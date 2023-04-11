@@ -1,0 +1,18 @@
+export default () => ({
+  employees: [],
+  employeeStatuses: [],
+  employeeTypes: [],
+  isLoadingEmployees: false,
+  employeesActive: [],
+  employeesBranchAdmin: [],
+  employeesBranchDefault: [],
+  postEmployee: {},
+  employee: {},
+  maritalStatus: [],
+  payslipTypes: [],
+  employeeStates: [],
+  putEmployee: false,
+  validateEmail: false,
+  employeesSearch: [],
+  exportEmployeesReport: false,
+});
