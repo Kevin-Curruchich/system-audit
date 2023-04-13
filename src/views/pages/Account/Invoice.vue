@@ -14,7 +14,7 @@
                 <div class="col-md-4 text-start">
                   <img
                     class="mb-2 w-25 p-2"
-                    src="https://mayfer.dev/wp-content/uploads/2020/10/logo3.png"
+                    src="https://sbg.org.gt/SBG/static/images/logo_sbg_white.png"
                     alt="Logo"
                   />
                   <h6>

@@ -1,4 +1,4 @@
 export default () => ({
   payrollBonuses: [],
-  isLoadingPayrollBonuses: true,
+  isLoadingPayrollBonuses: false,
 });

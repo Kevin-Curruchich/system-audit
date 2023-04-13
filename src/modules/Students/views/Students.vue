@@ -7,7 +7,7 @@
         <div class="pb-0 card-header">
           <div class="d-lg-flex">
             <div>
-              <h5 class="mb-0">Empleados</h5>
+              <h5 class="mb-0">Estudiantes</h5>
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
@@ -17,23 +17,19 @@
           </div>
           <div class="row mt-3">
             <div class="col-md-5">
-              <label class="form-label"> Sede </label>
+              <label class="form-label"> Buscar </label>
               <div class="">
-                <el-select v-model="selectedBranch">
-                  <el-option label="Todos" value=""></el-option>
-                  <el-option
-                    v-for="item in branches"
-                    :key="item.branchId"
-                    :value="item.branchId"
-                    :label="item.branchName"
-                  >
-                    {{ item.branchName }}
-                  </el-option>
-                </el-select>
+                <el-input
+                  v-model="search"
+                  clearable
+                  type="text"
+                  placeholder="Buscar"
+                />
               </div>
             </div>
+
             <div class="col-md-5">
-              <label class="form-label"> Estado </label>
+              <label class="form-label"> Tipo de estudiante </label>
               <div>
                 <el-select v-model="selectedStatus">
                   <el-option label="Todos" value=""></el-option>
@@ -59,18 +55,7 @@
           </div>
           <div class="row mt-3">
             <div class="col-md-5">
-              <label class="form-label"> Buscar </label>
-              <div class="">
-                <el-input
-                  v-model="search"
-                  clearable
-                  type="text"
-                  placeholder="Buscar"
-                />
-              </div>
-            </div>
-            <div class="col-md-5">
-              <label class="form-label"> Puesto </label>
+              <label class="form-label"> Ciclo </label>
               <div>
                 <el-select v-model="selectedEmployeeType">
                   <el-option label="Todos" value=""></el-option>
@@ -81,6 +66,22 @@
                     :label="item.employeeTypeName"
                   >
                     {{ item.employeeTypeName }}
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label"> Estado </label>
+              <div>
+                <el-select v-model="selectedStatus">
+                  <el-option label="Todos" value=""></el-option>
+                  <el-option
+                    v-for="item in employeeStatuses"
+                    :key="item.employeeStatusId"
+                    :value="item.employeeStatusId"
+                    :label="item.employeeStatussName"
+                  >
+                    {{ item.employeeStatussName }}
                   </el-option>
                 </el-select>
               </div>
@@ -107,7 +108,7 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column label="Salario">
+            <el-table-column label="Tipo de estudiante">
               <template #default="{ row }">
                 <span style="color: #525f7f"
                   ><b>Tipo de Pago:</b> {{ row.salaryTypeName }}</span
@@ -124,7 +125,7 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column label="Sede">
+            <el-table-column label="Ciclo">
               <template #default="{ row }">
                 <span><b>Sede:</b> {{ row.branchName }}</span>
                 <br />
@@ -157,17 +158,19 @@
       </div>
     </div>
   </div>
+  <add-edit-student />
 </template>
 
 <script>
 import { onMounted, ref } from "vue";
 import moment from "moment";
-import ArgonButton from "@/components/ArgonButton.vue";
 import { useEmployees, useBranches, useFormatDate } from "@/composables";
+import ArgonButton from "@/components/ArgonButton.vue";
+import AddEditStudent from "../components/AddEditStudent.vue";
 
 export default {
   name: "ProductsList",
-  components: { ArgonButton },
+  components: { ArgonButton, AddEditStudent },
 
   setup() {
     //instances
@@ -218,7 +221,7 @@ export default {
 
     //lifecycle
     onMounted(() => {
-      requestGetEmployees({});
+      // requestGetEmployees({});
       getBranches();
       requestGetEmployeeStatuses();
       requestGetEmployeeTypes();

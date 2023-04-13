@@ -3,7 +3,15 @@
   <button
     class="btn mb-0"
     :class="getClasses(variant, color, size, fullWidth, active)"
+    :disabled="loading"
   >
+    <template v-if="loading">
+      <span
+        class="spinner-border spinner-border-sm me-2"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    </template>
     <slot />
   </button>
 </template>
@@ -29,6 +37,10 @@ export default {
       default: false,
     },
     active: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
       type: Boolean,
       default: false,
     },

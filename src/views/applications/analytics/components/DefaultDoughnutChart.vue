@@ -37,7 +37,7 @@
                     <div class="px-2 py-1 d-flex">
                       <div>
                         <img
-                          src="https://mayfer.dev/wp-content/uploads/2020/10/logo3.png"
+                          src="https://sbg.org.gt/SBG/static/images/logo_sbg_white.png"
                           class="avatar avatar-sm me-2"
                           alt="logo_xd"
                         />

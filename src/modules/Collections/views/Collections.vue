@@ -7,49 +7,35 @@
         <div class="pb-0 card-header">
           <div class="d-lg-flex">
             <div>
-              <h5 class="mb-0">Planillas</h5>
+              <h5 class="mb-0">Cobros</h5>
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
-                <argon-button color="primary" size="lg"> Generar </argon-button>
+                <argon-button color="primary" size="lg"> Nuevo </argon-button>
               </div>
             </div>
           </div>
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table v-loading="isLoadingPayrolls" :data="payrollsPerPage">
-            <el-table-column label="ID Planilla">
+            <el-table-column label="Cobro">
               <template #default="{ row }">
                 {{ getPayrollId(row.payrollId) }}
               </template>
             </el-table-column>
-            <el-table-column label="Sede">
+            <el-table-column label="Tipo de estudiate">
               <template #default="{ row }">
                 {{ row.branch.branchName }}
               </template>
             </el-table-column>
-            <el-table-column label="Fecha inicial">
+            <el-table-column label="Tipo de cobro">
+              <template #default="{ row }">
+                {{ row.branch.branchName }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Monto base">
               <template #default="{ row }">
                 {{ formatDateDMY(row.payrollStartDate) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="Fecha final">
-              <template #default="{ row }">
-                {{ formatDateDMY(row.payrollEndDate) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="Fecha de Creacion">
-              <template #default="{ row }">
-                {{ formatDateDMYH(row.payrollCreatedAt) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="Estado" align="center">
-              <template #default="{ row }">
-                <el-tag
-                  :type="getStatusBadge(row.payrollState?.payrollStateId)"
-                  effect="dark"
-                  >{{ row.payrollState?.payrollStateName }}</el-tag
-                >
               </template>
             </el-table-column>
           </el-table>
@@ -82,7 +68,7 @@ export default {
       isLoadingPayrolls,
       onChangePage,
       payrollsPerPage,
-      requestGetPayrolls,
+      // requestGetPayrolls,
       total,
       getPayrollId,
       getStatusBadge,
@@ -91,7 +77,7 @@ export default {
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
 
     onMounted(() => {
-      requestGetPayrolls();
+      // requestGetPayrolls();
     });
     return {
       payrollsPerPage,

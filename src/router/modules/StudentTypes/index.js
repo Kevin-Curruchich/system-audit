@@ -1,17 +1,17 @@
 export default {
-  name: "payrolls",
-  path: "/payrolls",
+  name: "",
+  path: "/student-types",
   component: () =>
     import(
-      /* webpackChunkName: "PayrollLayout" */ "@/modules/Payrolls/layout/PayrollLayout.vue"
+      /* webpackChunkName: "StudentsLayouts" */ "@/modules/StudentTypes/layout/StudentTypesLayout.vue"
     ),
   children: [
     {
       path: "",
-      name: "payrolls-list",
+      name: "Student Types",
       component: () =>
         import(
-          /* webpackChunkName: "Payrolls" */ "@/modules/Payrolls/views/Payrolls.vue"
+          /* webpackChunkName: "StudentsList" */ "@/modules/StudentTypes/views/Students.vue"
         ),
     },
     // {

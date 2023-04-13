@@ -17,9 +17,9 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          :to="{ name: 'employees-list' }"
+          :to="{ name: 'List of Students' }"
           mini-icon="E"
-          text="Empleados"
+          text="Estudiantes"
         >
           <template #icon>
             <i class="fas fa-users text-secondary text-sm opacity-10"></i>
@@ -28,9 +28,20 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          :to="{ name: 'payrolls-list' }"
+          :to="{ name: 'Student Types' }"
+          mini-icon="TE"
+          text="Tipo de Estudiante"
+        >
+          <template #icon>
+            <i class="fas fa-user-tag text-info text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          :to="{ name: 'Collections List' }"
           mini-icon="P"
-          text="Planillas"
+          text="Cobros"
         >
           <template #icon>
             <i class="fas fa-wallet text-primary text-sm opacity-10"></i>
@@ -39,9 +50,9 @@
       </li>
       <li class="nav-item">
         <sidenav-item
-          :to="{ name: 'bonuses-list' }"
+          :to="{ name: 'Payments List' }"
           mini-icon="B"
-          text="Bonificaciones"
+          text="Pagos"
         >
           <template #icon>
             <i
@@ -55,7 +66,7 @@
           Utilidades
         </h6>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-collapse
           collapse-ref="pagesExamples"
           nav-text="Reportes"
@@ -66,21 +77,6 @@
           </template>
           <template #list>
             <ul class="nav ms-4">
-              <!-- nav links -->
-              <!-- <sidenav-collapse-item
-                refer="profileExample"
-                mini-icon="P"
-                text="Profile"
-              >
-                <template #nav-child-item>
-                  <sidenav-item
-                    :to="{ name: 'bonuses-list' }"
-                    mini-icon="A"
-                    text="All Projects"
-                  />
-                </template>
-              </sidenav-collapse-item> -->
-
               <sidenav-item
                 :to="{ name: 'payrolls-reports' }"
                 mini-icon="Pl"
@@ -94,7 +90,7 @@
             </ul>
           </template>
         </sidenav-collapse>
-      </li>
+      </li> -->
     </ul>
   </div>
   <!-- <div class="mt-3 sidenav-footer">
@@ -122,14 +118,14 @@
 </template>
 <script>
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCollapse from "./SidenavCollapse.vue";
+// import SidenavCollapse from "./SidenavCollapse.vue";
 // import SidenavCollapseItem from "./SidenavCollapseItem.vue";
 
 export default {
   name: "SidenavList",
   components: {
     SidenavItem,
-    SidenavCollapse,
+    // SidenavCollapse,
     // SidenavCollapseItem,
   },
   methods: {

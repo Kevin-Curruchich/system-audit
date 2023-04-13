@@ -1,17 +1,17 @@
 export default {
-  name: "bonuses",
-  path: "/bonuses",
+  name: "students",
+  path: "/students",
   component: () =>
     import(
-      /* webpackChunkName: "BonusLayout" */ "@/modules/Bonuses/layout/BonusLayout.vue"
+      /* webpackChunkName: "StudentsLayouts" */ "@/modules/Students/layout/StudentsLayout.vue"
     ),
   children: [
     {
       path: "",
-      name: "bonuses-list",
+      name: "List of Students",
       component: () =>
         import(
-          /* webpackChunkName: "Payrolls" */ "@/modules/Bonuses/views/Bonuses.vue"
+          /* webpackChunkName: "StudentsList" */ "@/modules/Students/views/Students.vue"
         ),
     },
     // {

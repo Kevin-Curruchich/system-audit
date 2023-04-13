@@ -4,7 +4,7 @@
       class="overflow-hidden position-relative border-radius-xl"
       :style="{
         backgroundImage:
-          'https://mayfer.dev/wp-content/uploads/2020/10/logo3.png',
+          'https://sbg.org.gt/SBG/static/images/logo_sbg_white.png',
       }"
     >
       <span class="mask" :class="`bg-gradient-${card.background}`"></span>

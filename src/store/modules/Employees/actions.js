@@ -1,4 +1,4 @@
-import mayApi from "@/apis/mayApi";
+import sbgApi from "@/apis/sbgApi";
 
 // export const myAction = async ({commit})=>{
 
@@ -7,7 +7,7 @@ import mayApi from "@/apis/mayApi";
 export const requestGetEmployees = async ({ commit }, paramsData) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingEmployees", true);
-    mayApi
+    sbgApi
       .get(`/employees`, {
         params: {
           branchId: paramsData.branchId,
@@ -32,7 +32,7 @@ export const requestGetEmployees = async ({ commit }, paramsData) => {
 
 export const requestGetEmploeeStatuses = async ({ commit }) => {
   return new Promise((resolve, reject) => {
-    mayApi
+    sbgApi
       .get("/employees/statuses")
       .then((response) => {
         commit("setEmployeeStatuses", response.data);
@@ -47,7 +47,7 @@ export const requestGetEmploeeStatuses = async ({ commit }) => {
 
 export const requestGetEmployeeTypes = async ({ commit }) => {
   return new Promise((resolve, reject) => {
-    mayApi
+    sbgApi
       .get("/employees/types")
       .then((response) => {
         commit("setEmployeeTypes", response.data);

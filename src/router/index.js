@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
 import Default from "../views/dashboards/Default.vue";
-import EmployeesRouter from "./modules/Employees";
-import PayrollsRouter from "./modules/Payrolls";
-import BonusesRouter from "./modules/Bonuses";
+import StudentsRouter from "./modules/Students";
+import StudentTypesRouter from "./modules/StudentTypes";
+import Collections from "./modules/Collections/index.js";
+import Payments from "./modules/Payments";
 import ReportsRouter from "./modules/Reports";
 import Illustration from "../modules/auth/views/Illustration.vue";
 
@@ -25,19 +26,24 @@ const routes = [
     component: Default,
   },
   {
-    path: "/employees",
+    path: "/students",
     beforeEnter: [isAuthenticatedGuard],
-    ...EmployeesRouter,
+    ...StudentsRouter,
+  },
+  {
+    path: "/student-types",
+    beforeEnter: [isAuthenticatedGuard],
+    ...StudentTypesRouter,
   },
   {
     path: "/payrolls",
     beforeEnter: [isAuthenticatedGuard],
-    ...PayrollsRouter,
+    ...Collections,
   },
   {
     path: "/bonuses",
     beforeEnter: [isAuthenticatedGuard],
-    ...BonusesRouter,
+    ...Payments,
   },
   {
     path: "/reports",

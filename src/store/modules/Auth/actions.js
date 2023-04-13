@@ -1,8 +1,8 @@
-import mayApi from "@/apis/mayApi";
+import sbgApi from "@/apis/sbgApi";
 
 export const signInUser = async ({ commit }, user) => {
   return new Promise((resolve, reject) => {
-    mayApi
+    sbgApi
       .post("/auth/signin", user)
       .then((response) => {
         commit("loginUser", response.data);
@@ -15,16 +15,16 @@ export const signInUser = async ({ commit }, user) => {
 };
 
 export const checkAuthentication = async ({ commit }) => {
-  const mayAccesToken = localStorage.getItem("maypayroll-accesToken");
+  const accesToken = localStorage.getItem("sbg-admin-access-token");
 
-  if (!mayAccesToken) {
+  if (!accesToken) {
     commit("logout");
     return { ok: false, message: "No estas autorizado" };
   }
   return { ok: true };
 
   // try {
-  //   const { data } = await mayApi.post(":lookup", { idToken });
+  //   const { data } = await sbgApi.post(":lookup", { idToken });
   //   const { displayName, email } = data.users[0];
 
   //   const user = {

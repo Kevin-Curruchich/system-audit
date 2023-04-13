@@ -119,8 +119,8 @@ export default {
     const { loginUser } = useAuth();
 
     const userForm = ref({
-      username: "admin@mayfer.dev",
-      password: "admin123",
+      username: "",
+      password: "",
     });
 
     const onSubmit = async () => {

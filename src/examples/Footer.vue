@@ -10,10 +10,10 @@
             ©
             {{ new Date().getFullYear() }},
             <a
-              href="https://mayfer.dev/"
+              href="https://sbg.org.gt/"
               class="font-weight-bold"
               target="_blank"
-              >MAYFER</a
+              >SBG</a
             >
           </div>
         </div>

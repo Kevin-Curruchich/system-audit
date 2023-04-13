@@ -1,14 +1,18 @@
 export default {
-  name: "bonuses",
-  path: "/bonuses",
+  name: "Payments",
+  path: "/payments",
   component: () =>
-    import(/* webpackChunkName: "BonusLayout" */ "../layout/BonusLayout.vue"),
+    import(
+      /* webpackChunkName: "PaymentsLayout" */ "@/modules/Payments/layout/PaymentsLayout.vue"
+    ),
   children: [
     {
       path: "",
-      name: "bonuses-list",
+      name: "Payments List",
       component: () =>
-        import(/* webpackChunkName: "Payrolls" */ "../views/Bonuses.vue"),
+        import(
+          /* webpackChunkName: "Payments" */ "@/modules/Payments/views/Payments.vue"
+        ),
     },
     // {
     //   path: ":id",

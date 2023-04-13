@@ -1,17 +1,17 @@
 export default {
-  name: "employees",
-  path: "/employees",
+  name: "Collections",
+  path: "/collections",
   component: () =>
     import(
-      /* webpackChunkName: "EmployeesLayouts" */ "@/modules/Employees/layout/EmployeeLayout.vue"
+      /* webpackChunkName: "CollectionsLayout" */ "@/modules/Collections/layout/CollectionsLayout.vue"
     ),
   children: [
     {
       path: "",
-      name: "employees-list",
+      name: "Collections List",
       component: () =>
         import(
-          /* webpackChunkName: "EmployeeList" */ "@/modules/Employees/views/Employees.vue"
+          /* webpackChunkName: "Collections" */ "@/modules/Collections/views/Collections.vue"
         ),
     },
     // {

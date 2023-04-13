@@ -2,11 +2,11 @@ import axios from "axios";
 import apiConstants from "./apiConstants";
 import useAuth from "@/composables/useAuth";
 
-const mayApi = axios.create({ baseURL: apiConstants.API });
+const sbgApi = axios.create({ baseURL: apiConstants.API });
 
-mayApi.interceptors.request.use(
+sbgApi.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("maypayroll-accesToken");
+    const token = localStorage.getItem("sbg-admin-access-token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -19,7 +19,7 @@ mayApi.interceptors.request.use(
 
 // interceptor to handle errors and dispatch logout action
 
-mayApi.interceptors.response.use(
+sbgApi.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -32,4 +32,4 @@ mayApi.interceptors.response.use(
   }
 );
 
-export default mayApi;
+export default sbgApi;

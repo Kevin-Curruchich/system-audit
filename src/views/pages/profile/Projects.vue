@@ -336,7 +336,7 @@ export default {
       invisionLogo: "https://source.unsplash.com/1280x720/?invisionLogo",
       spotifyLogo: "https://source.unsplash.com/1280x720/?spotifyLogo",
       asanaLogo: "https://source.unsplash.com/1280x720/?asanaLogo",
-      xdLogo: "https://mayfer.dev/wp-content/uploads/2020/10/logo3.png",
+      xdLogo: "https://sbg.org.gt/SBG/static/images/logo_sbg_white.png",
     };
   },
 

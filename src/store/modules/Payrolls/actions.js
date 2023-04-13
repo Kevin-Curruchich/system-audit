@@ -1,9 +1,9 @@
-import mayApi from "@/apis/mayApi";
+import sbgApi from "@/apis/sbgApi";
 
 export const requestGetPayrolls = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingPayrolls", true);
-    mayApi
+    sbgApi
       .get(`/payrolls`)
       .then((response) => {
         commit("setPayrolls", response.data);

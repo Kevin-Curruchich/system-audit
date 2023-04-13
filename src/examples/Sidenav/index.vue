@@ -38,7 +38,7 @@
             class="navbar-brand-img h-100"
             alt="main_logo"
           />
-          <span class="ms-2 font-weight-bold">MayPayroll</span>
+          <span class="ms-2 font-weight-bold">SBG Admin</span>
         </router-link>
       </div>
       <hr class="mt-0 horizontal dark" />
@@ -49,6 +49,7 @@
 <script>
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 import SidenavList from "./SidenavList.vue";
+import logo from "@/assets/sbg-logo.png";
 
 import { mapState } from "vuex";
 export default {
@@ -59,8 +60,8 @@ export default {
   },
   data() {
     return {
-      logo: "https://mayfer.dev/wp-content/uploads/2020/10/logo3.png",
-      logoWhite: "https://mayfer.dev/wp-content/uploads/2020/10/logo3.png",
+      logo,
+      logoWhite: logo,
       image: "https://source.unsplash.com/1280x720/?city",
     };
   },
@@ -75,6 +76,10 @@ export default {
 <style scoped>
 .ps {
   height: 100%;
+}
+
+.navbar-vertical.navbar-expand-xs {
+  z-index: 10 !important;
 }
 
 .navbar-vertical.navbar-expand-xs {

@@ -5,11 +5,11 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Today's Money"
+              title="Pagos registrados"
               value="$53,000"
               description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+55%</span> since yesterday"
+                >+55%</span> Último mes"
               :icon="{
                 component: 'ni ni-money-coins',
                 background: 'bg-gradient-primary',
@@ -19,13 +19,13 @@
           </div>
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Today's Users"
+              title="Estudiantes"
               value="2,300"
               description="<span
                 class='text-sm font-weight-bolder text-success'
-                >+3%</span> since last week"
+                >+3%</span> Último año"
               :icon="{
-                component: 'ni ni-world',
+                component: 'fas fa-users',
                 background: 'bg-gradient-danger',
                 shape: 'rounded-circle',
               }"
@@ -119,7 +119,7 @@ export default {
       bootstrap: "https://source.unsplash.com/1280x720/?bootstrap",
       invision: "https://source.unsplash.com/1280x720/?invision",
       slack: "https://source.unsplash.com/1280x720/?slack",
-      adobe: "https://mayfer.dev/wp-content/uploads/2020/10/logo3.png",
+      adobe: "https://sbg.org.gt/SBG/static/images/logo_sbg_white.png",
       sales: {
         us: {
           country: "United States",

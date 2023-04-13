@@ -1,4 +1,4 @@
-import mayApi from "@/apis/mayApi";
+import sbgApi from "@/apis/sbgApi";
 
 // export const myAction = async ({commit})=>{
 
@@ -7,7 +7,7 @@ import mayApi from "@/apis/mayApi";
 export const requestGetBranches = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingBranches", true);
-    mayApi
+    sbgApi
       .get("/branches")
       .then((response) => {
         commit("setBranches", response.data);
