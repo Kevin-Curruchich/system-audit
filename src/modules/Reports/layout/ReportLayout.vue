@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "BonusLayout",
+  name: "ReportLayout",
   mounted() {},
 };
 </script>

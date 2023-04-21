@@ -137,6 +137,6 @@ export default {
 <style>
 .modal.show {
   background-color: rgba(0, 0, 0, 0.3);
-  z-index: 10000;
+  z-index: 100;
 }
 </style>

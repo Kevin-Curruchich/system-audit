@@ -11,7 +11,9 @@
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
-                <argon-button color="primary" size="lg"> Nuevo </argon-button>
+                <argon-button color="primary" size="lg" @click="onOpenModal">
+                  Nuevo
+                </argon-button>
               </div>
             </div>
           </div>
@@ -34,12 +36,12 @@
                 <el-select v-model="selectedStatus">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in employeeStatuses"
-                    :key="item.employeeStatusId"
-                    :value="item.employeeStatusId"
-                    :label="item.employeeStatussName"
+                    v-for="item in studentStatuses"
+                    :key="item.studentStatusId"
+                    :value="item.studentStatusId"
+                    :label="item.studentStatussName"
                   >
-                    {{ item.employeeStatussName }}
+                    {{ item.studentStatussName }}
                   </el-option>
                 </el-select>
               </div>
@@ -57,15 +59,15 @@
             <div class="col-md-5">
               <label class="form-label"> Ciclo </label>
               <div>
-                <el-select v-model="selectedEmployeeType">
+                <el-select v-model="selectedStudentType">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in employeeTypes"
-                    :key="item.employeeTypeId"
-                    :value="item.employeeTypeId"
-                    :label="item.employeeTypeName"
+                    v-for="item in studentTypes"
+                    :key="item.studentTypeId"
+                    :value="item.studentTypeId"
+                    :label="item.studentTypeName"
                   >
-                    {{ item.employeeTypeName }}
+                    {{ item.studentTypeName }}
                   </el-option>
                 </el-select>
               </div>
@@ -76,12 +78,12 @@
                 <el-select v-model="selectedStatus">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in employeeStatuses"
-                    :key="item.employeeStatusId"
-                    :value="item.employeeStatusId"
-                    :label="item.employeeStatussName"
+                    v-for="item in studentStatuses"
+                    :key="item.studentStatusId"
+                    :value="item.studentStatusId"
+                    :label="item.studentStatussName"
                   >
-                    {{ item.employeeStatussName }}
+                    {{ item.studentStatussName }}
                   </el-option>
                 </el-select>
               </div>
@@ -90,13 +92,13 @@
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table
-            v-loading="isLoadingEmployees"
-            :data="employees.data"
+            v-loading="isLoadingStudents"
+            :data="students.data"
             style="width: 100%"
           >
             <el-table-column label="Nombre">
               <template #default="{ row }">
-                <a href="#" @click="redirectEmployee(row)"
+                <a href="#" @click="redirectstudent(row)"
                   >{{ row.personFullName }} <br />
                   <span style="color: #525f7f"
                     ><b>DPI:</b> {{ row.personNDI }}</span
@@ -113,16 +115,6 @@
                 <span style="color: #525f7f"
                   ><b>Tipo de Pago:</b> {{ row.salaryTypeName }}</span
                 >
-                <br />
-                <span style="color: #525f7f"
-                  ><b>Salario:</b> Q.
-                  {{ numberWithCommas(row.employeeSalary) }}</span
-                >
-                <br />
-                <span style="color: #525f7f"
-                  ><b>Fecha de Inicio:</b>
-                  {{ formatDateDMY(row.employeeStartDate) }}</span
-                >
               </template>
             </el-table-column>
             <el-table-column label="Ciclo">
@@ -131,16 +123,16 @@
                 <br />
                 <span><b>Departamento:</b> {{ row.departmentName }}</span>
                 <br />
-                <span><b>Puesto:</b> {{ row.employeeTypeName }}</span>
+                <span><b>Puesto:</b> {{ row.studentTypeName }}</span>
               </template>
             </el-table-column>
             <el-table-column label="Estado" align="center">
               <template #default="{ row }">
                 <el-tag
-                  :type="getStatusBadge(row.employeeStatusId)"
+                  :type="getStatusBadge(row.studentStatusId)"
                   effect="dark"
                 >
-                  {{ row.employeeStatussName }}
+                  {{ row.studentStatussName }}
                 </el-tag>
               </template>
             </el-table-column>
@@ -150,7 +142,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="employees.total"
+            :total="students.total"
             @current-change="onChangePage"
           />
         </div>
@@ -158,91 +150,75 @@
       </div>
     </div>
   </div>
-  <add-edit-student />
+  <add-edit-student :show-modal="showModal" @hidde-modal="hiddeModal" />
 </template>
 
 <script>
 import { onMounted, ref } from "vue";
 import moment from "moment";
-import { useEmployees, useBranches, useFormatDate } from "@/composables";
+import { useStudents } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditStudent from "../components/AddEditStudent.vue";
 
 export default {
-  name: "ProductsList",
+  name: "Students",
   components: { ArgonButton, AddEditStudent },
-
   setup() {
     //instances
     const {
-      employees,
-      employeeStatuses,
-      employeeTypes,
-      isLoadingEmployees,
-      requestGetEmployees,
-      requestGetEmployeeStatuses,
-      requestGetEmployeeTypes,
+      students,
+      studentStatuses,
+      studentTypes,
+      isLoadingStudents,
+      requestGetStudents,
       getStatusBadge,
-    } = useEmployees();
-    const { branches, getBranches } = useBranches();
-    const { formatDateDMY } = useFormatDate();
+    } = useStudents();
 
     //ref
-    const selectedBranch = ref("");
+    const showModal = ref(false);
     const selectedStatus = ref("");
-    const selectedEmployeeType = ref("");
+    const selectedStudentType = ref("");
     const search = ref("");
 
     //methods
-    const numberWithCommas = (x) => {
-      let parts = x.toString().split(".");
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      return parts.join(".");
-    };
-
     const onChangePage = (page) => {
-      requestGetEmployees({
+      requestGetStudents({
         page,
-        search: search.value || null,
-        branchId: selectedBranch.value || null,
-        employeeStatusId: selectedStatus.value || null,
-        employeeTypeId: selectedEmployeeType.value || null,
       });
     };
 
     const filter = () => {
-      requestGetEmployees({
-        search: search.value || null,
-        branchId: selectedBranch.value || null,
-        employeeStatusId: selectedStatus.value || null,
-        employeeTypeId: selectedEmployeeType.value || null,
-      });
+      requestGetStudents({});
+    };
+
+    const onOpenModal = () => {
+      showModal.value = true;
+    };
+
+    const hiddeModal = () => {
+      showModal.value = false;
     };
 
     //lifecycle
     onMounted(() => {
-      // requestGetEmployees({});
-      getBranches();
-      requestGetEmployeeStatuses();
-      requestGetEmployeeTypes();
+      // requestGetStudents({});
     });
 
     return {
-      branches,
-      employees,
-      employeeStatuses,
-      employeeTypes,
+      students,
+      studentStatuses,
+      studentTypes,
       filter,
-      isLoadingEmployees,
+      isLoadingStudents,
       moment,
-      numberWithCommas,
       onChangePage,
       search,
-      selectedBranch,
-      selectedEmployeeType,
+      selectedStudentType,
       selectedStatus,
-      formatDateDMY,
+      onOpenModal,
       getStatusBadge,
+      showModal,
+      hiddeModal,
     };
   },
 };

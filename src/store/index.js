@@ -1,10 +1,9 @@
 import { createStore } from "vuex";
 import bootstrap from "bootstrap/dist/js/bootstrap.min.js";
 import auth from "./modules/Auth";
-import employees from "./modules/Employees";
-import branches from "./modules/Branches";
-import payrolls from "./modules/Payrolls";
-import payrollBonuses from "./modules/PayrollBonuses";
+import students from "./modules/Students";
+import collections from "./modules/Collections";
+import payments from "./modules/Payments";
 
 export default createStore({
   state: {
@@ -80,9 +79,8 @@ export default createStore({
   },
   modules: {
     auth,
-    branches,
-    employees,
-    payrolls,
-    payrollBonuses,
+    students,
+    collections,
+    payments,
   },
 });

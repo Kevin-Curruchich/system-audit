@@ -17,10 +17,10 @@
           </div>
         </div>
         <div class="px-0 pb-0 card-body">
-          <el-table v-loading="isLoadingPayrolls" :data="payrollsPerPage">
+          <el-table v-loading="isLoadingCollections" :data="collectionsPerPage">
             <el-table-column label="Cobro">
               <template #default="{ row }">
-                {{ getPayrollId(row.payrollId) }}
+                {{ collectionId(row.collectionId) }}
               </template>
             </el-table-column>
             <el-table-column label="Tipo de estudiate">
@@ -35,7 +35,7 @@
             </el-table-column>
             <el-table-column label="Monto base">
               <template #default="{ row }">
-                {{ formatDateDMY(row.payrollStartDate) }}
+                {{ formatDateDMY(row.collectionStartDate) }}
               </template>
             </el-table-column>
           </el-table>
@@ -58,34 +58,31 @@
 import { onMounted } from "vue";
 import moment from "moment";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { usePayrolls, useFormatDate } from "@/composables";
+import { useCollections, useFormatDate } from "@/composables";
 
 export default {
-  name: "ProductsList",
+  name: "Collections",
   components: { ArgonButton },
   setup() {
     const {
-      isLoadingPayrolls,
+      isLoadingCollections,
       onChangePage,
-      payrollsPerPage,
-      // requestGetPayrolls,
+      collectionsPerPage,
       total,
-      getPayrollId,
+      collectionId,
       getStatusBadge,
-    } = usePayrolls();
+    } = useCollections();
 
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
 
-    onMounted(() => {
-      // requestGetPayrolls();
-    });
+    onMounted(() => {});
     return {
-      payrollsPerPage,
-      isLoadingPayrolls,
+      collectionsPerPage,
+      isLoadingCollections,
       moment,
       total,
       onChangePage,
-      getPayrollId,
+      collectionId,
       formatDateDMY,
       formatDateDMYH,
       getStatusBadge,

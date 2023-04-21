@@ -3,7 +3,7 @@ import * as actions from "./actions";
 import * as getters from "./getters";
 import * as mutations from "./mutations";
 
-const branchesStore = {
+const studentsStore = {
   namespaced: true,
   state,
   actions,
@@ -11,4 +11,4 @@ const branchesStore = {
   mutations,
 };
 
-export default branchesStore;
+export default studentsStore;

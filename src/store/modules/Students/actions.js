@@ -4,23 +4,21 @@ import sbgApi from "@/apis/sbgApi";
 
 // }
 
-export const requestGetEmployees = async ({ commit }, paramsData) => {
+export const requestGetStudents = async ({ commit }, paramsData) => {
   return new Promise((resolve, reject) => {
-    commit("setIsLoadingEmployees", true);
+    commit("setIsLoadingStudents", true);
     sbgApi
-      .get(`/employees`, {
+      .get(`/students`, {
         params: {
           branchId: paramsData.branchId,
           page: paramsData.page,
           take: paramsData.take,
           search: paramsData.search,
-          employeeStatusId: paramsData.employeeStatusId,
-          employeeTypeId: paramsData.employeeTypeId,
         },
       })
       .then((response) => {
-        commit("setEmployees", response.data);
-        commit("setIsLoadingEmployees", false);
+        commit("setStudents", response.data);
+        commit("setIsLoadingStudents", false);
         resolve(response.data);
       })
       .catch((error) => {
@@ -33,9 +31,9 @@ export const requestGetEmployees = async ({ commit }, paramsData) => {
 export const requestGetEmploeeStatuses = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     sbgApi
-      .get("/employees/statuses")
+      .get("/students/statuses")
       .then((response) => {
-        commit("setEmployeeStatuses", response.data);
+        commit("setStudentStatuses", response.data);
         resolve(response.data);
       })
       .catch((error) => {
@@ -45,12 +43,12 @@ export const requestGetEmploeeStatuses = async ({ commit }) => {
   });
 };
 
-export const requestGetEmployeeTypes = async ({ commit }) => {
+export const requestGetSudentTypes = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     sbgApi
-      .get("/employees/types")
+      .get("/students/types")
       .then((response) => {
-        commit("setEmployeeTypes", response.data);
+        commit("setSudentTypes", response.data);
         resolve(response.data);
       })
       .catch((error) => {

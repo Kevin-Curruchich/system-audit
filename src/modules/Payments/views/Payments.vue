@@ -19,10 +19,10 @@
           </div>
         </div>
         <div class="px-0 pb-0 card-body">
-          <el-table v-loading="isLoadingTable" :data="payrollBonusesPerPage">
+          <el-table v-loading="isLoadingTable" :data="paymentPerPage">
             <el-table-column label="ID Pago">
               <template #default="{ row }">
-                <a href="#">{{ getPayrollBonusesId(row.payrollBonusId) }}</a>
+                <a href="#">{{ getPaymentsId(row.paymentId) }}</a>
               </template>
             </el-table-column>
             <el-table-column label="Estudiante">
@@ -32,13 +32,13 @@
             </el-table-column>
             <el-table-column label="ID Cobro">
               <template #default="{ row }">
-                {{ row.payrollBonusType.payrollBonusTypeName }}
+                {{ row.paymentType.paymentTypeName }}
               </template>
             </el-table-column>
             <el-table-column label="Fecha Pago" min-width="150px">
               <template #default="{ row }">
-                {{ formatDateDMY(row.payrollBonusStartDate) }} -
-                {{ formatDateDMY(row.payrollBonusEndDate) }}
+                {{ formatDateDMY(row.paymentStartDate) }} -
+                {{ formatDateDMY(row.paymentEndDate) }}
               </template>
             </el-table-column>
           </el-table>
@@ -60,34 +60,34 @@
 <script>
 import { onMounted } from "vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { usePayrollBonuses, useFormatDate } from "@/composables";
+import { usePayments, useFormatDate } from "@/composables";
 
 export default {
-  name: "ProductsList",
+  name: "Payments",
   components: { ArgonButton },
   setup() {
     const {
       isLoadingTable,
       onChangePage,
-      payrollBonusesPerPage,
-      // requestGetPayrollBonuses,
+      paymentPerPage,
+      // requestgetPayments,
       total,
-      getPayrollBonusesId,
+      getPaymentsId,
       getStatusBadge,
       getStatus,
-    } = usePayrollBonuses();
+    } = usePayments();
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
 
     onMounted(() => {
-      // requestGetPayrollBonuses();
+      // requestgetPayments();
     });
 
     return {
       isLoadingTable,
       onChangePage,
-      payrollBonusesPerPage,
+      paymentPerPage,
       total,
-      getPayrollBonusesId,
+      getPaymentsId,
       formatDateDMY,
       formatDateDMYH,
       getStatusBadge,

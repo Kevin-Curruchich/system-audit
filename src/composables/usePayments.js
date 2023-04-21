@@ -1,35 +1,33 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
-import bonusesState from "@/constants/bonusesState";
+import paymentsState from "@/constants/paymentsState";
 
-export default function usePayrolls() {
+export default function usePayments() {
   const store = useStore();
 
   //   computed
-  const payrolls = computed(
-    () => store.getters["payrollBonuses/getPayrollBonuses"]
-  );
-  const total = computed(() => payrolls.value.length);
+  const collections = computed(() => store.getters["payments/getPayments"]);
+  const total = computed(() => collections.value.length);
   const isLoadingTable = computed(
-    () => store.getters["payrollBonuses/getIsLoadingPayrollBonuses"]
+    () => store.getters["payments/getIsLoadingPayments"]
   );
 
   //refs
-  const payrollBonusesPerPage = ref([]);
+  const paymentPerPage = ref([]);
 
   //methods
-  const requestGetPayrollBonuses = async () => {
-    await store.dispatch("payrollBonuses/requestGetPayrollBonuses");
+  const requestGetPayments = async () => {
+    await store.dispatch("payments/requestGetPayments");
     onChangePage(1);
   };
 
   const onChangePage = (page) => {
-    const currentPage = payrolls.value.slice((page - 1) * 10, page * 10);
+    const currentPage = collections.value.slice((page - 1) * 10, page * 10);
 
-    payrollBonusesPerPage.value = currentPage;
+    paymentPerPage.value = currentPage;
   };
 
-  const getPayrollBonusesId = (id) => {
+  const getPaymentsId = (id) => {
     return id.substring(0, 8);
   };
 
@@ -37,13 +35,13 @@ export default function usePayrolls() {
     let statusId = status;
     let statusReturn = "";
     switch (statusId) {
-      case bonusesState.DRAFT:
+      case paymentsState.DRAFT:
         statusReturn = "info";
         break;
-      case bonusesState.APPROVE:
+      case paymentsState.APPROVE:
         statusReturn = "success";
         break;
-      case bonusesState.CANCEL:
+      case paymentsState.CANCEL:
         statusReturn = "danger";
         break;
     }
@@ -54,13 +52,13 @@ export default function usePayrolls() {
     let statusId = status;
     let statusReturn = "";
     switch (statusId) {
-      case bonusesState.DRAFT:
+      case paymentsState.DRAFT:
         statusReturn = "Borrador";
         break;
-      case bonusesState.APPROVE:
+      case paymentsState.APPROVE:
         statusReturn = "Aprobada";
         break;
-      case bonusesState.CANCEL:
+      case paymentsState.CANCEL:
         statusReturn = "Cancelada";
         break;
     }
@@ -70,9 +68,9 @@ export default function usePayrolls() {
   return {
     isLoadingTable,
     onChangePage,
-    payrollBonusesPerPage,
-    requestGetPayrollBonuses,
-    getPayrollBonusesId,
+    paymentPerPage,
+    requestGetPayments,
+    getPaymentsId,
     total,
     getStatusBadge,
     getStatus,

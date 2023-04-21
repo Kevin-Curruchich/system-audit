@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "PayrollLayout",
+  name: "CollectionsLayout",
   mounted() {},
 };
 </script>

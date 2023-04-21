@@ -66,31 +66,6 @@
           Utilidades
         </h6>
       </li>
-      <!-- <li class="nav-item">
-        <sidenav-collapse
-          collapse-ref="pagesExamples"
-          nav-text="Reportes"
-          :class="getRoute() === 'pages' ? 'active' : ''"
-        >
-          <template #icon>
-            <i class="fas fa-file-alt text-warning text-sm opacity-10"></i>
-          </template>
-          <template #list>
-            <ul class="nav ms-4">
-              <sidenav-item
-                :to="{ name: 'payrolls-reports' }"
-                mini-icon="Pl"
-                text="Planilllas"
-              />
-              <sidenav-item
-                :to="{ name: 'bonuses-reports' }"
-                mini-icon="Gn"
-                text="Bonificacion"
-              />
-            </ul>
-          </template>
-        </sidenav-collapse>
-      </li> -->
     </ul>
   </div>
   <!-- <div class="mt-3 sidenav-footer">

@@ -1,13 +1,13 @@
 import sbgApi from "@/apis/sbgApi";
 
-export const requestGetPayrolls = async ({ commit }) => {
+export const requestGetPayments = async ({ commit }) => {
   return new Promise((resolve, reject) => {
-    commit("setIsLoadingPayrolls", true);
+    commit("setIsLoadingPayments", true);
     sbgApi
-      .get(`/payrolls`)
+      .get("/collection/all")
       .then((response) => {
-        commit("setPayrolls", response.data);
-        commit("setIsLoadingPayrolls", false);
+        commit("setPayments", response.data);
+        commit("setIsLoadingPayments", false);
         resolve(response.data);
       })
       .catch((error) => {

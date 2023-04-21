@@ -18,18 +18,18 @@
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table
-            v-loading="isLoadingEmployees"
-            :data="employees.data"
+            v-loading="isLoadingStudents"
+            :data="students.data"
             style="width: 100%"
           >
             <el-table-column label="Nombre">
               <template #default="{ row }">
-                <span>{{ row.employeeName }}</span>
+                <span>{{ row.studentTypeName }}</span>
               </template>
             </el-table-column>
             <el-table-column label="Descripción">
               <template #default="{ row }">
-                <span>{{ row.employeeTypeName }}</span>
+                <span>{{ row.studentTypeDesc }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -38,7 +38,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="employees.total"
+            :total="students.total"
             @current-change="onChangePage"
           />
         </div>
@@ -52,80 +52,46 @@
 import { onMounted, ref } from "vue";
 import moment from "moment";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { useEmployees, useBranches, useFormatDate } from "@/composables";
+import { useStudents, useFormatDate } from "@/composables";
 
 export default {
-  name: "ProductsList",
+  name: "Students",
   components: { ArgonButton },
 
   setup() {
     //instances
-    const {
-      employees,
-      employeeStatuses,
-      employeeTypes,
-      isLoadingEmployees,
-      requestGetEmployees,
-      requestGetEmployeeStatuses,
-      requestGetEmployeeTypes,
-      getStatusBadge,
-    } = useEmployees();
-    const { branches, getBranches } = useBranches();
+    const { students, isLoadingStudents, requestGetStudents, getStatusBadge } =
+      useStudents();
     const { formatDateDMY } = useFormatDate();
 
     //ref
-    const selectedBranch = ref("");
     const selectedStatus = ref("");
-    const selectedEmployeeType = ref("");
     const search = ref("");
 
     //methods
-    const numberWithCommas = (x) => {
-      let parts = x.toString().split(".");
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      return parts.join(".");
-    };
-
     const onChangePage = (page) => {
-      requestGetEmployees({
+      requestGetStudents({
         page,
         search: search.value || null,
-        branchId: selectedBranch.value || null,
-        employeeStatusId: selectedStatus.value || null,
-        employeeTypeId: selectedEmployeeType.value || null,
       });
     };
 
     const filter = () => {
-      requestGetEmployees({
+      requestGetStudents({
         search: search.value || null,
-        branchId: selectedBranch.value || null,
-        employeeStatusId: selectedStatus.value || null,
-        employeeTypeId: selectedEmployeeType.value || null,
       });
     };
 
     //lifecycle
-    onMounted(() => {
-      // requestGetEmployees({});
-      getBranches();
-      requestGetEmployeeStatuses();
-      requestGetEmployeeTypes();
-    });
+    onMounted(() => {});
 
     return {
-      branches,
-      employees,
-      employeeStatuses,
-      employeeTypes,
+      students,
       filter,
-      isLoadingEmployees,
+      isLoadingStudents,
       moment,
-      numberWithCommas,
       onChangePage,
       search,
-      selectedBranch,
-      selectedEmployeeType,
       selectedStatus,
       formatDateDMY,
       getStatusBadge,

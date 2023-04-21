@@ -20,7 +20,7 @@
                 <div class="card-body">
                   <form role="form" @submit.prevent="onSubmit">
                     <div class="mb-3">
-                      <argon-input
+                      <el-input
                         id="email"
                         v-model="userForm.username"
                         type="email"
@@ -29,7 +29,7 @@
                       />
                     </div>
                     <div class="mb-3">
-                      <argon-input
+                      <el-input
                         id="password"
                         v-model="userForm.password"
                         type="password"
@@ -72,7 +72,7 @@
                 :style="{
                   backgroundImage:
                     'url(' +
-                    'https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg' +
+                    'https://sbg.org.gt/SBG/static/images/SBG/parqueo_sm.jpg' +
                     ')',
                   backgroundSize: 'cover',
                 }"
@@ -82,12 +82,9 @@
                 <h4
                   class="mt-5 text-white font-weight-bolder position-relative"
                 >
-                  "Attention is the new currency"
+                  "Seminario Biblico Guatemalteco"
                 </h4>
-                <p class="text-white position-relative">
-                  The more effortless the writing looks, the more effort the
-                  writer actually put into the process.
-                </p>
+                <p class="text-white position-relative">Preparando Siervos</p>
               </div>
             </div>
           </div>
@@ -98,21 +95,18 @@
 </template>
 
 <script>
-// import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import { mapMutations } from "vuex";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 import useAuth from "@/composables/useAuth";
+import sbgImage from "../../../../public/sbg-image.jpg";
 
 export default {
   name: "SigninIllustration",
   components: {
-    ArgonInput,
     ArgonButton,
-    // ArgonSwitch,
   },
   setup() {
     const router = useRouter();
@@ -130,7 +124,7 @@ export default {
       }
     };
 
-    return { onSubmit, userForm };
+    return { onSubmit, userForm, sbgImage };
   },
   created() {
     this.$store.state.hideConfigButton = true;

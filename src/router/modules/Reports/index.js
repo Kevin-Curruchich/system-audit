@@ -7,19 +7,19 @@ export default {
     ),
   children: [
     {
-      path: "payrolls",
-      name: "payrolls-reports",
+      path: "collections",
+      name: "collections-reports",
       component: () =>
         import(
-          /* webpackChunkName: "PayrollsReport" */ "@/modules/Reports/views/Payrolls.vue"
+          /* webpackChunkName: "CollectionReport" */ "@/modules/Reports/views/Collections.vue"
         ),
     },
     {
-      path: "bonuses",
-      name: "bonuses-reports",
+      path: "payments",
+      name: "payments-reports",
       component: () =>
         import(
-          /* webpackChunkName: "BonusesReports" */ "@/modules/Reports/views/Bonuses.vue"
+          /* webpackChunkName: "PaymentsReports" */ "@/modules/Reports/views/Payments.vue"
         ),
     },
     // {

@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "EmployeeList",
+  name: "StudentTypes",
   mounted() {},
 };
 </script>

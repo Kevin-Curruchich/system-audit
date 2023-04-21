@@ -7,7 +7,7 @@
         <div class="pb-0 card-header">
           <div class="d-lg-flex">
             <div>
-              <h5 class="mb-0">Reporte Planillas</h5>
+              <h5 class="mb-0">Reporte Bonos</h5>
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
@@ -16,18 +16,8 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-5">
-              <label class="form-label"> Mes de planilla </label>
-              <div class="">
-                <el-date-picker
-                  v-model="value2"
-                  type="month"
-                  placeholder="Selecccione mes de planilla"
-                />
-              </div>
-            </div>
-            <div class="col-md-5">
-              <label class="form-label"> Periodo de pago </label>
+            <div class="col-md-3">
+              <label class="form-label"> Tipo de bonificacion </label>
               <div>
                 <el-select v-model="selectedBranch">
                   <el-option label="Todos" value=""></el-option>
@@ -40,6 +30,32 @@
                     {{ item.branchName }}
                   </el-option>
                 </el-select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label"> Sede </label>
+              <div>
+                <el-select v-model="selectedBranch">
+                  <el-option label="Todos" value=""></el-option>
+                  <el-option
+                    v-for="item in [{ branchId: '12', branchName: 'Name' }]"
+                    :key="item.branchId"
+                    :value="item.branchId"
+                    :label="item.branchName"
+                  >
+                    {{ item.branchName }}
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label"> Año de bonificacion </label>
+              <div class="">
+                <el-date-picker
+                  v-model="value2"
+                  type="year"
+                  placeholder="Selecccione año"
+                />
               </div>
             </div>
             <div class="col-md-2">
@@ -51,40 +67,7 @@
               </div>
             </div>
           </div>
-          <div class="row mt-3">
-            <div class="col-md-5">
-              <label class="form-label"> Sede </label>
-              <div class="">
-                <el-select v-model="selectedBranch">
-                  <el-option label="Todos" value=""></el-option>
-                  <el-option
-                    v-for="item in [{ branchId: '12', branchName: 'Name' }]"
-                    :key="item.branchId"
-                    :value="item.branchId"
-                    :label="item.branchName"
-                  >
-                    {{ item.branchName }}
-                  </el-option>
-                </el-select>
-              </div>
-            </div>
-            <div class="col-md-5">
-              <label class="form-label"> Estado pago del empleado </label>
-              <div>
-                <el-select v-model="selectedBranch">
-                  <el-option label="Todos" value=""></el-option>
-                  <el-option
-                    v-for="item in [{ branchId: '12', branchName: 'Name' }]"
-                    :key="item.branchId"
-                    :value="item.branchId"
-                    :label="item.branchName"
-                  >
-                    {{ item.branchName }}
-                  </el-option>
-                </el-select>
-              </div>
-            </div>
-          </div>
+
           <el-divider />
           <div class="d-lg-flex justify-content-end gap-3">
             <argon-button
@@ -120,7 +103,7 @@
 import ArgonButton from "@/components/ArgonButton.vue";
 
 export default {
-  name: "PayrollReports",
+  name: "PaymentsReport",
   components: { ArgonButton },
   data() {
     return {

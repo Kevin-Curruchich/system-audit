@@ -36,12 +36,12 @@ const routes = [
     ...StudentTypesRouter,
   },
   {
-    path: "/payrolls",
+    path: "/collections",
     beforeEnter: [isAuthenticatedGuard],
     ...Collections,
   },
   {
-    path: "/bonuses",
+    path: "/payments",
     beforeEnter: [isAuthenticatedGuard],
     ...Payments,
   },
