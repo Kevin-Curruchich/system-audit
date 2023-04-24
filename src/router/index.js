@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
+// import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
 import Default from "../views/dashboards/Default.vue";
 import StudentsRouter from "./modules/Students";
 import StudentTypesRouter from "./modules/StudentTypes";
@@ -22,32 +22,32 @@ const routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     component: Default,
   },
   {
     path: "/students",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     ...StudentsRouter,
   },
   {
     path: "/student-types",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     ...StudentTypesRouter,
   },
   {
     path: "/collections",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     ...Collections,
   },
   {
     path: "/payments",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     ...Payments,
   },
   {
     path: "/reports",
-    beforeEnter: [isAuthenticatedGuard],
+    // beforeEnter: [isAuthenticatedGuard],
     ...ReportsRouter,
   },
 ];

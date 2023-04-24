@@ -99,31 +99,22 @@
             <el-table-column label="Nombre">
               <template #default="{ row }">
                 <a href="#" @click="redirectstudent(row)"
-                  >{{ row.personFullName }} <br />
-                  <span style="color: #525f7f"
-                    ><b>DPI:</b> {{ row.personNDI }}</span
-                  >
-                  <br />
-                  <span style="color: #525f7f"
-                    ><b>Telefono:</b> {{ row.personPhone }}</span
-                  ></a
-                >
+                  >{{ `${row.studentName} ${row.studentLastName}` }}
+                </a>
+                <br />
+                <span><b>DPI:</b> {{ row.studentDni }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="Contacto">
+              <template #default="{ row }">
+                <span><b>Telefono:</b> {{ row.studentPhone }}</span>
+                <br />
+                <span><b>Correo:</b> {{ row.studentEmail }}</span>
               </template>
             </el-table-column>
             <el-table-column label="Tipo de estudiante">
               <template #default="{ row }">
-                <span style="color: #525f7f"
-                  ><b>Tipo de Pago:</b> {{ row.salaryTypeName }}</span
-                >
-              </template>
-            </el-table-column>
-            <el-table-column label="Ciclo">
-              <template #default="{ row }">
-                <span><b>Sede:</b> {{ row.branchName }}</span>
-                <br />
-                <span><b>Departamento:</b> {{ row.departmentName }}</span>
-                <br />
-                <span><b>Puesto:</b> {{ row.studentTypeName }}</span>
+                {{ row.StudentType?.studentTypeName }}
               </template>
             </el-table-column>
             <el-table-column label="Estado" align="center">
@@ -150,7 +141,11 @@
       </div>
     </div>
   </div>
-  <add-edit-student :show-modal="showModal" @hidde-modal="hiddeModal" />
+  <add-edit-student
+    :show-modal="showModal"
+    @hidde-modal="hiddeModal"
+    @accept-modal="acceptModal"
+  />
 </template>
 
 <script>
@@ -183,6 +178,7 @@ export default {
     //methods
     const onChangePage = (page) => {
       requestGetStudents({
+        take: 10,
         page,
       });
     };
@@ -199,26 +195,32 @@ export default {
       showModal.value = false;
     };
 
+    const acceptModal = () => {
+      hiddeModal();
+      requestGetStudents({});
+    };
+
     //lifecycle
     onMounted(() => {
-      // requestGetStudents({});
+      requestGetStudents({});
     });
 
     return {
-      students,
-      studentStatuses,
-      studentTypes,
+      acceptModal,
       filter,
+      getStatusBadge,
+      hiddeModal,
       isLoadingStudents,
       moment,
       onChangePage,
-      search,
-      selectedStudentType,
-      selectedStatus,
       onOpenModal,
-      getStatusBadge,
+      search,
+      selectedStatus,
+      selectedStudentType,
       showModal,
-      hiddeModal,
+      students,
+      studentStatuses,
+      studentTypes,
     };
   },
 };

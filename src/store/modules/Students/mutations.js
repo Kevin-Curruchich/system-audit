@@ -15,5 +15,9 @@ export const setStudentStatuses = (state, val) => {
 };
 
 export const setSudentTypes = (state, val) => {
-  state.sudentTypes = val;
+  state.studentTypes = val;
+};
+
+export const setIsLoadingStudentTypes = (state, val) => {
+  state.isLoadingStudentTypes = val;
 };

@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import studentStatus from "@/constants/studentStatus";
 
@@ -12,25 +12,34 @@ export default function useStudents() {
     () => store.getters["students/getIsLoadingStudents"]
   );
   const studentTypes = computed(() => store.getters["students/getSudentTypes"]);
+  const studentTypesTotal = ref(studentTypes.value.length);
+  const isLoadingStudentTypes = computed(
+    () => store.getters["students/getIsLoadingStudentTypes"]
+  );
+
   const studentStatuses = computed(
     () => store.getters["students/getStudentStatuses"]
   );
 
   //methods
-  const requestGetStudents = async ({ page = 1, take = 10, search = "" }) => {
+  const requestGetStudents = async ({ page = 1, take = 10 }) => {
     await store.dispatch("students/requestGetStudents", {
       page,
-      search,
       take,
     });
   };
-
   const requestGetStudentStatuses = async () => {
-    await store.dispatch("students/requestGetEmploeeStatuses");
+    await store.dispatch("students/requestGetStudentStatuses");
   };
 
   const requestGetSudentTypes = async () => {
     await store.dispatch("students/requestGetSudentTypes");
+  };
+
+  //post request
+  const requestPostStudent = async (student) => {
+    const resp = await store.dispatch("students/requestPostStudent", student);
+    return resp;
   };
 
   const getStatusBadge = (status) => {
@@ -53,11 +62,14 @@ export default function useStudents() {
   return {
     students,
     isLoadingStudents,
+    isLoadingStudentTypes,
     studentStatuses,
     studentTypes,
     requestGetStudents,
     requestGetStudentStatuses,
     requestGetSudentTypes,
+    requestPostStudent,
     getStatusBadge,
+    studentTypesTotal,
   };
 }

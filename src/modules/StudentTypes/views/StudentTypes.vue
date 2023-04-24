@@ -18,8 +18,8 @@
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table
-            v-loading="isLoadingStudents"
-            :data="students.data"
+            v-loading="isLoadingStudentTypes"
+            :data="studentTypes"
             style="width: 100%"
           >
             <el-table-column label="Nombre">
@@ -38,7 +38,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="students.total"
+            :total="2"
             @current-change="onChangePage"
           />
         </div>
@@ -60,8 +60,12 @@ export default {
 
   setup() {
     //instances
-    const { students, isLoadingStudents, requestGetStudents, getStatusBadge } =
-      useStudents();
+    const {
+      studentTypes,
+      isLoadingStudentTypes,
+      requestGetSudentTypes,
+      getStatusBadge,
+    } = useStudents();
     const { formatDateDMY } = useFormatDate();
 
     //ref
@@ -69,26 +73,18 @@ export default {
     const search = ref("");
 
     //methods
-    const onChangePage = (page) => {
-      requestGetStudents({
-        page,
-        search: search.value || null,
-      });
-    };
-
-    const filter = () => {
-      requestGetStudents({
-        search: search.value || null,
-      });
+    const onChangePage = () => {
+      requestGetSudentTypes();
     };
 
     //lifecycle
-    onMounted(() => {});
+    onMounted(() => {
+      requestGetSudentTypes();
+    });
 
     return {
-      students,
-      filter,
-      isLoadingStudents,
+      studentTypes,
+      isLoadingStudentTypes,
       moment,
       onChangePage,
       search,

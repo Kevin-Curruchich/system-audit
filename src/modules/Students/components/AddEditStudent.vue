@@ -29,18 +29,18 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="DPI/DNI" prop="studentDNI">
+            <el-form-item label="DPI/DNI" prop="studentDni">
               <el-input
-                v-model="formModel.studentDNI"
+                v-model="formModel.studentDni"
                 type="text"
                 placeholder="DPI/DNI"
               />
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Telefono" prop="studentPhoneNumber">
+            <el-form-item label="Telefono" prop="studentPhone">
               <el-input
-                v-model="formModel.studentPhoneNumber"
+                v-model="formModel.studentPhone"
                 type="text"
                 placeholder="Telefono"
               />
@@ -56,26 +56,26 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Fecha ingreso" prop="studentDateStart">
+            <el-form-item label="Fecha ingreso" prop="studentStartDate">
               <el-date-picker
-                v-model="formModel.studentDateStart"
-                type="month"
+                v-model="formModel.studentStartDate"
                 placeholder="Fecha ingreso"
+                format="DD/MM/YYYY"
                 style="width: 100%"
               />
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Tipo estudiante" prop="studentType">
+            <el-form-item label="Tipo estudiante" prop="studentTypeId">
               <el-select
-                v-model="formModel.studentType"
+                v-model="formModel.studentTypeId"
                 placeholder="Tipo estudiante"
               >
                 <el-option
-                  v-for="item in [{ label: 'Estudiante', value: 1 }]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in studentTypes"
+                  :key="item.studentTypeId"
+                  :value="item.studentTypeId"
+                  :label="item.studentTypeName"
                 />
               </el-select>
             </el-form-item>
@@ -87,15 +87,17 @@
       <argon-button variant="outline" @click="onHideModal"
         >Cancelar</argon-button
       >
-      <argon-button @click="onSubmit">Agregar</argon-button>
+      <argon-button :loading="sendingRequest" @click="onSubmit"
+        >Agregar</argon-button
+      >
     </template>
   </modal>
 </template>
 
 <script>
-import { ref } from "vue";
-import Modal from "@/components/Modal.vue";
-import { ArgonButton } from "@/components";
+import { onMounted, ref } from "vue";
+import { useStudents } from "@/composables";
+import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 
 export default {
@@ -109,34 +111,38 @@ export default {
       default: false,
     },
   },
-  emits: ["hidde-modal"],
+  emits: ["hidde-modal", "accept-modal"],
   setup(_, { emit }) {
     const requiredMesage = errorMessages.required;
     const inValidEmailMessage = errorMessages.inValidEmail;
+    //instances
+    const { requestGetSudentTypes, studentTypes, requestPostStudent } =
+      useStudents();
 
     //refs
+    const sendingRequest = ref(false);
     const formRef = ref(null);
     const formModel = ref({
       studentName: "",
       studentLastName: "",
-      studentDNI: "",
-      studentPhoneNumber: "",
+      studentDni: "",
+      studentPhone: "",
       studentEmail: "",
-      studentDateStart: "",
-      studentType: "",
+      studentStartDate: "",
+      studentTypeId: "",
     });
 
     const rules = ref({
       studentName: [{ required: true, message: requiredMesage }],
       studentLastName: [{ required: true, message: requiredMesage }],
-      studentDNI: [{ required: true, message: requiredMesage }],
-      studentPhoneNumber: [{ required: true, message: requiredMesage }],
+      studentDni: [{ required: true, message: requiredMesage }],
+      studentPhone: [{ required: true, message: requiredMesage }],
       studentEmail: [
         { required: true, message: requiredMesage },
         { type: "email", message: inValidEmailMessage },
       ],
-      studentDateStart: [{ required: true, message: requiredMesage }],
-      studentType: [
+      studentStartDate: [{ required: true, message: requiredMesage }],
+      studentTypeId: [
         { required: true, message: requiredMesage, trigger: "change" },
       ],
     });
@@ -147,13 +153,31 @@ export default {
       emit("hidde-modal");
     };
 
+    const onClearData = () => {
+      formRef.value.resetFields();
+      sendingRequest.value = false;
+    };
+
     const onSubmit = async () => {
       await formRef.value.validate((isValid) => {
         if (isValid) {
-          console.log(formModel.value);
+          sendingRequest.value = true;
+          requestPostStudent(formModel.value)
+            .then(() => {
+              emit("accept-modal");
+              onClearData();
+            })
+            .catch(() => {
+              sendingRequest.value = false;
+            });
         }
       });
     };
+
+    //lifecycle
+    onMounted(() => {
+      requestGetSudentTypes();
+    });
 
     return {
       formModel,
@@ -161,6 +185,8 @@ export default {
       onHideModal,
       onSubmit,
       rules,
+      sendingRequest,
+      studentTypes,
     };
   },
 };

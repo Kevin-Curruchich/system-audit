@@ -11,7 +11,7 @@ export default {
       name: "Student Types",
       component: () =>
         import(
-          /* webpackChunkName: "StudentsList" */ "@/modules/StudentTypes/views/Students.vue"
+          /* webpackChunkName: "StudentsList" */ "@/modules/StudentTypes/views/StudentTypes.vue"
         ),
     },
     // {

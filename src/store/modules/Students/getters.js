@@ -14,5 +14,9 @@ export const getStudentStatuses = (state) => {
 };
 
 export const getSudentTypes = (state) => {
-  return state.sudentTypes;
+  return state.studentTypes;
+};
+
+export const getIsLoadingStudentTypes = (state) => {
+  return state.isLoadingStudentTypes;
 };
