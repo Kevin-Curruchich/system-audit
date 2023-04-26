@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "sbg-admin"
-  }
+    "default": "sbg-admin",
+    "dev": "sbg-admin-dev-3cb61"
+  },
+  "targets": {},
+  "etags": {}
 }
