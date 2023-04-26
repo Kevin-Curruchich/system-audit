@@ -3,9 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Default from "../views/dashboards/Default.vue";
 import StudentsRouter from "./modules/Students";
 import StudentTypesRouter from "./modules/StudentTypes";
-import Collections from "./modules/Collections/index.js";
 import Payments from "./modules/Payments";
 import ReportsRouter from "./modules/Reports";
+import SettingsRouter from "./modules/Settings";
 import Illustration from "../modules/auth/views/Illustration.vue";
 
 const routes = [
@@ -36,11 +36,6 @@ const routes = [
     ...StudentTypesRouter,
   },
   {
-    path: "/collections",
-    // beforeEnter: [isAuthenticatedGuard],
-    ...Collections,
-  },
-  {
     path: "/payments",
     // beforeEnter: [isAuthenticatedGuard],
     ...Payments,
@@ -49,6 +44,11 @@ const routes = [
     path: "/reports",
     // beforeEnter: [isAuthenticatedGuard],
     ...ReportsRouter,
+  },
+  {
+    path: "/settings",
+    // beforeEnter: [isAuthenticatedGuard],
+    ...SettingsRouter,
   },
 ];
 

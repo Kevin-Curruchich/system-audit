@@ -42,6 +42,14 @@ export default function useStudents() {
     return resp;
   };
 
+  const requestPostStudentType = async (studentType) => {
+    const resp = await store.dispatch(
+      "students/requestPostStudentType",
+      studentType
+    );
+    return resp;
+  };
+
   const getStatusBadge = (status) => {
     let statusId = status;
     let statusReturn = "";
@@ -51,9 +59,6 @@ export default function useStudents() {
         break;
       case studentStatus.INACTIVE:
         statusReturn = "danger";
-        break;
-      case studentStatus.INACTIVE_PENDING_PAYMENT:
-        statusReturn = "info";
         break;
     }
     return statusReturn;
@@ -71,5 +76,6 @@ export default function useStudents() {
     requestPostStudent,
     getStatusBadge,
     studentTypesTotal,
+    requestPostStudentType,
   };
 }

@@ -4,6 +4,7 @@
     <template #body>
       <el-form
         ref="formRef"
+        v-loading="sendingRequest"
         label-position="top"
         :model="formModel"
         :rules="rules"

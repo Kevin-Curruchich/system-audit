@@ -33,16 +33,14 @@
             <div class="col-md-5">
               <label class="form-label"> Tipo de estudiante </label>
               <div>
-                <el-select v-model="selectedStatus">
+                <el-select v-model="selectedStudentType">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in studentStatuses"
-                    :key="item.studentStatusId"
-                    :value="item.studentStatusId"
-                    :label="item.studentStatussName"
-                  >
-                    {{ item.studentStatussName }}
-                  </el-option>
+                    v-for="item in studentTypes"
+                    :key="item.studentTypeId"
+                    :value="item.studentTypeId"
+                    :label="item.studentTypeName"
+                  />
                 </el-select>
               </div>
             </div>
@@ -55,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="row mt-3">
+          <!-- <div class="row mt-3">
             <div class="col-md-5">
               <label class="form-label"> Ciclo </label>
               <div>
@@ -88,7 +86,7 @@
                 </el-select>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table
@@ -98,7 +96,10 @@
           >
             <el-table-column label="Nombre">
               <template #default="{ row }">
-                <a href="#" @click="redirectstudent(row)"
+                <a
+                  href="#"
+                  class="text-primary"
+                  @click="onNavStudent(row.studentId)"
                   >{{ `${row.studentName} ${row.studentLastName}` }}
                 </a>
                 <br />
@@ -123,7 +124,7 @@
                   :type="getStatusBadge(row.studentStatusId)"
                   effect="dark"
                 >
-                  {{ row.studentStatussName }}
+                  {{ row.StudentStatus?.studentStatusName }}
                 </el-tag>
               </template>
             </el-table-column>
@@ -150,7 +151,7 @@
 
 <script>
 import { onMounted, ref } from "vue";
-import moment from "moment";
+import { useRouter } from "vue-router";
 import { useStudents } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditStudent from "../components/AddEditStudent.vue";
@@ -160,6 +161,9 @@ export default {
   components: { ArgonButton, AddEditStudent },
   setup() {
     //instances
+
+    const router = useRouter();
+
     const {
       students,
       studentStatuses,
@@ -181,6 +185,10 @@ export default {
         take: 10,
         page,
       });
+    };
+
+    const onNavStudent = (id) => {
+      router.push({ name: "Student", params: { id } });
     };
 
     const filter = () => {
@@ -211,7 +219,6 @@ export default {
       getStatusBadge,
       hiddeModal,
       isLoadingStudents,
-      moment,
       onChangePage,
       onOpenModal,
       search,
@@ -221,6 +228,7 @@ export default {
       students,
       studentStatuses,
       studentTypes,
+      onNavStudent,
     };
   },
 };

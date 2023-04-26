@@ -10,6 +10,14 @@ export const setIsLoadingStudents = (state, val) => {
   state.isLoadingStudents = val;
 };
 
+export const setStudentById = (state, student) => {
+  state.student = student;
+};
+
+export const setIsLoadingStudent = (state, val) => {
+  state.isLoadingStudent = val;
+};
+
 export const setStudentStatuses = (state, val) => {
   state.studentStatuses = val;
 };

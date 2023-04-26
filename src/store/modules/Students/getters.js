@@ -9,6 +9,14 @@ export const getIsLoadingStudents = (state) => {
   return state.isLoadingStudents;
 };
 
+export const getStudentById = (state) => {
+  return state.student;
+};
+
+export const getIsLoadingStudent = (state) => {
+  return state.isLoadingStudent;
+};
+
 export const getStudentStatuses = (state) => {
   return state.studentStatuses;
 };

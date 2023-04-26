@@ -4,68 +4,49 @@
     class="collapse navbar-collapse w-auto h-auto h-100"
   >
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <sidenav-item
-          :to="{ name: 'Dashboard' }"
-          mini-icon="D"
-          text="Dashboard"
-        >
-          <template #icon>
-            <i class="ni ni-world text-primary text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          :to="{ name: 'List of Students' }"
-          mini-icon="E"
-          text="Estudiantes"
-        >
-          <template #icon>
-            <i class="fas fa-users text-secondary text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          :to="{ name: 'Student Types' }"
-          mini-icon="TE"
-          text="Tipo de Estudiante"
-        >
-          <template #icon>
-            <i class="fas fa-user-tag text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          :to="{ name: 'Collections List' }"
-          mini-icon="P"
-          text="Cobros"
-        >
-          <template #icon>
-            <i class="fas fa-wallet text-primary text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          :to="{ name: 'Payments List' }"
-          mini-icon="B"
-          text="Pagos"
-        >
-          <template #icon>
-            <i
-              class="fas fa-money-bill-wave-alt text-success text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
+      <sidenav-item :to="{ name: 'Dashboard' }" mini-icon="D" text="Dashboard">
+        <template #icon>
+          <i class="ni ni-world text-primary text-sm opacity-10"></i>
+        </template>
+      </sidenav-item>
+      <sidenav-item
+        :to="{ name: 'List of Students' }"
+        mini-icon="E"
+        text="Estudiantes"
+      >
+        <template #icon>
+          <i class="fas fa-users text-secondary text-sm opacity-10"></i>
+        </template>
+      </sidenav-item>
+
       <li class="mt-3 nav-item">
         <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6">
           Utilidades
         </h6>
       </li>
+      <sidenav-collapse
+        collapse-ref="settingsPages"
+        nav-text="Configuracion"
+        :class="getRoute() === 'settings' ? 'active' : ''"
+      >
+        <template #icon>
+          <i class="fas fa-cog text-warning text-sm opacity-10"></i>
+        </template>
+        <template #list>
+          <ul class="nav ms-4">
+            <sidenav-item
+              :to="{ name: 'Settings Student Types' }"
+              mini-icon="S"
+              text="Tipo de Estudiante"
+            />
+            <sidenav-item
+              :to="{ name: 'Settings Collections' }"
+              mini-icon="S"
+              text="Cobros"
+            />
+          </ul>
+        </template>
+      </sidenav-collapse>
     </ul>
   </div>
   <!-- <div class="mt-3 sidenav-footer">
@@ -93,14 +74,14 @@
 </template>
 <script>
 import SidenavItem from "./SidenavItem.vue";
-// import SidenavCollapse from "./SidenavCollapse.vue";
+import SidenavCollapse from "./SidenavCollapse.vue";
 // import SidenavCollapseItem from "./SidenavCollapseItem.vue";
 
 export default {
   name: "SidenavList",
   components: {
     SidenavItem,
-    // SidenavCollapse,
+    SidenavCollapse,
     // SidenavCollapseItem,
   },
   methods: {

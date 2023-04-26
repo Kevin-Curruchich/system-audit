@@ -4,5 +4,6 @@ export default () => ({
   studentTypes: [],
   isLoadingStudents: false,
   student: {},
+  isLoadingStudent: false,
   isLoadingStudentTypes: false,
 });

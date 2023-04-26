@@ -1,5 +1,4 @@
 export default {
-  ACTIVE: "74dc3c68-143f-40eb-bdf7-eed2170a89f5",
-  INACTIVE: "58648a7a-8bc8-4b8d-a524-4fa4e7274a00",
-  INACTIVE_PENDING_PAYMENT: "52ca2675-fb32-4e5f-a6c4-3de118efd26a",
+  ACTIVE: "92db2b1f-4daa-4e3a-9989-41a15f765f8c",
+  INACTIVE: "4452e80c-c522-4f17-a61b-adec013ed3d9",
 };
