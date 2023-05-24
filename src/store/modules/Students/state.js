@@ -1,5 +1,6 @@
 export default () => ({
   students: [],
+  studentsList: [],
   studentStatuses: [],
   studentTypes: [],
   isLoadingStudents: false,

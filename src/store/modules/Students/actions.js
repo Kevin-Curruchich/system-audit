@@ -17,6 +17,21 @@ export const requestGetStudents = async ({ commit }, params) => {
   });
 };
 
+export const requestGetStudentsList = async ({ commit }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .get(`/students/list`)
+      .then((response) => {
+        commit("setStudentsList", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const requestGetStudentById = async ({ commit }, id) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingStudent", true);

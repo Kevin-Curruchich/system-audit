@@ -4,3 +4,10 @@ export const getCollections = (state) => {
 export const getIsLoadingCollections = (state) => {
   return state.isLoadingCollection;
 };
+
+export const getAssignedCollections = (state) => {
+  return state.assignedCollections;
+};
+export const getIsLoadingAssignedCollections = (state) => {
+  return state.isLoadingAssignedCollections;
+};

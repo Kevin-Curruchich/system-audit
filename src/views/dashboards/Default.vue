@@ -7,9 +7,7 @@
             <mini-statistics-card
               title="Pagos registrados"
               value="$53,000"
-              description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+55%</span> Último mes"
+              description=""
               :icon="{
                 component: 'ni ni-money-coins',
                 background: 'bg-gradient-primary',
@@ -21,9 +19,7 @@
             <mini-statistics-card
               title="Estudiantes"
               value="2,300"
-              description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+3%</span> Último año"
+              description=""
               :icon="{
                 component: 'fas fa-users',
                 background: 'bg-gradient-danger',
@@ -35,9 +31,7 @@
             <mini-statistics-card
               title="New Clients"
               value="+3,462"
-              description="<span
-                class='text-sm font-weight-bolder text-danger'
-                >-2%</span> since last quarter"
+              description=""
               :icon="{
                 component: 'ni ni-paper-diploma',
                 background: 'bg-gradient-success',
@@ -49,9 +43,7 @@
             <mini-statistics-card
               title="Sales"
               value="$103,430"
-              description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+5%</span> than last month"
+              description=""
               :icon="{
                 component: 'ni ni-cart',
                 background: 'bg-gradient-warning',

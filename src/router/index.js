@@ -4,6 +4,7 @@ import Default from "../views/dashboards/Default.vue";
 import StudentsRouter from "./modules/Students";
 import StudentTypesRouter from "./modules/StudentTypes";
 import Payments from "./modules/Payments";
+import Collections from "./modules/Collections";
 import ReportsRouter from "./modules/Reports";
 import SettingsRouter from "./modules/Settings";
 import Illustration from "../modules/auth/views/Illustration.vue";
@@ -39,6 +40,11 @@ const routes = [
     path: "/payments",
     // beforeEnter: [isAuthenticatedGuard],
     ...Payments,
+  },
+  {
+    path: "/collections",
+    // beforeEnter: [isAuthenticatedGuard],
+    ...Collections,
   },
   {
     path: "/reports",

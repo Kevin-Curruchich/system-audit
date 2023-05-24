@@ -17,36 +17,43 @@
           </div>
         </div>
         <div class="px-0 pb-0 card-body">
-          <el-table v-loading="isLoadingCollections" :data="collectionsPerPage">
+          <el-table v-loading="isLoadingCollections" :data="collections">
             <el-table-column label="Nombre">
               <template #default="{ row }">
-                {{ collectionId(row.collectionId) }}
+                {{ row.collectionName }}
               </template>
             </el-table-column>
             <el-table-column label="Tipo de estudiate">
               <template #default="{ row }">
-                {{ row.branch.branchName }}
+                <ul>
+                  <li
+                    v-for="item in row.collectionStudentApply"
+                    :key="item.studentTypeId"
+                  >
+                    {{ getStudentTypeName(item.studentTypeId) }}
+                  </li>
+                </ul>
               </template>
             </el-table-column>
-            <!-- <el-table-column label="Tipo de cobro">
+            <el-table-column label="Tipo de cobro">
               <template #default="{ row }">
-                {{ row.branch.branchName }}
+                {{ row.collectionType?.collectionTypeName }}
               </template>
-            </el-table-column> -->
+            </el-table-column>
             <el-table-column label="Monto base">
               <template #default="{ row }">
-                {{ formatDateDMY(row.collectionStartDate) }}
+                {{ `Q. ${row.collectionBaseAmount}` }}
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">
-          <el-pagination
+          <!-- <el-pagination
             background
             layout="prev, pager, next"
             :total="total"
             @current-change="onChangePage"
-          />
+          /> -->
         </div>
         <!-- </div> -->
       </div>
@@ -56,36 +63,24 @@
 
 <script>
 import { onMounted } from "vue";
-import moment from "moment";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { useCollections, useFormatDate } from "@/composables";
+import { useCollections, useStudents } from "@/composables";
 
 export default {
   name: "Collections",
   components: { ArgonButton },
   setup() {
-    const {
-      isLoadingCollections,
-      onChangePage,
-      collectionsPerPage,
-      total,
-      collectionId,
-      getStatusBadge,
-    } = useCollections();
+    const { isLoadingCollections, collections, requestGetCollections } =
+      useCollections();
+    const { getStudentTypeName } = useStudents();
 
-    const { formatDateDMY, formatDateDMYH } = useFormatDate();
-
-    onMounted(() => {});
+    onMounted(() => {
+      requestGetCollections();
+    });
     return {
-      collectionsPerPage,
       isLoadingCollections,
-      moment,
-      total,
-      onChangePage,
-      collectionId,
-      formatDateDMY,
-      formatDateDMYH,
-      getStatusBadge,
+      collections,
+      getStudentTypeName,
     };
   },
 };

@@ -1,6 +1,5 @@
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
-import collectionStateConstants from "@/constants/collectionStateConstants";
 
 export default function useCollection() {
   const store = useStore();
@@ -9,57 +8,54 @@ export default function useCollection() {
   const collections = computed(
     () => store.getters["collections/getCollections"]
   );
-  const total = computed(() => collections.value.length);
   const isLoadingCollections = computed(
     () => store.getters["collections/getIsLoadingCollections"]
   );
 
-  //refs
-  const collectionsPerPage = ref([]);
+  const assignedCollections = computed(
+    () => store.getters["collections/getAssignedCollections"]
+  );
+  const isLoadingAssignedCollections = computed(
+    () => store.getters["collections/getIsLoadingAssignedCollections"]
+  );
 
   //methods
+  //gets
   const requestGetCollections = async () => {
     await store.dispatch("collections/requestGetCollections");
-    onChangePage(1);
   };
 
-  const onChangePage = (page) => {
-    const collectionsOfCurrentPage = collections.value.slice(
-      (page - 1) * 10,
-      page * 10
+  const requestGetAssignedCollections = async (params) => {
+    const resp = await store.dispatch(
+      "collections/requestGetAssignedCollections",
+      params
     );
 
-    collectionsPerPage.value = collectionsOfCurrentPage;
+    return resp;
+  };
+
+  //post
+  const requestPostCollectionStudent = async (params) => {
+    const resp = await store.dispatch(
+      "collections/requestPostCollectionStudent",
+      params
+    );
+
+    return resp;
   };
 
   const collectionId = (id) => {
     return id.substring(0, 8);
   };
 
-  const getStatusBadge = (status) => {
-    let statusId = status;
-    let statusReturn = "";
-    switch (statusId) {
-      case collectionStateConstants.DRAFT:
-        statusReturn = "info";
-        break;
-      case collectionStateConstants.APPROVE:
-        statusReturn = "success";
-        break;
-      case collectionStateConstants.CANCEL:
-        statusReturn = "danger";
-        break;
-    }
-    return statusReturn;
-  };
-
   return {
     isLoadingCollections,
-    onChangePage,
-    collectionsPerPage,
     requestGetCollections,
     collectionId,
-    total,
-    getStatusBadge,
+    collections,
+    assignedCollections,
+    isLoadingAssignedCollections,
+    requestGetAssignedCollections,
+    requestPostCollectionStudent,
   };
 }

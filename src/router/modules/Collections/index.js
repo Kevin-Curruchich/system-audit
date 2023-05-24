@@ -3,7 +3,7 @@ export default {
   path: "/collections",
   component: () =>
     import(
-      /* webpackChunkName: "CollectionsLayout" */ "@/modules/Collections/layout/CollectionsLayout.vue"
+      /* webpackChunkName: "CollectionsLayout" */ "@/modules/AssignedCollection/layout/CollectionsLayout"
     ),
   children: [
     {
@@ -11,7 +11,7 @@ export default {
       name: "Collections List",
       component: () =>
         import(
-          /* webpackChunkName: "Collections" */ "@/modules/Collections/views/Collections.vue"
+          /* webpackChunkName: "Collections" */ "@/modules/AssignedCollection/views/AssignedCollection"
         ),
     },
     // {

@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "sbg-admin",
+    "default": "sbg-admin-dev-3cb61",
     "dev": "sbg-admin-dev-3cb61"
   },
   "targets": {},

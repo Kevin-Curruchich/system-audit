@@ -1,5 +1,6 @@
 import sbgApi from "@/apis/sbgApi";
 
+//get
 export const requestGetCollections = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingCollections", true);
@@ -8,6 +9,55 @@ export const requestGetCollections = async ({ commit }) => {
       .then((response) => {
         commit("setCollection", response.data);
         commit("setIsLoadingCollections", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const requestGetAssignedCollections = async ({ commit }, params) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsLoadingAssignedCollections", true);
+    sbgApi
+      .get(`/collections/students`, { params })
+      .then((response) => {
+        commit("setAssignedCollection", response.data);
+        commit("setIsLoadingAssignedCollections", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const requestGetCollectionTypes = async ({ commit }) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsLoadingCollectionTypes", true);
+    sbgApi
+      .get(`/collections/types`)
+      .then((response) => {
+        commit("setCollectionTypes", response.data);
+        commit("setIsLoadingCollectionTypes", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+//post
+export const requestPostCollectionStudent = async (_, params) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post(`/collections/student`, params)
+      .then((response) => {
         resolve(response.data);
       })
       .catch((error) => {

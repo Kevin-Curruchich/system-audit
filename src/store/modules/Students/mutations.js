@@ -6,6 +6,10 @@ export const setStudents = (state, students) => {
   state.students = students;
 };
 
+export const setStudentsList = (state, val) => {
+  state.studentsList = val;
+};
+
 export const setIsLoadingStudents = (state, val) => {
   state.isLoadingStudents = val;
 };

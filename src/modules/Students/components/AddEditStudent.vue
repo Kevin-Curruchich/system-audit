@@ -8,7 +8,6 @@
         label-position="top"
         :model="formModel"
         :rules="rules"
-        :hide-required-asterisk="true"
       >
         <div class="row">
           <div class="col-md-6">

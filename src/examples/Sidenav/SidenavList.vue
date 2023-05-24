@@ -18,6 +18,15 @@
           <i class="fas fa-users text-secondary text-sm opacity-10"></i>
         </template>
       </sidenav-item>
+      <sidenav-item
+        :to="{ name: 'Collections List' }"
+        mini-icon="CA"
+        text="Cobros Asignados"
+      >
+        <template #icon>
+          <i class="fas fa-dollar-sign"></i>
+        </template>
+      </sidenav-item>
 
       <li class="mt-3 nav-item">
         <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6">

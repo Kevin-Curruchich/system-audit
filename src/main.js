@@ -27,6 +27,26 @@ import ArgonDashboard from "./argon-dashboard";
 import "element-plus/dist/index.css";
 import es from "element-plus/es/locale/lang/es";
 
+const debounce = (fn, delay) => {
+  let timer = null;
+  return function () {
+    let context = this;
+    let args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+};
+
+const _ResizeObserver = window.ResizeObserver;
+window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
+  constructor(callback) {
+    callback = debounce(callback, 16);
+    super(callback);
+  }
+};
+
 const appInstance = createApp(App);
 appInstance.use(store);
 appInstance.use(router);
