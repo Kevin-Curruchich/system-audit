@@ -35,6 +35,43 @@ export const requestGetAssignedCollections = async ({ commit }, params) => {
   });
 };
 
+export const requestGetCollectionsByStudent = async ({ commit }, params) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsLoadingCollectionsByStudent", true);
+    sbgApi
+      .get(`/collections/students`, { params })
+      .then((response) => {
+        commit("setCollectionsByStudent", response.data);
+        commit("setIsLoadingCollectionsByStudent", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const requestGetCollectionsOwedByStudent = async (
+  { commit },
+  studentId
+) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsLoadingCollectionsByStudent", true);
+    sbgApi
+      .get(`/collections/students/${studentId}/owed`)
+      .then((response) => {
+        commit("setCollectionsByStudent", response.data);
+        commit("setIsLoadingCollectionsByStudent", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const requestGetCollectionTypes = async ({ commit }) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingCollectionTypes", true);

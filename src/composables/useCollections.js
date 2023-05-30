@@ -19,6 +19,14 @@ export default function useCollection() {
     () => store.getters["collections/getIsLoadingAssignedCollections"]
   );
 
+  const collectionsByStudent = computed(
+    () => store.getters["collections/getCollectionsByStudent"]
+  );
+
+  const isLoadingCollectionsByStudent = computed(
+    () => store.getters["collections/getIsLoadingCollectionsByStudent"]
+  );
+
   //methods
   //gets
   const requestGetCollections = async () => {
@@ -29,6 +37,15 @@ export default function useCollection() {
     const resp = await store.dispatch(
       "collections/requestGetAssignedCollections",
       params
+    );
+
+    return resp;
+  };
+
+  const requestGetCollectionsOwedByStudent = async (studentId) => {
+    const resp = await store.dispatch(
+      "collections/requestGetCollectionsOwedByStudent",
+      studentId
     );
 
     return resp;
@@ -49,13 +66,16 @@ export default function useCollection() {
   };
 
   return {
-    isLoadingCollections,
-    requestGetCollections,
+    assignedCollections,
     collectionId,
     collections,
-    assignedCollections,
+    collectionsByStudent,
     isLoadingAssignedCollections,
+    isLoadingCollections,
+    isLoadingCollectionsByStudent,
     requestGetAssignedCollections,
+    requestGetCollections,
+    requestGetCollectionsOwedByStudent,
     requestPostCollectionStudent,
   };
 }

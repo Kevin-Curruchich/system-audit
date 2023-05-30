@@ -20,3 +20,11 @@ export const setCollectionTypes = (state, val) => {
 export const setIsLoadingCollectionTypes = (state, val) => {
   state.isLoadingCollectionTypes = val;
 };
+
+export const setCollectionsByStudent = (state, val) => {
+  state.collectionsByStudent = val;
+};
+
+export const setIsLoadingCollectionsByStudent = (state, val) => {
+  state.isLoadingCollectionsByStudent = val;
+};

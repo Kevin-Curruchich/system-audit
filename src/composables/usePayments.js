@@ -6,9 +6,8 @@ export default function usePayments() {
   const store = useStore();
 
   //   computed
-  const collections = computed(() => store.getters["payments/getPayments"]);
-  const total = computed(() => collections.value.length);
-  const isLoadingTable = computed(
+  const payments = computed(() => store.getters["payments/getPayments"]);
+  const isLoadingPayments = computed(
     () => store.getters["payments/getIsLoadingPayments"]
   );
 
@@ -16,15 +15,18 @@ export default function usePayments() {
   const paymentPerPage = ref([]);
 
   //methods
-  const requestGetPayments = async () => {
-    await store.dispatch("payments/requestGetPayments");
-    onChangePage(1);
+  //get
+  const requestGetPayments = async (params = { page: 1, take: 10 }) => {
+    await store.dispatch("payments/requestGetPayments", params);
   };
 
-  const onChangePage = (page) => {
-    const currentPage = collections.value.slice((page - 1) * 10, page * 10);
-
-    paymentPerPage.value = currentPage;
+  //post
+  const requestPostPayments = async (params) => {
+    const response = await store.dispatch(
+      "payments/requestPostPayments",
+      params
+    );
+    return response;
   };
 
   const getPaymentsId = (id) => {
@@ -66,13 +68,13 @@ export default function usePayments() {
   };
 
   return {
-    isLoadingTable,
-    onChangePage,
-    paymentPerPage,
-    requestGetPayments,
     getPaymentsId,
-    total,
-    getStatusBadge,
     getStatus,
+    getStatusBadge,
+    isLoadingPayments,
+    paymentPerPage,
+    payments,
+    requestGetPayments,
+    requestPostPayments,
   };
 }

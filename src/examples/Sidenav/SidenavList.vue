@@ -27,6 +27,15 @@
           <i class="fas fa-dollar-sign"></i>
         </template>
       </sidenav-item>
+      <sidenav-item
+        :to="{ name: 'Payments List' }"
+        mini-icon="A"
+        text="Aportes"
+      >
+        <template #icon>
+          <i class="fas fa-receipt"></i>
+        </template>
+      </sidenav-item>
 
       <li class="mt-3 nav-item">
         <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6">

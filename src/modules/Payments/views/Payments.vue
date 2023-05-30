@@ -11,7 +11,11 @@
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
-                <argon-button color="primary" size="lg">
+                <argon-button
+                  color="primary"
+                  size="lg"
+                  @click="showModal = true"
+                >
                   Registrar
                 </argon-button>
               </div>
@@ -19,7 +23,7 @@
           </div>
         </div>
         <div class="px-0 pb-0 card-body">
-          <el-table v-loading="isLoadingTable" :data="paymentPerPage">
+          <el-table v-loading="isLoadingPayments" :data="payments.data">
             <el-table-column label="ID Pago">
               <template #default="{ row }">
                 <a href="#">{{ getPaymentsId(row.paymentId) }}</a>
@@ -27,18 +31,22 @@
             </el-table-column>
             <el-table-column label="Estudiante">
               <template #default="{ row }">
-                {{ row.branch.branchName }}
+                {{ row.student.studentFullName }}
               </template>
             </el-table-column>
-            <el-table-column label="ID Cobro">
+            <el-table-column label="Cobro a debitar">
               <template #default="{ row }">
-                {{ row.paymentType.paymentTypeName }}
+                {{ row.collectionStudent.collection.collectionName }}
               </template>
             </el-table-column>
             <el-table-column label="Fecha Pago" min-width="150px">
               <template #default="{ row }">
-                {{ formatDateDMY(row.paymentStartDate) }} -
-                {{ formatDateDMY(row.paymentEndDate) }}
+                {{ formatDateDMY(row.paymentDate) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Monto de Pago" min-width="150px">
+              <template #default="{ row }">
+                {{ `Q. ${row.paymentAmount}` }}
               </template>
             </el-table-column>
           </el-table>
@@ -47,7 +55,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="total"
+            :total="payments.total"
             @current-change="onChangePage"
           />
         </div>
@@ -55,43 +63,57 @@
       </div>
     </div>
   </div>
+  <add-edit-payment
+    :show-modal="showModal"
+    @hidde-modal="onCloseModal"
+    @accept-modal="onAcceptModal"
+  />
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import { usePayments, useFormatDate } from "@/composables";
+import AddEditPayment from "../components/AddEditPayment.vue";
 
 export default {
   name: "Payments",
-  components: { ArgonButton },
+  components: { ArgonButton, AddEditPayment },
   setup() {
-    const {
-      isLoadingTable,
-      onChangePage,
-      paymentPerPage,
-      // requestgetPayments,
-      total,
-      getPaymentsId,
-      getStatusBadge,
-      getStatus,
-    } = usePayments();
+    //instnaces
+    const { isLoadingPayments, requestGetPayments, payments, getPaymentsId } =
+      usePayments();
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
 
+    //refs
+    const showModal = ref(false);
+
+    //methods
+    const onChangePage = () => {};
+
+    const onCloseModal = () => {
+      showModal.value = false;
+    };
+
+    const onAcceptModal = () => {
+      showModal.value = false;
+      requestGetPayments();
+    };
+
     onMounted(() => {
-      // requestgetPayments();
+      requestGetPayments();
     });
 
     return {
-      isLoadingTable,
-      onChangePage,
-      paymentPerPage,
-      total,
-      getPaymentsId,
       formatDateDMY,
       formatDateDMYH,
-      getStatusBadge,
-      getStatus,
+      getPaymentsId,
+      isLoadingPayments,
+      onAcceptModal,
+      onChangePage,
+      onCloseModal,
+      payments,
+      showModal,
     };
   },
 };

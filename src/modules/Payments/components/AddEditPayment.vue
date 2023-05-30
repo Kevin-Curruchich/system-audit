@@ -1,6 +1,6 @@
 <template>
   <modal scrollable :show="showModal" size="lg" :on-hide-modal="onHideModal">
-    <template #header> Asignar cobro </template>
+    <template #header> Registrar Pago </template>
     <template #body>
       <el-form
         ref="formRef"
@@ -27,35 +27,48 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Cobro" prop="collectionId">
+            <el-form-item label="Cobro a debitar" prop="collectionStudentId">
               <el-select
-                v-model="formModel.collectionId"
-                placeholder="Cobro"
+                v-model="formModel.collectionStudentId"
+                placeholder="Cobro a debitar"
                 filterable
               >
                 <el-option
-                  v-for="collection in collectionsToStudent"
-                  :key="collection.collectionId"
-                  :value="collection.collectionId"
-                  :label="collection.collectionName"
+                  v-for="collection in collectionsByStudent"
+                  :key="collection.collectionStudentId"
+                  :value="collection.collectionStudentId"
+                  :label="collection.collection.collectionName"
                 />
               </el-select>
             </el-form-item>
           </div>
+          <div class="col-md-12">
+            <el-divider></el-divider>
+          </div>
           <div class="col-md-6">
-            <el-form-item label="Monto" prop="collectionStudentAmountOwed">
+            <el-form-item label="Saldo" prop="collectionStudentAmountOwed">
               <el-input
                 v-model="formModel.collectionStudentAmountOwed"
                 type="number"
-                placeholder="Monto "
+                placeholder="Monto a debitar"
+                :disabled="true"
+              />
+            </el-form-item>
+          </div>
+          <div class="col-md-6">
+            <el-form-item label="Monto a debitar" prop="paymentAmount">
+              <el-input
+                v-model="formModel.paymentAmount"
+                type="number"
+                placeholder="Monto a debitar"
               />
             </el-form-item>
           </div>
 
           <div class="col-md-6">
-            <el-form-item label="Fecha" prop="collectionStudentDate">
+            <el-form-item label="Fecha" prop="paymentDate">
               <el-date-picker
-                v-model="formModel.collectionStudentDate"
+                v-model="formModel.paymentDate"
                 placeholder="Fecha"
                 format="DD/MM/YYYY"
                 style="width: 100%"
@@ -63,9 +76,9 @@
             </el-form-item>
           </div>
           <div class="col-md-12">
-            <el-form-item label="Descripcion" prop="collectionDescription">
+            <el-form-item label="Descripcion" prop="paymentDescription">
               <el-input
-                v-model="formModel.collectionDescription"
+                v-model="formModel.paymentDescription"
                 placeholder="Descripcion"
                 type="textarea"
                 rows="2"
@@ -88,7 +101,12 @@
 
 <script>
 import { onMounted, ref, watch } from "vue";
-import { useStudents, useCollections, useFormatDate } from "@/composables";
+import {
+  useStudents,
+  useCollections,
+  useFormatDate,
+  usePayments,
+} from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 
@@ -108,8 +126,9 @@ export default {
     const requiredMesage = errorMessages.required;
     //instances
     const { requestGetStudentsList, studentsList } = useStudents();
-    const { collections, requestGetCollections, requestPostCollectionStudent } =
+    const { collectionsByStudent, requestGetCollectionsOwedByStudent } =
       useCollections();
+    const { requestPostPayments } = usePayments();
 
     const { formatDateYMD } = useFormatDate();
 
@@ -119,19 +138,18 @@ export default {
     const formRef = ref(null);
     const formModel = ref({
       studentId: "",
-      collectionId: "",
-      collectionStudentDate: "",
+      collectionStudentId: "",
+      paymentDate: "",
       collectionStudentAmountOwed: "",
-      collectionDescription: "",
+      paymentAmount: "",
+      paymentDescription: "",
     });
 
     const rules = ref({
       studentId: [{ required: true, message: requiredMesage }],
-      collectionId: [{ required: true, message: requiredMesage }],
-      collectionStudentAmountOwed: [
-        { required: true, message: requiredMesage },
-      ],
-      collectionStudentDate: [{ required: true, message: requiredMesage }],
+      collectionStudentId: [{ required: true, message: requiredMesage }],
+      paymentAmount: [{ required: true, message: requiredMesage }],
+      paymentDate: [{ required: true, message: requiredMesage }],
     });
 
     //methods
@@ -150,13 +168,12 @@ export default {
       await formRef.value.validate((isValid) => {
         if (isValid) {
           lockModal.value = true;
-          formModel.value.collectionStudentDate = formatDateYMD(
-            formModel.value.collectionStudentDate
+          formModel.value.paymentDate = formatDateYMD(
+            formModel.value.paymentDate
           );
-          formModel.value.collectionStudentAmountOwed =
-            +formModel.value.collectionStudentAmountOwed;
-          console.log({ formModel: formModel.value });
-          requestPostCollectionStudent(formModel.value)
+          formModel.value.paymentAmount = +formModel.value.paymentAmount;
+
+          requestPostPayments(formModel.value)
             .then(() => {
               onClearData();
               emit("accept-modal");
@@ -174,32 +191,28 @@ export default {
       (studentId) => {
         if (studentId) {
           lockModal.value = true;
-          formModel.value.collectionId = "";
-          const studentData = studentsList.value.data.find(
-            (student) => student.studentId === studentId
-          );
+          formModel.value.collectionStudentId = "";
 
-          collectionsToStudent.value = collections.value.filter((collection) =>
-            collection.collectionStudentApply.find(
-              (applyStudent) =>
-                applyStudent.studentTypeId === studentData.studentTypeId
-            )
-          );
-          lockModal.value = false;
+          requestGetCollectionsOwedByStudent(studentId)
+            .then(() => {
+              lockModal.value = false;
+            })
+            .catch(() => {
+              lockModal.value = false;
+            });
         }
       }
     );
 
     watch(
-      () => formModel.value.collectionId,
-      (collecitonId) => {
-        if (collecitonId) {
-          const collectionData = collectionsToStudent.value.find(
-            (collection) => collection.collectionId === collecitonId
-          );
-
+      () => formModel.value.collectionStudentId,
+      (collectionStudentId) => {
+        if (collectionStudentId) {
           formModel.value.collectionStudentAmountOwed =
-            collectionData.collectionBaseAmount;
+            collectionsByStudent.value.find(
+              (collection) =>
+                collection.collectionStudentId === collectionStudentId
+            ).collectionStudentAmountOwed;
         }
       }
     );
@@ -207,7 +220,6 @@ export default {
     //lifecycle
     onMounted(() => {
       requestGetStudentsList();
-      requestGetCollections();
     });
 
     return {
@@ -218,7 +230,7 @@ export default {
       rules,
       lockModal,
       studentsList,
-      collectionsToStudent,
+      collectionsByStudent,
     };
   },
 };

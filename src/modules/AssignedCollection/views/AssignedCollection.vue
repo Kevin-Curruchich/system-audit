@@ -27,7 +27,7 @@
             v-loading="isLoadingAssignedCollections"
             :data="assignedCollections.data"
           >
-            <el-table-column label="ID">
+            <el-table-column label="ID" min-width="50px">
               <template #default="{ row }">
                 <a href="#" class="text-primary">
                   {{ collectionId(row.collectionStudentId) }}
@@ -39,12 +39,32 @@
                 {{ row.student.studentFullName }}
               </template>
             </el-table-column>
-            <el-table-column label="Fecha asignacion">
+            <el-table-column label="Cobro">
+              <template #default="{ row }">
+                {{ row.collection.collectionName }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Fecha">
               <template #default="{ row }">
                 {{ formatDateDMY(row.collectionStudentDate) }}
               </template>
             </el-table-column>
-            <el-table-column label="Monto a pagar">
+            <el-table-column label="Total">
+              <template #default="{ row }">
+                {{
+                  `Q. ${
+                    row.collectionStudentAmountOwed +
+                    row.collectionStudentAmountPaid
+                  }`
+                }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Abonado">
+              <template #default="{ row }">
+                {{ `Q. ${row.collectionStudentAmountPaid}` }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Saldo">
               <template #default="{ row }">
                 {{ `Q. ${row.collectionStudentAmountOwed}` }}
               </template>

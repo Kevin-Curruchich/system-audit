@@ -1,13 +1,29 @@
 import sbgApi from "@/apis/sbgApi";
 
-export const requestGetPayments = async ({ commit }) => {
+//get
+export const requestGetPayments = async ({ commit }, params) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingPayments", true);
     sbgApi
-      .get("/collection/all")
+      .get("/payments", { params })
       .then((response) => {
         commit("setPayments", response.data);
         commit("setIsLoadingPayments", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+//post
+export const requestPostPayments = async (_, params) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post("/payments", params)
+      .then((response) => {
         resolve(response.data);
       })
       .catch((error) => {
