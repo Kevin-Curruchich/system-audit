@@ -22,6 +22,14 @@ export default {
           /* webpackChunkName: "CollectionReport" */ "@/modules/Settings/Collections/views/Collections.vue"
         ),
     },
+    {
+      path: "quarters",
+      name: "Settings Quarters",
+      component: () =>
+        import(
+          /* webpackChunkName: "CollectionReport" */ "@/modules/Settings/Quarters/views/Quarters.vue"
+        ),
+    },
 
     // {
     //   path: ":id",

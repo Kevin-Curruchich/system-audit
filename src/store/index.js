@@ -4,6 +4,7 @@ import auth from "./modules/Auth";
 import students from "./modules/Students";
 import collections from "./modules/Collections";
 import payments from "./modules/Payments";
+import quarters from "./modules/Quarters";
 
 export default createStore({
   state: {
@@ -82,5 +83,6 @@ export default createStore({
     students,
     collections,
     payments,
+    quarters,
   },
 });

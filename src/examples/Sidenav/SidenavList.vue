@@ -62,6 +62,11 @@
               mini-icon="S"
               text="Cobros"
             />
+            <sidenav-item
+              :to="{ name: 'Settings Quarters' }"
+              mini-icon="T"
+              text="Trimestres"
+            />
           </ul>
         </template>
       </sidenav-collapse>

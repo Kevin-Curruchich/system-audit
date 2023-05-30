@@ -53,6 +53,19 @@
           </div>
 
           <div class="col-md-6">
+            <el-form-item label="Trimestre" prop="quartetlyQuartetlyId">
+              <el-select v-model="formModel.quartetlyQuartetlyId">
+                <el-option
+                  v-for="quarter in quartersList"
+                  :key="quarter.quartetlyId"
+                  :value="quarter.quartetlyId"
+                  :label="quarter.quartetlyName"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
+
+          <div class="col-md-6">
             <el-form-item label="Fecha" prop="collectionStudentDate">
               <el-date-picker
                 v-model="formModel.collectionStudentDate"
@@ -62,6 +75,7 @@
               />
             </el-form-item>
           </div>
+
           <div class="col-md-12">
             <el-form-item label="Descripcion" prop="collectionDescription">
               <el-input
@@ -88,7 +102,12 @@
 
 <script>
 import { onMounted, ref, watch } from "vue";
-import { useStudents, useCollections, useFormatDate } from "@/composables";
+import {
+  useStudents,
+  useCollections,
+  useFormatDate,
+  useQuarters,
+} from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 
@@ -110,6 +129,7 @@ export default {
     const { requestGetStudentsList, studentsList } = useStudents();
     const { collections, requestGetCollections, requestPostCollectionStudent } =
       useCollections();
+    const { requestGetQuartresList, quartersList } = useQuarters();
 
     const { formatDateYMD } = useFormatDate();
 
@@ -120,6 +140,7 @@ export default {
     const formModel = ref({
       studentId: "",
       collectionId: "",
+      quartetlyQuartetlyId: "",
       collectionStudentDate: "",
       collectionStudentAmountOwed: "",
       collectionDescription: "",
@@ -132,6 +153,7 @@ export default {
         { required: true, message: requiredMesage },
       ],
       collectionStudentDate: [{ required: true, message: requiredMesage }],
+      quartetlyQuartetlyId: [{ required: true, message: requiredMesage }],
     });
 
     //methods
@@ -208,6 +230,7 @@ export default {
     onMounted(() => {
       requestGetStudentsList();
       requestGetCollections();
+      requestGetQuartresList();
     });
 
     return {
@@ -219,6 +242,7 @@ export default {
       lockModal,
       studentsList,
       collectionsToStudent,
+      quartersList,
     };
   },
 };

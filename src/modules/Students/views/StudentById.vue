@@ -20,12 +20,7 @@
     <el-tabs type="border-card" stretch>
       <el-tab-pane>
         <template #label>
-          <i class="fas fa-money-bill-wave-alt m-2"></i> Pagos
-        </template>
-      </el-tab-pane>
-      <el-tab-pane>
-        <template #label>
-          <i class="fas fa-hand-holding-usd me-2"></i> Cobros
+          <i class="fas fa-money-bill-wave-alt m-2"></i> Historial Pagos
         </template>
       </el-tab-pane>
       <el-tab-pane>
