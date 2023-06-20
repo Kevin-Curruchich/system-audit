@@ -22,6 +22,7 @@
         <template #label>
           <i class="fas fa-money-bill-wave-alt m-2"></i> Historial Pagos
         </template>
+        <student-collection-history />
       </el-tab-pane>
       <el-tab-pane>
         <template #label>
@@ -37,9 +38,10 @@ import { ArgonButton } from "@/components";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStudent } from "@/composables";
+import StudentCollectionHistory from "../components/StudentCollectionHistory.vue";
 
 export default {
-  components: { ArgonButton },
+  components: { ArgonButton, StudentCollectionHistory },
   props: {
     id: {
       type: String,

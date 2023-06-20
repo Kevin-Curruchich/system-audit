@@ -22,7 +22,6 @@ export const requestGetQuartresList = async ({ commit }, params) => {
     sbgApi
       .get(`/quartes/list`, { params })
       .then((response) => {
-        console.log({ response });
         commit("setQuartersList", response.data);
         resolve(response.data);
       })

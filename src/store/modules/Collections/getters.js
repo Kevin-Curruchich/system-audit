@@ -12,6 +12,14 @@ export const getIsLoadingAssignedCollections = (state) => {
   return state.isLoadingAssignedCollections;
 };
 
+export const getCollectionsOwedByStudent = (state) => {
+  return state.collectionsOwedByStudent;
+};
+
+export const getIsLoadingCollectionsOwedByStudent = (state) => {
+  return state.isLoadingCollectionsOwedByStudent;
+};
+
 export const getCollectionsByStudent = (state) => {
   return state.collectionsByStudent;
 };

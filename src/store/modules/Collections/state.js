@@ -5,6 +5,8 @@ export default () => ({
   isLoadingAssignedCollections: false,
   collectionTypes: [],
   isLoadingCollectionTypes: false,
+  collectionsOwedByStudent: [],
+  isLoadingCollectionsOwedByStudent: true,
   collectionsByStudent: [],
   isLoadingCollectionsByStudent: true,
 });

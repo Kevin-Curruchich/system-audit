@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-5">
+            <div class="col-md-3">
               <label class="form-label"> Buscar </label>
               <div class="">
                 <el-input
@@ -29,8 +29,7 @@
                 />
               </div>
             </div>
-
-            <div class="col-md-5">
+            <div class="col-md-3">
               <label class="form-label"> Tipo de estudiante </label>
               <div>
                 <el-select v-model="selectedStudentType">
@@ -45,17 +44,7 @@
               </div>
             </div>
             <div class="col-md-2">
-              <div class="h-100 d-flex align-items-end">
-                <argon-button @click="filter"
-                  >Filtrar
-                  <i class="fas fa-filter"></i>
-                </argon-button>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="row mt-3">
-            <div class="col-md-5">
-              <label class="form-label"> Ciclo </label>
+              <label class="form-label"> Año </label>
               <div>
                 <el-select v-model="selectedStudentType">
                   <el-option label="Todos" value=""></el-option>
@@ -64,13 +53,11 @@
                     :key="item.studentTypeId"
                     :value="item.studentTypeId"
                     :label="item.studentTypeName"
-                  >
-                    {{ item.studentTypeName }}
-                  </el-option>
+                  />
                 </el-select>
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-2">
               <label class="form-label"> Estado </label>
               <div>
                 <el-select v-model="selectedStatus">
@@ -86,7 +73,15 @@
                 </el-select>
               </div>
             </div>
-          </div> -->
+            <div class="col-md-2">
+              <div class="h-100 d-flex align-items-end justify-content-end">
+                <argon-button @click="filter"
+                  >Filtrar
+                  <i class="fas fa-filter"></i>
+                </argon-button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="px-0 pb-0 card-body">
           <el-table

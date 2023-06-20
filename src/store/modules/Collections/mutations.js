@@ -21,6 +21,14 @@ export const setIsLoadingCollectionTypes = (state, val) => {
   state.isLoadingCollectionTypes = val;
 };
 
+export const setCollectionsOwedByStudent = (state, val) => {
+  state.collectionsOwedByStudent = val;
+};
+
+export const setIsLoadingCollectionsOwedByStudent = (state, val) => {
+  state.isLoadingCollectionsOwedByStudent = val;
+};
+
 export const setCollectionsByStudent = (state, val) => {
   state.collectionsByStudent = val;
 };

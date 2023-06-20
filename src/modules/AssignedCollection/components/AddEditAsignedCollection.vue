@@ -177,7 +177,7 @@ export default {
           );
           formModel.value.collectionStudentAmountOwed =
             +formModel.value.collectionStudentAmountOwed;
-          console.log({ formModel: formModel.value });
+
           requestPostCollectionStudent(formModel.value)
             .then(() => {
               onClearData();

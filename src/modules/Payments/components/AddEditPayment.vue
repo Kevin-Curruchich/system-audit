@@ -34,7 +34,7 @@
                 filterable
               >
                 <el-option
-                  v-for="collection in collectionsByStudent"
+                  v-for="collection in collectionsOwedByStudent"
                   :key="collection.collectionStudentId"
                   :value="collection.collectionStudentId"
                   :label="collection.collection.collectionName"
@@ -126,7 +126,7 @@ export default {
     const requiredMesage = errorMessages.required;
     //instances
     const { requestGetStudentsList, studentsList } = useStudents();
-    const { collectionsByStudent, requestGetCollectionsOwedByStudent } =
+    const { collectionsOwedByStudent, requestGetCollectionsOwedByStudent } =
       useCollections();
     const { requestPostPayments } = usePayments();
 
@@ -209,7 +209,7 @@ export default {
       (collectionStudentId) => {
         if (collectionStudentId) {
           formModel.value.collectionStudentAmountOwed =
-            collectionsByStudent.value.find(
+            collectionsOwedByStudent.value.find(
               (collection) =>
                 collection.collectionStudentId === collectionStudentId
             ).collectionStudentAmountOwed;
@@ -230,7 +230,7 @@ export default {
       rules,
       lockModal,
       studentsList,
-      collectionsByStudent,
+      collectionsOwedByStudent,
     };
   },
 };
