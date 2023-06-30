@@ -5,6 +5,10 @@ export const getIsLoadingCollections = (state) => {
   return state.isLoadingCollection;
 };
 
+export const getCollectionTypes = (state) => {
+  return state.collectionTypes;
+};
+
 export const getAssignedCollections = (state) => {
   return state.assignedCollections;
 };

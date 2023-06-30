@@ -103,3 +103,17 @@ export const requestPostCollectionStudent = async (_, params) => {
       });
   });
 };
+
+export const requestPostCollection = async (_, data) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post(`/collections`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

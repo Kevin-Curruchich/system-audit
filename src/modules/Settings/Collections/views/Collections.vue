@@ -11,7 +11,13 @@
             </div>
             <div class="my-auto mt-4 ms-auto mt-lg-0">
               <div class="my-auto ms-auto">
-                <argon-button color="primary" size="lg"> Nuevo </argon-button>
+                <argon-button
+                  color="primary"
+                  size="lg"
+                  @click="showModal = true"
+                >
+                  Nuevo
+                </argon-button>
               </div>
             </div>
           </div>
@@ -59,28 +65,54 @@
       </div>
     </div>
   </div>
+  <AddEditCollection
+    :show-modal="showModal"
+    @hidde-modal="onHiddeModal"
+    @accept-modal="onAcceptModal"
+  />
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import { useCollections, useStudents } from "@/composables";
+import AddEditCollection from "../components/AddEditCollection.vue";
 
 export default {
   name: "Collections",
-  components: { ArgonButton },
+  components: { ArgonButton, AddEditCollection },
   setup() {
+    //instances
     const { isLoadingCollections, collections, requestGetCollections } =
       useCollections();
     const { getStudentTypeName } = useStudents();
 
+    //refs
+    const showModal = ref(false);
+
+    //methods
+    const onHiddeModal = () => {
+      showModal.value = false;
+    };
+
+    const onAcceptModal = () => {
+      showModal.value = false;
+      requestGetCollections();
+    };
+
+    //lifecycle
     onMounted(() => {
       requestGetCollections();
     });
+
+    //returns
     return {
-      isLoadingCollections,
       collections,
       getStudentTypeName,
+      isLoadingCollections,
+      onAcceptModal,
+      onHiddeModal,
+      showModal,
     };
   },
 };

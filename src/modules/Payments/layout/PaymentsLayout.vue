@@ -13,6 +13,6 @@
 <script>
 export default {
   name: "PaymentsLayout",
-  mounted() {},
+  setup() {},
 };
 </script>

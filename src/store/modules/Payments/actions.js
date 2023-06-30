@@ -18,6 +18,24 @@ export const requestGetPayments = async ({ commit }, params) => {
   });
 };
 
+export const requestGetPaymentById = async ({ commit }, id) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsLoadingPaymentById", true);
+    sbgApi
+      .get(`/payments/${id}`)
+      .then((response) => {
+        console.log({ response });
+        commit("setPaymentById", response.data);
+        commit("setIsLoadingPaymentById", false);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 //post
 export const requestPostPayments = async (_, params) => {
   return new Promise((resolve, reject) => {

@@ -16,20 +16,37 @@ export default function useStudents() {
     () => store.getters["students/getIsLoadingStudents"]
   );
   const studentTypes = computed(() => store.getters["students/getSudentTypes"]);
+  const studentYears = computed(() => [
+    { year: 0, label: "Especiales" },
+    { year: 1, label: "Primer" },
+    { year: 2, label: "Segundo" },
+    { year: 3, label: "Tercer" },
+    { year: 4, label: "Cuarto" },
+  ]);
   const studentTypesTotal = ref(studentTypes.value.length);
   const isLoadingStudentTypes = computed(
     () => store.getters["students/getIsLoadingStudentTypes"]
   );
-
   const studentStatuses = computed(
     () => store.getters["students/getStudentStatuses"]
   );
 
   //methods
-  const requestGetStudents = async ({ page = 1, take = 10 }) => {
+  const requestGetStudents = async ({
+    page = 1,
+    take = 10,
+    search = "",
+    studentTypeId = "",
+    studentStatusId = "",
+    studentCurrentYear = "",
+  }) => {
     await store.dispatch("students/requestGetStudents", {
       page,
       take,
+      search,
+      studentTypeId,
+      studentStatusId,
+      studentCurrentYear,
     });
   };
 
@@ -98,5 +115,6 @@ export default function useStudents() {
     studentStatuses,
     studentTypes,
     studentTypesTotal,
+    studentYears,
   };
 }

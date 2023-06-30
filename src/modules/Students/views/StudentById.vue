@@ -18,16 +18,17 @@
     </div>
 
     <el-tabs type="border-card" stretch>
-      <el-tab-pane>
+      <el-tab-pane lazy>
         <template #label>
-          <i class="fas fa-money-bill-wave-alt m-2"></i> Historial Pagos
+          <i class="fas fa-money-bill-wave-alt m-2"></i> Historial de Aportes
         </template>
         <student-collection-history />
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane lazy>
         <template #label>
           <i class="fas fa-address-card m-2"></i> Información
         </template>
+        <student-information />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -39,9 +40,10 @@ import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStudent } from "@/composables";
 import StudentCollectionHistory from "../components/StudentCollectionHistory.vue";
+import StudentInformation from "../components/StudentInformation.vue";
 
 export default {
-  components: { ArgonButton, StudentCollectionHistory },
+  components: { ArgonButton, StudentCollectionHistory, StudentInformation },
   props: {
     id: {
       type: String,

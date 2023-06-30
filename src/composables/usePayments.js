@@ -1,14 +1,20 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import paymentsState from "@/constants/paymentsState";
 
 export default function usePayments() {
   const store = useStore();
+  const router = useRouter();
 
   //   computed
   const payments = computed(() => store.getters["payments/getPayments"]);
   const isLoadingPayments = computed(
     () => store.getters["payments/getIsLoadingPayments"]
+  );
+  const paymentById = computed(() => store.getters["payments/getPaymentById"]);
+  const isLoadingPaymentById = computed(
+    () => store.getters["payments/getIsLoadingPaymentById"]
   );
 
   //refs
@@ -16,8 +22,14 @@ export default function usePayments() {
 
   //methods
   //get
-  const requestGetPayments = async (params = { page: 1, take: 10 }) => {
+  const requestGetPayments = async (
+    params = { page: 1, take: 10, searchQuery: "", currentYear: "" }
+  ) => {
     await store.dispatch("payments/requestGetPayments", params);
+  };
+
+  const requestGetPaymentById = async (id) => {
+    await store.dispatch("payments/requestGetPaymentById", id);
   };
 
   //post
@@ -29,8 +41,14 @@ export default function usePayments() {
     return response;
   };
 
+  //functions
   const getPaymentsId = (id) => {
+    if (!id) return;
     return id.substring(0, 8);
+  };
+
+  const onNavigateToPayment = (id) => {
+    router.push({ name: "Invoice", params: { id: id } });
   };
 
   const getStatusBadge = (status) => {
@@ -76,5 +94,9 @@ export default function usePayments() {
     payments,
     requestGetPayments,
     requestPostPayments,
+    requestGetPaymentById,
+    paymentById,
+    isLoadingPaymentById,
+    onNavigateToPayment,
   };
 }

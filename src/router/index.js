@@ -56,6 +56,11 @@ const routes = [
     // beforeEnter: [isAuthenticatedGuard],
     ...SettingsRouter,
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    redirect: { name: "Dashboard" },
+  },
 ];
 
 const router = createRouter({

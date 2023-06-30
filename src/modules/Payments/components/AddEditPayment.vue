@@ -37,7 +37,7 @@
                   v-for="collection in collectionsOwedByStudent"
                   :key="collection.collectionStudentId"
                   :value="collection.collectionStudentId"
-                  :label="collection.collection.collectionName"
+                  :label="`${collection.collection.collectionName} - ${collection.Quartetly.quartetlyName} `"
                 />
               </el-select>
             </el-form-item>
@@ -50,17 +50,17 @@
               <el-input
                 v-model="formModel.collectionStudentAmountOwed"
                 type="number"
-                placeholder="Monto a debitar"
+                placeholder="Saldo"
                 :disabled="true"
               />
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Monto a debitar" prop="paymentAmount">
+            <el-form-item label="Monto a abonar" prop="paymentAmount">
               <el-input
                 v-model="formModel.paymentAmount"
                 type="number"
-                placeholder="Monto a debitar"
+                placeholder="Monto a abonar"
               />
             </el-form-item>
           </div>
@@ -72,6 +72,16 @@
                 placeholder="Fecha"
                 format="DD/MM/YYYY"
                 style="width: 100%"
+              />
+            </el-form-item>
+          </div>
+
+          <div class="col-md-6">
+            <el-form-item label="Recibo" prop="paymentSlip">
+              <el-input
+                v-model="formModel.paymentSlip"
+                type="text"
+                placeholder="Recibo"
               />
             </el-form-item>
           </div>
@@ -140,6 +150,7 @@ export default {
       studentId: "",
       collectionStudentId: "",
       paymentDate: "",
+      paymentSlip: "",
       collectionStudentAmountOwed: "",
       paymentAmount: "",
       paymentDescription: "",

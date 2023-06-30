@@ -80,6 +80,21 @@
               </el-select>
             </el-form-item>
           </div>
+          <div class="col-md-6">
+            <el-form-item label="Año" prop="studentCurrentYear">
+              <el-select
+                v-model="formModel.studentCurrentYear"
+                placeholder="Año estudiante"
+              >
+                <el-option
+                  v-for="item in studentYears"
+                  :key="item.year"
+                  :value="item.year"
+                  :label="item.label"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
       </el-form>
     </template>
@@ -116,8 +131,12 @@ export default {
     const requiredMesage = errorMessages.required;
     const inValidEmailMessage = errorMessages.inValidEmail;
     //instances
-    const { requestGetSudentTypes, studentTypes, requestPostStudent } =
-      useStudents();
+    const {
+      requestGetSudentTypes,
+      studentTypes,
+      studentYears,
+      requestPostStudent,
+    } = useStudents();
 
     //refs
     const sendingRequest = ref(false);
@@ -130,6 +149,7 @@ export default {
       studentEmail: "",
       studentStartDate: "",
       studentTypeId: "",
+      studentCurrentYear: "",
     });
 
     const rules = ref({
@@ -145,6 +165,7 @@ export default {
       studentTypeId: [
         { required: true, message: requiredMesage, trigger: "change" },
       ],
+      studentCurrentYear: [{ required: true, message: requiredMesage }],
     });
 
     //methods
@@ -187,6 +208,7 @@ export default {
       rules,
       sendingRequest,
       studentTypes,
+      studentYears,
     };
   },
 };

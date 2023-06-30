@@ -12,6 +12,7 @@ export const requestGetStudents = async ({ commit }, params) => {
       })
       .catch((error) => {
         console.log(error);
+        commit("setIsLoadingStudents", false);
         reject(error);
       });
   });

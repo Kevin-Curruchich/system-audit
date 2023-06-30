@@ -46,13 +46,13 @@
             <div class="col-md-2">
               <label class="form-label"> Año </label>
               <div>
-                <el-select v-model="selectedStudentType">
+                <el-select v-model="studentCurrentYear">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in studentTypes"
-                    :key="item.studentTypeId"
-                    :value="item.studentTypeId"
-                    :label="item.studentTypeName"
+                    v-for="item in studentYears"
+                    :key="item.year"
+                    :value="item.year"
+                    :label="item.label"
                   />
                 </el-select>
               </div>
@@ -113,6 +113,11 @@
                 {{ row.StudentType?.studentTypeName }}
               </template>
             </el-table-column>
+            <el-table-column label="Año">
+              <template #default="{ row }">
+                {{ row?.studentCurrentYear }}
+              </template>
+            </el-table-column>
             <el-table-column label="Estado" align="center">
               <template #default="{ row }">
                 <el-tag
@@ -145,7 +150,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStudents } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
@@ -166,6 +171,7 @@ export default {
       isLoadingStudents,
       requestGetStudents,
       getStatusBadge,
+      studentYears,
     } = useStudents();
 
     //ref
@@ -173,6 +179,7 @@ export default {
     const selectedStatus = ref("");
     const selectedStudentType = ref("");
     const search = ref("");
+    const studentCurrentYear = ref("");
 
     //methods
     const onChangePage = (page) => {
@@ -187,7 +194,14 @@ export default {
     };
 
     const filter = () => {
-      requestGetStudents({});
+      requestGetStudents({
+        page: 1,
+        take: 10,
+        search: search.value,
+        studentTypeId: selectedStudentType.value,
+        studentStatusId: selectedStatus.value,
+        studentCurrentYear: studentCurrentYear.value,
+      });
     };
 
     const onOpenModal = () => {
@@ -203,11 +217,6 @@ export default {
       requestGetStudents({});
     };
 
-    //lifecycle
-    onMounted(() => {
-      requestGetStudents({});
-    });
-
     return {
       acceptModal,
       filter,
@@ -215,6 +224,7 @@ export default {
       hiddeModal,
       isLoadingStudents,
       onChangePage,
+      onNavStudent,
       onOpenModal,
       search,
       selectedStatus,
@@ -223,7 +233,8 @@ export default {
       students,
       studentStatuses,
       studentTypes,
-      onNavStudent,
+      studentYears,
+      studentCurrentYear,
     };
   },
 };

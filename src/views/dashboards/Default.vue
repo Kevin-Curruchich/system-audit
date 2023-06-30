@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
-              title="Pagos registrados"
+              title="Aportes registrados"
               value="$53,000"
               description=""
               :icon="{
