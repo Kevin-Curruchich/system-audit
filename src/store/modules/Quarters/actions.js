@@ -31,3 +31,17 @@ export const requestGetQuartresList = async ({ commit }, params) => {
       });
   });
 };
+
+export const requestPostQuarters = async (_, data) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post(`/quartes`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

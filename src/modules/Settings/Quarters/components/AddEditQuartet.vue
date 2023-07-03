@@ -11,9 +11,9 @@
       >
         <div class="row">
           <div class="col-md-6">
-            <el-form-item label="Nombre Trimestre" prop="quartetName">
+            <el-form-item label="Nombre Trimestre" prop="quartetlyName">
               <el-input
-                v-model="formModel.quartetName"
+                v-model="formModel.quartetlyName"
                 placeholder="Nombre Trimestre"
               />
             </el-form-item>
@@ -55,7 +55,7 @@
 
 <script>
 import { onMounted, ref } from "vue";
-import { useCollections, useFormatDate } from "@/composables";
+import { useQuarters, useFormatDate } from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 
@@ -74,21 +74,20 @@ export default {
   setup(_, { emit }) {
     const requiredMesage = errorMessages.required;
     //instances
-    const { requestPostCollectionStudent } = useCollections();
-
+    const { requestPostQuarters } = useQuarters();
     const { formatDateYMD } = useFormatDate();
 
     //refs
     const lockModal = ref(false);
     const formRef = ref(null);
     const formModel = ref({
-      quartetName: "",
+      quartetlyName: "",
       quartetlyStart: "",
       quartetlyEnd: "",
     });
 
     const rules = ref({
-      quartetName: [{ required: true, message: requiredMesage }],
+      quartetlyName: [{ required: true, message: requiredMesage }],
       quartetlyStart: [{ required: true, message: requiredMesage }],
       quartetlyEnd: [{ required: true, message: requiredMesage }],
     });
@@ -115,7 +114,7 @@ export default {
             formModel.value.quartetlyEnd
           );
 
-          requestPostCollectionStudent(formModel.value)
+          requestPostQuarters(formModel.value)
             .then(() => {
               onClearData();
               emit("accept-modal");

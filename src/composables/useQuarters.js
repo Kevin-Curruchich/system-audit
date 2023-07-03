@@ -25,12 +25,18 @@ const useQuarters = () => {
     return resp;
   };
 
+  const requestPostQuarters = async (data) => {
+    const resp = await store.dispatch("quarters/requestPostQuarters", data);
+    return resp;
+  };
+
   return {
     quarters,
     isLoadingQuarters,
     requestGetQuartres,
     requestGetQuartresList,
     quartersList,
+    requestPostQuarters,
   };
 };
 
