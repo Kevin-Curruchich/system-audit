@@ -96,6 +96,8 @@ export default function useStudents() {
         return "Interno";
       case studentType.EXTERNAL:
         return "Externo";
+      case studentType.MARRIED:
+        return "Casado";
     }
   };
 
