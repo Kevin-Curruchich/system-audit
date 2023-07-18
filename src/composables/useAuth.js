@@ -10,23 +10,24 @@ const useAuth = () => {
     return resp;
   };
 
-  const checkAuthStatus = async () => {
+  const checkAuthentication = async () => {
     const resp = await store.dispatch("auth/checkAuthentication");
     return resp;
   };
 
   const logout = () => {
-    store.commit("auth/logout");
     router.push({ name: "login" });
+    store.commit("auth/logout");
   };
 
   return {
-    checkAuthStatus,
+    checkAuthentication,
     loginUser,
     logout,
 
     authStatus: computed(() => store.getters["auth/currentState"]),
     username: computed(() => store.getters["auth/username"]),
+    userData: computed(() => store.getters["auth/userData"]),
   };
 };
 

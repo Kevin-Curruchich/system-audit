@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
+import isAdminUser from "../modules/auth/guards/auth-gard-admin.js";
+import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
 import Default from "../views/dashboards/Default.vue";
 import StudentsRouter from "./modules/Students";
 import StudentTypesRouter from "./modules/StudentTypes";
@@ -23,7 +24,7 @@ const routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard, isAdminUser],
     component: Default,
   },
   {
@@ -33,27 +34,27 @@ const routes = [
   },
   {
     path: "/student-types",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard, isAdminUser],
     ...StudentTypesRouter,
   },
   {
     path: "/payments",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard],
     ...Payments,
   },
   {
     path: "/collections",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard, isAdminUser],
     ...Collections,
   },
   {
     path: "/reports",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard, isAdminUser],
     ...ReportsRouter,
   },
   {
     path: "/settings",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard, isAdminUser],
     ...SettingsRouter,
   },
   {

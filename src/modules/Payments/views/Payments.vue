@@ -64,7 +64,7 @@
             row-key="studentId"
             style="width: 100%; margin-bottom: 20px"
             border
-            size="medium"
+            size="default"
           >
             <el-table-column label="Estudiante" min-width="180px">
               <template #default="{ row }">

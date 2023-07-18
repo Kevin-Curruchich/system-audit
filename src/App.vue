@@ -18,7 +18,8 @@ Coded by www.creative-tim.com
     v-show="layout === 'landing'"
     class="landing-bg h-100 bg-gradient-primary position-fixed w-100"
   ></div>
-  <sidenav v-if="showSidenav" />
+  <sidenav v-if="showSidenav" :show-aside="accesSideNav" />
+
   <main class="main-content position-relative max-height-vh-100 h-100">
     <navbar v-if="showNavbar" />
     <router-view />
@@ -34,6 +35,9 @@ import Sidenav from "./examples/Sidenav";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
 import { mapState } from "vuex";
+import useAuth from "@/composables/useAuth";
+import userRole from "@/constants/userRole";
+import { computed } from "vue";
 
 export default {
   name: "App",
@@ -42,6 +46,14 @@ export default {
     // Configurator,
     Navbar,
     AppFooter,
+  },
+  setup() {
+    const { userData } = useAuth();
+
+    return {
+      userData,
+      accesSideNav: computed(() => userData.value?.roleId === userRole.ADMIN),
+    };
   },
   computed: {
     ...mapState([

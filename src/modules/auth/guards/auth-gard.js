@@ -1,7 +1,9 @@
-import store from "@/store";
+import useAuth from "@/composables/useAuth";
 
 const isAuthenticatedGuard = async (to, from, next) => {
-  const { ok } = await store.dispatch("auth/checkAuthentication");
+  const { checkAuthentication } = useAuth();
+
+  const { ok } = await checkAuthentication();
 
   if (ok) next();
   else next({ name: "login" });

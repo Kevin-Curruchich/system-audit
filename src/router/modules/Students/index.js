@@ -1,3 +1,5 @@
+import isAdminUser from "@/modules/auth/guards/auth-gard-admin.js";
+
 export default {
   name: "students",
   path: "/students",
@@ -9,6 +11,7 @@ export default {
     {
       path: "",
       name: "List of Students",
+      beforeEnter: [isAdminUser],
       component: () =>
         import(
           /* webpackChunkName: "StudentsList" */ "@/modules/Students/views/Students.vue"

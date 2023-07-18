@@ -15,6 +15,7 @@
     :class="`${darkMode ? 'bg-trasnparent' : 'bg-success'}`"
   />
   <aside
+    v-if="showAside"
     id="sidenav-main"
     class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 ms-4"
     :class="` ${sidebarType} ${
@@ -57,6 +58,12 @@ export default {
   components: {
     SidenavList,
     PerfectScrollbar,
+  },
+  props: {
+    showAside: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

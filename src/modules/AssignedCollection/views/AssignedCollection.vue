@@ -64,7 +64,7 @@
             row-key="studentId"
             style="width: 100%; margin-bottom: 20px"
             border
-            size="medium"
+            size="default"
           >
             <el-table-column label="Estudiate">
               <template #default="{ row }">
@@ -141,7 +141,7 @@
             </el-table-column>
             <el-table-column label="Acciones">
               <template #default="{ row }">
-                <el-button v-show="row?.collectionStudentId" size="sm">
+                <el-button v-show="row?.collectionStudentId" size="small">
                   <i class="fas fa-edit"></i>
                 </el-button>
               </template>

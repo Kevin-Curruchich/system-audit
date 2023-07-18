@@ -18,39 +18,48 @@
                   <p class="mb-0">Ingresa tu correo y contraseña</p>
                 </div>
                 <div class="card-body">
-                  <form role="form" @submit.prevent="onSubmit">
+                  <el-form
+                    ref="formRef"
+                    role="form"
+                    :model="userForm"
+                    :rules="rules"
+                    label-position="top"
+                  >
                     <div class="mb-3">
-                      <el-input
-                        id="email"
-                        v-model="userForm.username"
-                        type="email"
-                        placeholder="Email"
-                        size="lg"
-                      />
+                      <el-form-item label="Correo electronico" prop="userEmail">
+                        <el-input
+                          id="email"
+                          v-model="userForm.userEmail"
+                          type="email"
+                          placeholder="Correo electronico"
+                        />
+                      </el-form-item>
                     </div>
-                    <div class="mb-3">
-                      <el-input
-                        id="password"
-                        v-model="userForm.password"
-                        type="password"
-                        placeholder="Contraseña"
-                        size="lg"
-                      />
+                    <div class="mb-3 mt-2">
+                      <el-form-item label="Contraseña" prop="password">
+                        <el-input
+                          id="password"
+                          v-model="userForm.password"
+                          type="password"
+                          placeholder="Contraseña"
+                        />
+                      </el-form-item>
                     </div>
                     <!-- <argon-switch id="rememberMe" name="rememberMe">
                       Remember me
                     </argon-switch> -->
-                    <div class="text-center">
-                      <argon-button
-                        class="mt-4"
-                        variant="gradient"
-                        color="success"
-                        full-width
-                        size="lg"
-                        >Iniciar</argon-button
-                      >
-                    </div>
-                  </form>
+                  </el-form>
+                  <div class="text-center">
+                    <argon-button
+                      class="mt-4"
+                      variant="gradient"
+                      color="success"
+                      full-width
+                      :loading="sendingRequest"
+                      @click="onSubmit"
+                      >Iniciar</argon-button
+                    >
+                  </div>
                 </div>
                 <!-- <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
@@ -70,10 +79,7 @@
               <div
                 class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
                 :style="{
-                  backgroundImage:
-                    'url(' +
-                    'https://sbg.org.gt/SBG/static/images/SBG/parqueo_sm.jpg' +
-                    ')',
+                  backgroundImage: `url(${sbgImage})`,
                   backgroundSize: 'cover',
                 }"
               >
@@ -98,6 +104,7 @@
 import { mapMutations } from "vuex";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
 import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 import useAuth from "@/composables/useAuth";
@@ -110,34 +117,92 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const { loginUser } = useAuth();
+    const { loginUser, userData } = useAuth();
+
+    const formRef = ref(null);
+    const sendingRequest = ref(false);
 
     const userForm = ref({
-      username: "",
+      userEmail: "",
       password: "",
     });
 
+    const rules = ref({
+      userEmail: [
+        {
+          required: true,
+          message: "Por favor ingrese su correo",
+          trigger: "blur",
+        },
+        {
+          type: "email",
+          message: "Por favor ingrese un correo valido",
+          trigger: "blur",
+        },
+      ],
+      password: [
+        {
+          required: true,
+          message: "Por favor ingrese su contraseña",
+          trigger: "blur",
+        },
+      ],
+    });
+
     const onSubmit = async () => {
-      const { ok } = await loginUser(userForm.value);
-      if (ok) {
-        router.push({ name: "Dashboard" });
-      }
+      sendingRequest.value = true;
+      await formRef.value.validate(async (isValid) => {
+        if (!isValid) {
+          sendingRequest.value = false;
+          return;
+        }
+        loginUser(userForm.value)
+          .then(({ ok }) => {
+            if (ok) {
+              if (userData.value.studentId) {
+                router.push({
+                  name: "Student",
+                  params: { id: userData.value.studentId },
+                });
+              } else {
+                router.push({ name: "Dashboard" });
+              }
+            }
+          })
+          .catch(({ error }) => {
+            //display message error
+            ElMessage({
+              message: error.message,
+              type: "error",
+              showClose: true,
+            });
+
+            sendingRequest.value = false;
+          });
+      });
     };
 
-    return { onSubmit, userForm, sbgImage };
+    return { onSubmit, userForm, sbgImage, formRef, rules, sendingRequest };
   },
   created() {
     this.$store.state.hideConfigButton = true;
-    this.toggleDefaultLayout();
+    // this.toggleDefaultLayout();
+    this.toggleDefaultLayoutFalse();
+
     body.classList.remove("bg-gray-100");
   },
   beforeUnmount() {
     this.$store.state.hideConfigButton = false;
-    this.toggleDefaultLayout();
+    // this.toggleDefaultLayout();
+    this.toggleDefaultLayoutTrue();
     body.classList.add("bg-gray-100");
   },
   methods: {
-    ...mapMutations(["toggleDefaultLayout"]),
+    ...mapMutations([
+      "toggleDefaultLayout",
+      "toggleDefaultLayoutFalse",
+      "toggleDefaultLayoutTrue",
+    ]),
   },
 };
 </script>

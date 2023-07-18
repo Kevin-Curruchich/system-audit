@@ -52,7 +52,8 @@
     "vue-sweetalert2": "5.0.5",
     "vue-tilt.js": "1.1.1",
     "vue3-perfect-scrollbar": "^1.6.1",
-    "vuex": "4.0.2"
+    "vuex": "4.0.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.8",

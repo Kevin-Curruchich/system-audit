@@ -1,3 +1,5 @@
+import isAdminUser from "@/modules/auth/guards/auth-gard-admin.js";
+
 export default {
   name: "Payments",
   path: "/payments",
@@ -9,6 +11,7 @@ export default {
     {
       path: "",
       name: "Payments List",
+      beforeEnter: [isAdminUser],
       component: () =>
         import(
           /* webpackChunkName: "Payments" */ "@/modules/Payments/views/Payments.vue"
