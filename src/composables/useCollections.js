@@ -74,10 +74,10 @@ export default function useCollection() {
     return resp;
   };
 
-  const requestGetCollectionsByStudent = async (studentId) => {
+  const requestGetCollectionsByStudent = async (studentId, params) => {
     const resp = await store.dispatch(
       "collections/requestGetCollectionsByStudent",
-      studentId
+      { studentId, params }
     );
 
     return resp;

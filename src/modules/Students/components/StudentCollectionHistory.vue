@@ -1,5 +1,37 @@
 <template>
   <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-9">
+        <label class="form-label"> Trimestre </label>
+        <div>
+          <el-select
+            v-model="quarterSelected"
+            placeholder="Seleccione trimestre"
+          >
+            <el-option value="" label="Todos" />
+            <el-option
+              v-for="item in quartersByStudent"
+              :key="item.Quartetly.quartetlyId"
+              :value="item.Quartetly.quartetlyId"
+              :label="item.Quartetly.quartetlyName"
+            />
+          </el-select>
+        </div>
+      </div>
+      <div class="col-1 d-flex align-items-end">
+        <el-button type="primary" @click="onFilterHistory">
+          Filtrar <i class="fas fa-filter mx-2"></i>
+        </el-button>
+      </div>
+      <div class="col-2 d-flex align-items-end justify-content-end">
+        <el-button
+          :loading="isDownlodReportByStudent"
+          @click="onDownloadReport"
+        >
+          Descargar <i class="fas fa-file-download mx-2"></i>
+        </el-button>
+      </div>
+    </div>
     <div class="row">
       <div class="col-12">
         <el-collapse v-loading="isLoadingCollectionsByStudent">
@@ -8,6 +40,7 @@
               collectionStudentId,
               collection,
               Payment,
+              Quartetly,
               collectionStudentAmountOwed,
               collectionStudentAmountPaid,
             } in collectionsByStudent"
@@ -15,7 +48,10 @@
           >
             <template #title>
               <span class="me-2 fs-6">
-                {{ collection.collectionName }}
+                {{ collection.collectionName }} |
+                {{ Quartetly.quartetlyName }} |
+              </span>
+              <span class="me-2 fs-6">
                 <b>
                   {{
                     `Q.${(
@@ -24,6 +60,7 @@
                   }}
                 </b>
               </span>
+
               <el-tag type="success" class="me-2"
                 >{{
                   `Q.${collectionStudentAmountPaid.toLocaleString("es-GT")}`
@@ -36,7 +73,11 @@
               </el-tag>
             </template>
 
-            <el-timeline>
+            <el-card v-if="Payment.length === 0" shadow="never">
+              <span class="fs-6 text">No hay aportes registrados</span>
+            </el-card>
+
+            <el-timeline v-else>
               <el-timeline-item
                 v-for="payment in Payment"
                 :key="payment.paymentId"
@@ -75,9 +116,16 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useCollections, useFormatDate, usePayments } from "@/composables";
+import {
+  useCollections,
+  useFormatDate,
+  usePayments,
+  useQuarters,
+  useReports,
+  useStudent,
+} from "@/composables";
 export default {
   setup() {
     const route = useRoute();
@@ -91,17 +139,62 @@ export default {
       collectionId,
     } = useCollections();
     const { formatDateDMY } = useFormatDate();
+    const { requestGetQuartresByStudent, quartersByStudent } = useQuarters();
+    const {
+      requestDownloadCollectionHistoryByStudent,
+      isDownlodReportByStudent,
+    } = useReports();
+    const { student } = useStudent();
 
+    //ref
+    const quarterSelected = ref("");
+
+    //computed
+
+    const params = computed(() => {
+      return {
+        quartetlyId: quarterSelected.value,
+      };
+    });
+
+    //methods
+    const onDownloadReport = () => {
+      requestDownloadCollectionHistoryByStudent(id, params.value).then(
+        (response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${student.value.studentFullName}_Reporte.xlsx`
+          );
+          document.body.appendChild(link);
+          link.click();
+        }
+      );
+    };
+
+    const onFilterHistory = () => {
+      requestGetCollectionsByStudent(id, params.value);
+    };
+
+    //lifecycle
     onMounted(() => {
-      requestGetCollectionsByStudent(id);
+      requestGetCollectionsByStudent(id, params.value);
+      requestGetQuartresByStudent(id);
     });
 
     return {
-      collectionsByStudent,
-      isLoadingCollectionsByStudent,
-      formatDateDMY,
       collectionId,
+      collectionsByStudent,
+      formatDateDMY,
+      isDownlodReportByStudent,
+      isLoadingCollectionsByStudent,
+      onDownloadReport,
+      onFilterHistory,
       onNavigateToPayment,
+      quartersByStudent,
+      quarterSelected,
     };
   },
 };

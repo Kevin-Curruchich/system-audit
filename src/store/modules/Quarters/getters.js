@@ -9,3 +9,7 @@ export const getIsLoadingQuarters = (state) => {
 export const getQuartersList = (state) => {
   return state.quartersList;
 };
+
+export const getQuartersByStudent = (state) => {
+  return state.setQuartersByStudent;
+};

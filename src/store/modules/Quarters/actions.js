@@ -32,6 +32,22 @@ export const requestGetQuartresList = async ({ commit }, params) => {
   });
 };
 
+export const requestGetQuartresByStudent = async ({ commit }, id) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .get(`/quartes/student/${id}`)
+      .then((response) => {
+        commit("setQuartersByStudent", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+//post
 export const requestPostQuarters = async (_, data) => {
   return new Promise((resolve, reject) => {
     sbgApi

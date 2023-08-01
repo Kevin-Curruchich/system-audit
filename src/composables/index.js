@@ -4,6 +4,7 @@ import useFormatDate from "./useFormatDate";
 import usePayments from "./usePayments";
 import useStudent from "./useStudent";
 import useQuarters from "./useQuarters";
+import useReports from "./useReports";
 
 export {
   useCollections,
@@ -12,4 +13,5 @@ export {
   usePayments,
   useStudent,
   useQuarters,
+  useReports,
 };

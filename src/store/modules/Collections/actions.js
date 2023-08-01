@@ -35,11 +35,14 @@ export const requestGetAssignedCollections = async ({ commit }, params) => {
   });
 };
 
-export const requestGetCollectionsByStudent = async ({ commit }, id) => {
+export const requestGetCollectionsByStudent = async (
+  { commit },
+  { studentId, params }
+) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingCollectionsByStudent", true);
     sbgApi
-      .get(`/collections/students/${id}/history`)
+      .get(`/collections/students/${studentId}/history`, { params })
       .then((response) => {
         commit("setCollectionsByStudent", response.data);
         commit("setIsLoadingCollectionsByStudent", false);

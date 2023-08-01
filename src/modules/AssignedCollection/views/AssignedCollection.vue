@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-5">
+            <div class="col-md-4">
               <label class="form-label"> Buscar </label>
               <div class="">
                 <el-input
@@ -33,8 +33,8 @@
                 />
               </div>
             </div>
-            <div class="col-md-5">
-              <label class="form-label"> Año </label>
+            <div class="col-md-3">
+              <label class="form-label"> Año estudiante </label>
               <div>
                 <el-select v-model="studentCurrentYear">
                   <el-option label="Todos" value=""></el-option>
@@ -43,6 +43,20 @@
                     :key="item.year"
                     :value="item.year"
                     :label="item.label"
+                  />
+                </el-select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label"> Trimestre </label>
+              <div>
+                <el-select v-model="quartetlyId">
+                  <el-option label="Todos" value=""></el-option>
+                  <el-option
+                    v-for="item in quartersList"
+                    :key="item.quartetlyId"
+                    :value="item.quartetlyId"
+                    :label="item.quartetlyName"
                   />
                 </el-select>
               </div>
@@ -169,7 +183,12 @@
 
 <script>
 import { ref } from "vue";
-import { useCollections, useFormatDate, useStudents } from "@/composables";
+import {
+  useCollections,
+  useFormatDate,
+  useStudents,
+  useQuarters,
+} from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditAsignedCollection from "../components/AddEditAsignedCollection.vue";
 
@@ -188,13 +207,14 @@ export default {
       requestGetAssignedCollections,
     } = useCollections();
     const { studentYears } = useStudents();
-
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
+    const { quartersList } = useQuarters();
 
     //refs
     const showModal = ref(false);
     const search = ref("");
     const studentCurrentYear = ref("");
+    const quartetlyId = ref("");
 
     //methods
     const filter = () => {
@@ -203,6 +223,7 @@ export default {
         page: 1,
         searchQuery: search.value,
         currentYear: studentCurrentYear.value,
+        quartetlyId: quartetlyId.value,
       });
     };
 
@@ -227,6 +248,7 @@ export default {
     return {
       assignedCollections,
       collectionId,
+      filter,
       formatDateDMY,
       formatDateDMYH,
       getStatusBadge,
@@ -234,12 +256,13 @@ export default {
       onAcceptModal,
       onChangePage,
       onCloseModal,
+      quartersList,
+      quartetlyId,
       search,
       showModal,
+      studentCurrentYear,
       studentYears,
       total,
-      studentCurrentYear,
-      filter,
     };
   },
 };

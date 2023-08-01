@@ -9,3 +9,7 @@ export const setIsLoadingQuarters = (state, val) => {
 export const setQuartersList = (state, val) => {
   state.quartersList = val;
 };
+
+export const setQuartersByStudent = (state, val) => {
+  state.setQuartersByStudent = val;
+};

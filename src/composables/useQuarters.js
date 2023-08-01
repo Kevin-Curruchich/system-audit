@@ -14,9 +14,22 @@ const useQuarters = () => {
     () => store.getters["quarters/getQuartersList"]
   );
 
+  const quartersByStudent = computed(
+    () => store.getters["quarters/getQuartersByStudent"]
+  );
+
   //methods
   const requestGetQuartres = async (params = { page: 1, take: 10 }) => {
     const resp = await store.dispatch("quarters/requestGetQuartres", params);
+    return resp;
+  };
+
+  const requestGetQuartresByStudent = async (id) => {
+    const resp = await store.dispatch(
+      "quarters/requestGetQuartresByStudent",
+      id
+    );
+
     return resp;
   };
 
@@ -31,11 +44,13 @@ const useQuarters = () => {
   };
 
   return {
-    quarters,
     isLoadingQuarters,
-    requestGetQuartres,
-    requestGetQuartresList,
+    quarters,
+    quartersByStudent,
     quartersList,
+    requestGetQuartres,
+    requestGetQuartresByStudent,
+    requestGetQuartresList,
     requestPostQuarters,
   };
 };
