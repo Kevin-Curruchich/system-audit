@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row mb-3">
-      <div class="col-9">
+      <div class="col-md-9 col-sm-12">
         <label class="form-label"> Trimestre </label>
         <div>
           <el-select
@@ -18,13 +18,14 @@
           </el-select>
         </div>
       </div>
-      <div class="col-1 d-flex align-items-end">
+      <div class="col-md-1 col-sm-6 d-flex align-items-end">
         <el-button type="primary" @click="onFilterHistory">
           Filtrar <i class="fas fa-filter mx-2"></i>
         </el-button>
       </div>
-      <div class="col-2 d-flex align-items-end justify-content-end">
+      <div class="col-md-2 col-sm-6 d-flex align-items-end justify-content-end">
         <el-button
+          v-if="userIsAdmin"
           :loading="isDownlodReportByStudent"
           @click="onDownloadReport"
         >
@@ -33,7 +34,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-sm-12">
         <el-collapse v-loading="isLoadingCollectionsByStudent">
           <el-collapse-item
             v-for="{
@@ -125,6 +126,7 @@ import {
   useQuarters,
   useReports,
   useStudent,
+  useAuth,
 } from "@/composables";
 export default {
   setup() {
@@ -132,6 +134,8 @@ export default {
 
     const { id } = route.params;
     const { onNavigateToPayment } = usePayments();
+    const { userIsAdmin } = useAuth();
+
     const {
       requestGetCollectionsByStudent,
       collectionsByStudent,
@@ -195,6 +199,7 @@ export default {
       onNavigateToPayment,
       quartersByStudent,
       quarterSelected,
+      userIsAdmin,
     };
   },
 };

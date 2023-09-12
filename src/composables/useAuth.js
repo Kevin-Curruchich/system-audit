@@ -1,9 +1,16 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import store from "@/store";
+import userRole from "../constants/userRole";
 
 const useAuth = () => {
   const router = useRouter();
+
+  //computed
+  const authStatus = computed(() => store.getters["auth/currentState"]);
+  const username = computed(() => store.getters["auth/username"]);
+  const userData = computed(() => store.getters["auth/userData"]);
+  const userIsAdmin = computed(() => userData.value?.roleId === userRole.ADMIN);
 
   const loginUser = async (user) => {
     const resp = await store.dispatch("auth/signInUser", user);
@@ -24,10 +31,10 @@ const useAuth = () => {
     checkAuthentication,
     loginUser,
     logout,
-
-    authStatus: computed(() => store.getters["auth/currentState"]),
-    username: computed(() => store.getters["auth/username"]),
-    userData: computed(() => store.getters["auth/userData"]),
+    authStatus,
+    username,
+    userData,
+    userIsAdmin,
   };
 };
 

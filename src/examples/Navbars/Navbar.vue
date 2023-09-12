@@ -13,6 +13,7 @@
   >
     <div class="px-3 py-1 container-fluid">
       <breadcrumbs
+        v-if="userIsAdmin"
         :current-page="currentRouteName"
         :current-directory="currentDirectory"
       />
@@ -21,6 +22,7 @@
         :class="isRTL ? 'me-3' : ''"
       >
         <a
+          v-if="userIsAdmin"
           href="#"
           class="p-0 nav-link text-body"
           @click.prevent="navbarMinimize"
@@ -144,11 +146,12 @@ export default {
     Breadcrumbs,
   },
   setup() {
-    const { userData, logout } = useAuth();
+    const { userData, userIsAdmin, logout } = useAuth();
 
     return {
       userData,
       logout,
+      userIsAdmin,
     };
   },
   data() {

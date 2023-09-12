@@ -4,7 +4,12 @@
       <div class="col-12">
         <div class="d-lg-flex">
           <div>
-            <argon-button variant="outline" color="black" @click="back">
+            <argon-button
+              v-if="userIsAdmin"
+              variant="outline"
+              color="black"
+              @click="back"
+            >
               <i class="fas fa-arrow-left"></i>
             </argon-button>
           </div>
@@ -38,7 +43,7 @@
 import { ArgonButton } from "@/components";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStudent } from "@/composables";
+import { useStudent, useAuth } from "@/composables";
 import StudentCollectionHistory from "../components/StudentCollectionHistory.vue";
 import StudentInformation from "../components/StudentInformation.vue";
 
@@ -54,6 +59,9 @@ export default {
     //instances
     const router = useRouter();
     const { student, requestGetStudentById, isLoadingStudent } = useStudent();
+    const { userIsAdmin } = useAuth();
+
+    console.log({ userIsAdmin });
 
     const back = () => {
       router.push({ name: "List of Students" });
@@ -64,7 +72,7 @@ export default {
       requestGetStudentById(props.id);
     });
 
-    return { back, student, isLoadingStudent };
+    return { back, student, isLoadingStudent, userIsAdmin };
   },
 };
 </script>

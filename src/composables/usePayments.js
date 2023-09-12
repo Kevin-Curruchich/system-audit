@@ -41,6 +41,14 @@ export default function usePayments() {
     return response;
   };
 
+  const requestPostInvoiceMail = async (id) => {
+    const response = await store.dispatch(
+      "payments/requestPostInvoiceMail",
+      id
+    );
+    return response;
+  };
+
   //functions
   const getPaymentsId = (id) => {
     if (!id) return;
@@ -89,14 +97,15 @@ export default function usePayments() {
     getPaymentsId,
     getStatus,
     getStatusBadge,
+    isLoadingPaymentById,
     isLoadingPayments,
+    onNavigateToPayment,
+    paymentById,
     paymentPerPage,
     payments,
+    requestGetPaymentById,
     requestGetPayments,
     requestPostPayments,
-    requestGetPaymentById,
-    paymentById,
-    isLoadingPaymentById,
-    onNavigateToPayment,
+    requestPostInvoiceMail,
   };
 }

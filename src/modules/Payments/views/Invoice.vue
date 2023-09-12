@@ -1,7 +1,38 @@
 <template>
-  <el-button @click="onBackPayments">
+  <el-button size="large" @click="onBackPayments">
     <i class="fas fa-arrow-left mx-2"></i> Volver
   </el-button>
+  <div class="container-fluid">
+    <div v-if="userIsAdmin" class="row p-4">
+      <div class="col-6 text-end">
+        <argon-button
+          v-show="!isLoadingPaymentById"
+          color="success"
+          variant="gradient"
+          class="mb-0"
+          :onclick="printInvoice"
+          type="button"
+          name="button"
+          >Imprimir
+          <i class="fas fa-print mx-2"></i>
+        </argon-button>
+      </div>
+      <div class="col-6">
+        <argon-button
+          v-show="!isLoadingPaymentById"
+          color="primary"
+          variant="gradient"
+          class="mb-0"
+          :onclick="onSendEmail"
+          type="button"
+          name="button"
+          :loading="sendEmail"
+          >Enviar correo
+          <i class="fas fa-envelope mx-2"></i>
+        </argon-button>
+      </div>
+    </div>
+  </div>
   <div v-if="isLoadingPaymentById" class="container-fluid mt-1 pt-1">
     <div class="row">
       <div class="col-md-8 col-sm-10 mx-auto">
@@ -20,115 +51,122 @@
   <div v-else id="sbg-invoice" class="container-fluid mt-1 pt-1">
     <div v-loading="isLoadingPaymentById" class="row">
       <div class="col-md-8 col-sm-10 mx-auto">
-        <div class="card">
-          <div class="card-header text-center pb-0">
-            <div class="row justify-content-between py-1 my-0">
-              <div class="col-12 text-start">
-                <img
-                  class="mb-2 w-25 p-2"
-                  src="https://sbg.org.gt/SBG/static/images/logo_sbg_white.png"
-                  alt="Logo"
-                />
-                <h3>Seminario Bíblico Guatemalteco</h3>
-                <p class="d-block text-secondary mb-1">
-                  <i class="fas fa-map-marker-alt me-2"></i> 5a. Calle 0-43
-                </p>
-                <p class="d-block text-secondary mb-1">
-                  <i class="fas fa-phone-alt me-2"></i> 2251-8000
-                </p>
-              </div>
-            </div>
-            <div class="row justify-content-md-between">
-              <div class="col-md-12">
-                <span class="text-left fs-6">
-                  Correlativo:
-                  <span class="text-secondary">
-                    {{ paymentById?.paymentId }}
-                  </span>
-                </span>
-              </div>
-              <div class="col-6">
-                <p class="text-start mb-0">
-                  Estudiante:
-                  <b>
-                    {{ paymentById?.student?.studentFullName }}
-                  </b>
-                </p>
-              </div>
-              <div class="col-6 text-end">
-                <p class="text-secondary mb-0">
-                  Fecha:
-                  <b>
-                    {{ formatDateDMY(paymentById?.paymentDate) }}
-                  </b>
-                </p>
-              </div>
-            </div>
+        <div class="card p-3">
+          <div
+            class="company-info"
+            style="
+              text-align: center;
+              margin-bottom: 20px;
+              font-family: Arial, Helvetica, sans-serif;
+            "
+          >
+            <img
+              class="company-logo"
+              src="https://sbg.org.gt/SBG/static/images/logo_sbg_white.png"
+              alt="Logo de la empresa"
+              style="max-width: 100px; margin-bottom: 10px"
+            />
+            <h2 style="margin: 0">SEMINARIO BIBLICO GUATEMALTECO</h2>
+            <p style="margin: 5px 0">
+              1 Calle 7-206 Z.3 Chimaltenango, Guatemala, Chimaltenango,
+              Guatemala
+            </p>
+            <p style="margin: 5px 0">Tel: 7839-4897</p>
           </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-12">
-                <el-table :data="[paymentById]">
-                  <el-table-column>
-                    <template #header>
-                      <div class="text-center">Concepto</div>
-                    </template>
-                    <template #default="{ row }">
-                      <div class="text-center text-center-cell">
-                        {{ row?.collectionStudent?.collection.collectionName }}
-                      </div>
-                    </template>
-                  </el-table-column>
-                  <el-table-column>
-                    <template #header>
-                      <div class="text-center">Monto</div>
-                    </template>
-                    <template #default="{ row }">
-                      <div class="text-center text-center-cell">
-                        {{
-                          `Q. ${(row?.paymentAmount).toLocaleString("es-GT")}`
-                        }}
-                      </div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </div>
+          <hr style="margin: 5px 0" />
+          <div
+            class="invoice-header"
+            style="
+              text-align: center;
+              margin-bottom: 20px;
+              font-family: Arial, Helvetica, sans-serif;
+            "
+          >
+            <p style="margin: 5px 0">
+              Fecha:
+              {{ formatDateDMY(paymentById?.paymentDate) }}
+            </p>
+            <p style="margin: 5px 0">
+              <b>Correlativo:</b> {{ paymentById?.paymentId }}
+            </p>
           </div>
-          <div class="card-footer pt-1 pb-4">
-            <div class="d-flex justify-content-center">
-              <span class="text-secondary mb-0">
-                Alguna informacion extra
-              </span>
-            </div>
+          <div
+            class="customer-info"
+            style="
+              margin-bottom: 20px;
+              font-family: Arial, Helvetica, sans-serif;
+            "
+          >
+            <p style="margin: 0; font-weight: bold">Estudiante:</p>
+            <p style="margin: 5px 0">
+              {{ paymentById?.student?.studentFullName }}
+            </p>
           </div>
+          <table
+            class="invoice-table"
+            style="
+              width: 100%;
+              margin-top: 20px;
+              border-collapse: collapse;
+              background-color: #f9f9f9;
+              font-family: Arial, Helvetica, sans-serif;
+            "
+          >
+            <tr>
+              <th
+                style="border: 1px solid #ddd; padding: 10px; text-align: left"
+              >
+                Concepto
+              </th>
+
+              <th
+                style="border: 1px solid #ddd; padding: 10px; text-align: left"
+              >
+                Monto
+              </th>
+            </tr>
+
+            <tr
+              v-for="item in [paymentById]"
+              :key="item?.collectionStudent?.collection.collectionId"
+            >
+              <td
+                style="border: 1px solid #ddd; padding: 10px; text-align: left"
+              >
+                <b>
+                  {{ item?.collectionStudent?.collection.collectionName }}
+                </b>
+                <br />
+                <small style="font-variant: small-caps">{{
+                  item?.paymentDescription
+                }}</small>
+              </td>
+
+              <td
+                style="border: 1px solid #ddd; padding: 10px; text-align: left"
+              >
+                {{ `Q. ${item?.paymentAmount?.toLocaleString("es-GT")}` }}
+              </td>
+            </tr>
+          </table>
+          <!-- <div
+            class="total"
+            style="text-align: right; margin-top: 20px; font-weight: bold"
+          >
+            <p style="margin: 0; font-size: large">Total: $190.00</p>
+          </div> -->
         </div>
       </div>
-    </div>
-  </div>
-  <div class="container-fluid">
-    <div class="row d-flex justify-content-center align-items-center p-4">
-      <argon-button
-        v-show="!isLoadingPaymentById"
-        color="success"
-        variant="gradient"
-        class="mb-0"
-        :onclick="printInvoice"
-        type="button"
-        name="button"
-        >Imprimir
-        <i class="fas fa-print"></i>
-      </argon-button>
     </div>
   </div>
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { usePayments, useFormatDate } from "@/composables";
+import { usePayments, useFormatDate, useAuth } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
-import styles from "./styles";
+import { ElMessage } from "element-plus";
 
 export default {
   name: "Invoice",
@@ -137,32 +175,38 @@ export default {
   },
   setup() {
     //composables
-    const { requestGetPaymentById, paymentById, isLoadingPaymentById } =
-      usePayments();
+    const {
+      requestGetPaymentById,
+      paymentById,
+      isLoadingPaymentById,
+      requestPostInvoiceMail,
+    } = usePayments();
     const { formatDateDMY } = useFormatDate();
 
     const route = useRoute();
     const router = useRouter();
+    const { userIsAdmin } = useAuth();
+
+    //ref
+    const sendEmail = ref(false);
 
     //methods
+    const onSendEmail = async () => {
+      sendEmail.value = true;
+      const id = route.params.id;
+      await requestPostInvoiceMail(id);
+      sendEmail.value = false;
+
+      //message success email
+      ElMessage({
+        showClose: true,
+        message: "Correo enviado correctamente",
+        type: "success",
+      });
+    };
+
     const printInvoice = () => {
       const prtContent = document.getElementById("sbg-invoice");
-      // const WinPrint = window.open(
-      //   "www.sbg.org.gt",
-      //   "Recibo_SBG",
-      //   "left=0,top=0,toolbar=0,scrollbars=0,status=0"
-      // );
-
-      // WinPrint.document.write(
-      //   `<html><head>
-      //     <style>
-      //     ${styles}
-      //     </style>
-      //     <body onload="window.print();">
-      //     ${prtContent.innerHTML}
-      //     </html>`
-      // );
-
       const WinPrint = window.open(
         "www.sbg.org.gt",
         "Recibo_SBG",
@@ -170,9 +214,6 @@ export default {
       );
       WinPrint.document.write(
         `<html><head>
-          <style>
-          ${styles}
-          </style>
           <body onload="window.print();">
           ${prtContent.innerHTML}
           </html>`
@@ -190,7 +231,6 @@ export default {
 
     //lifecycle
     onMounted(() => {
-      console.log("Hola");
       const id = route.params.id;
       requestGetPaymentById(id);
     });
@@ -199,8 +239,11 @@ export default {
       formatDateDMY,
       isLoadingPaymentById,
       onBackPayments,
+      onSendEmail,
       paymentById,
       printInvoice,
+      sendEmail,
+      userIsAdmin,
     };
   },
 };

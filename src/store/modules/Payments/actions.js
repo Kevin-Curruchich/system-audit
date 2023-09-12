@@ -50,3 +50,17 @@ export const requestPostPayments = async (_, params) => {
       });
   });
 };
+
+export const requestPostInvoiceMail = async (_, id) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post(`/payments/payment-mail/${id}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

@@ -48,18 +48,19 @@
                     <!-- <argon-switch id="rememberMe" name="rememberMe">
                       Remember me
                     </argon-switch> -->
+                    <div class="text-center">
+                      <argon-button
+                        class="mt-4"
+                        variant="gradient"
+                        color="success"
+                        full-width
+                        :loading="sendingRequest"
+                        type="submit"
+                        @click="onSubmit"
+                        >Iniciar</argon-button
+                      >
+                    </div>
                   </el-form>
-                  <div class="text-center">
-                    <argon-button
-                      class="mt-4"
-                      variant="gradient"
-                      color="success"
-                      full-width
-                      :loading="sendingRequest"
-                      @click="onSubmit"
-                      >Iniciar</argon-button
-                    >
-                  </div>
                 </div>
                 <!-- <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
