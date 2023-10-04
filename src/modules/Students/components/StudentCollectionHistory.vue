@@ -35,7 +35,10 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <el-collapse v-loading="isLoadingCollectionsByStudent">
+        <el-collapse
+          id="collapse-student-collection-history"
+          v-loading="isLoadingCollectionsByStudent"
+        >
           <el-collapse-item
             v-for="{
               collectionStudentId,
@@ -44,71 +47,108 @@
               Quartetly,
               collectionStudentAmountOwed,
               collectionStudentAmountPaid,
+              collectionStudentDate,
             } in collectionsByStudent"
             :key="collectionStudentId"
           >
             <template #title>
-              <span class="me-2 fs-6">
-                {{ collection.collectionName }} |
-                {{ Quartetly.quartetlyName }} |
-              </span>
-              <span class="me-2 fs-6">
-                <b>
-                  {{
-                    `Q.${(
-                      collectionStudentAmountOwed + collectionStudentAmountPaid
-                    ).toLocaleString("es-GT")}`
-                  }}
-                </b>
-              </span>
-
-              <el-tag type="success" class="me-2"
-                >{{
-                  `Q.${collectionStudentAmountPaid.toLocaleString("es-GT")}`
-                }}
-              </el-tag>
-              <el-tag type="danger" class="me-2"
-                >{{
-                  `Q.${collectionStudentAmountOwed.toLocaleString("es-GT")}`
-                }}
-              </el-tag>
+              <div class="d-flex flex-wrap">
+                <span class="me-2 fs-6">
+                  {{ collection.collectionName }}
+                  {{ formatDateDM(collectionStudentDate) }} |
+                  {{ Quartetly.quartetlyName }}
+                </span>
+              </div>
             </template>
 
             <el-card v-if="Payment.length === 0" shadow="never">
               <span class="fs-6 text">No hay aportes registrados</span>
             </el-card>
 
-            <el-timeline v-else>
-              <el-timeline-item
-                v-for="payment in Payment"
-                :key="payment.paymentId"
-                :timestamp="formatDateDMY(payment.paymentDate)"
-                placement="top"
-                type="primary"
-              >
-                <el-card shadow="never">
-                  <span class="me-1">ID: </span>
-                  <a
-                    href="#"
-                    class="text-primary"
-                    @click="onNavigateToPayment(payment.paymentId)"
-                    >{{ collectionId(payment.paymentId) }}
-                  </a>
-                  <br />
-                  <span
-                    >Aporte:
-                    <b>
-                      {{ `Q.${payment.paymentAmount.toLocaleString("es-GT")}` }}
-                    </b>
-                  </span>
-                  <br />
-                  <span class="me-1 mt-3"
-                    >Descripción:
-                    {{ payment.paymentDescription }}
-                  </span>
-                </el-card>
-              </el-timeline-item>
-            </el-timeline>
+            <div v-else>
+              <el-card shadow="never" class="mt-2 mb-4">
+                <table class="text-center">
+                  <tr>
+                    <td>
+                      <span class="mx-4 fs-6">Total</span>
+                    </td>
+                    <td>
+                      <span class="mx-4 fs-6">Abonado</span>
+                    </td>
+                    <td>
+                      <span class="mx-4 fs-6">Saldo</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="me-2 fs-6">
+                        <b>
+                          {{
+                            `Q.${(
+                              collectionStudentAmountOwed +
+                              collectionStudentAmountPaid
+                            ).toLocaleString("es-GT")}`
+                          }}
+                        </b>
+                      </span>
+                    </td>
+
+                    <td>
+                      <el-tag type="success" class="me-2"
+                        >{{
+                          `Q.${collectionStudentAmountPaid.toLocaleString(
+                            "es-GT"
+                          )}`
+                        }}
+                      </el-tag>
+                    </td>
+                    <td>
+                      <el-tag type="danger" class="me-2"
+                        >{{
+                          `Q.${collectionStudentAmountOwed.toLocaleString(
+                            "es-GT"
+                          )}`
+                        }}
+                      </el-tag>
+                    </td>
+                  </tr>
+                </table>
+              </el-card>
+
+              <el-timeline>
+                <el-timeline-item
+                  v-for="payment in Payment"
+                  :key="payment.paymentId"
+                  :timestamp="formatDateDMY(payment.paymentDate)"
+                  placement="top"
+                  type="primary"
+                >
+                  <el-card shadow="never">
+                    <span class="me-1">ID: </span>
+                    <a
+                      href="#"
+                      class="text-primary"
+                      @click="onNavigateToPayment(payment.paymentId)"
+                      >{{ collectionId(payment.paymentId) }}
+                    </a>
+                    <br />
+                    <span
+                      >Aporte:
+                      <b>
+                        {{
+                          `Q.${payment.paymentAmount.toLocaleString("es-GT")}`
+                        }}
+                      </b>
+                    </span>
+                    <br />
+                    <span class="me-1 mt-3"
+                      >Descripción:
+                      {{ payment.paymentDescription }}
+                    </span>
+                  </el-card>
+                </el-timeline-item>
+              </el-timeline>
+            </div>
           </el-collapse-item>
         </el-collapse>
       </div>
@@ -142,7 +182,7 @@ export default {
       isLoadingCollectionsByStudent,
       collectionId,
     } = useCollections();
-    const { formatDateDMY } = useFormatDate();
+    const { formatDateDMY, formatDateDM } = useFormatDate();
     const { requestGetQuartresByStudent, quartersByStudent } = useQuarters();
     const {
       requestDownloadCollectionHistoryByStudent,
@@ -200,9 +240,15 @@ export default {
       quartersByStudent,
       quarterSelected,
       userIsAdmin,
+      formatDateDM,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+.el-collapse-item__header {
+  height: auto !important;
+  flex-wrap: wrap !important;
+}
+</style>

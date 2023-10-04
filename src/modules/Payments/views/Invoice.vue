@@ -10,7 +10,7 @@
           color="success"
           variant="gradient"
           class="mb-0"
-          :onclick="printInvoice"
+          :onclick="onPrintInvoice"
           type="button"
           name="button"
           >Imprimir
@@ -205,7 +205,7 @@ export default {
       });
     };
 
-    const printInvoice = () => {
+    const onPrintInvoice = () => {
       const prtContent = document.getElementById("sbg-invoice");
       const WinPrint = window.open(
         "www.sbg.org.gt",
@@ -221,7 +221,9 @@ export default {
 
       WinPrint.document.close();
       WinPrint.focus();
-      WinPrint.print();
+      WinPrint.print({
+        scale: 110,
+      });
       WinPrint.close();
     };
 
@@ -241,7 +243,7 @@ export default {
       onBackPayments,
       onSendEmail,
       paymentById,
-      printInvoice,
+      onPrintInvoice,
       sendEmail,
       userIsAdmin,
     };

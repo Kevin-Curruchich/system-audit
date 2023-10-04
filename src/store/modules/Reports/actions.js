@@ -10,11 +10,32 @@ export const requestDownloadCollectionHistoryByStudent = async (
       .get(`/reports/students/${studentId}`, { params, responseType: "blob" })
       .then((response) => {
         commit("setIsDownloadReportByStudent", false);
-        console.log(response);
+        resolve(response);
+      })
+      .catch((error) => {
+        commit("setIsDownloadReportByStudent", false);
+
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const requestDownloadCollectionHistoryByYear = async (
+  { commit },
+  { params }
+) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsDownloadingReportByYear", true);
+    sbgApi
+      .get(`/reports/year`, { params, responseType: "blob" })
+      .then((response) => {
+        commit("setIsDownloadingReportByYear", false);
         resolve(response);
       })
       .catch((error) => {
         console.log(error);
+        commit("setIsDownloadingReportByYear", false);
         reject(error);
       });
   });

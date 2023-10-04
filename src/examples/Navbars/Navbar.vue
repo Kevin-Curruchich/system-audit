@@ -18,6 +18,7 @@
         :current-directory="currentDirectory"
       />
       <div
+        v-if="userIsAdmin"
         class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none"
         :class="isRTL ? 'me-3' : ''"
       >
@@ -84,7 +85,10 @@
               <span v-else class="d-sm-inline d-none">Sign In</span>
             </router-link> -->
           </li>
-          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+          <li
+            v-if="userIsAdmin"
+            class="nav-item d-xl-none ps-3 d-flex align-items-center"
+          >
             <a
               id="iconNavbarSidenav"
               href="#"

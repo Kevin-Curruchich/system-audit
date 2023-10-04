@@ -107,6 +107,22 @@
       >
     </template>
   </modal>
+
+  <el-dialog
+    v-model="dialogVisible"
+    title="Enviar Correo"
+    width="30%"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+  >
+    <span>Enviar Recibo por correo</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="onCloseDialog">No enviar</el-button>
+        <el-button type="primary" @click="onSendMail"> Enviar </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -119,6 +135,7 @@ import {
 } from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
+import { ElMessage } from "element-plus";
 
 export default {
   components: {
@@ -138,12 +155,14 @@ export default {
     const { requestGetStudentsList, studentsList } = useStudents();
     const { collectionsOwedByStudent, requestGetCollectionsOwedByStudent } =
       useCollections();
-    const { requestPostPayments } = usePayments();
+    const { requestPostPayments, requestPostInvoiceMail } = usePayments();
 
     const { formatDateYMD } = useFormatDate();
 
     //refs
     const lockModal = ref(false);
+    const paymentReponse = ref(null);
+    const dialogVisible = ref(false);
     const collectionsToStudent = ref([]);
     const formRef = ref(null);
     const formModel = ref({
@@ -159,7 +178,21 @@ export default {
     const rules = ref({
       studentId: [{ required: true, message: requiredMesage }],
       collectionStudentId: [{ required: true, message: requiredMesage }],
-      paymentAmount: [{ required: true, message: requiredMesage }],
+      paymentAmount: [
+        {
+          required: true,
+          message: requiredMesage,
+        },
+        {
+          validator: (rule, value, callback) => {
+            if (value > formModel.value.collectionStudentAmountOwed) {
+              callback(new Error("El monto a abonar debe ser menor al saldo"));
+            } else {
+              callback();
+            }
+          },
+        },
+      ],
       paymentDate: [{ required: true, message: requiredMesage }],
     });
 
@@ -169,10 +202,32 @@ export default {
       emit("hidde-modal");
     };
 
+    const onCloseDialog = () => {
+      dialogVisible.value = false;
+      onClearData();
+      emit("accept-modal");
+    };
+
+    const onSendMail = async () => {
+      const paymentId = paymentReponse.value[1].paymentId;
+      await requestPostInvoiceMail(paymentId);
+
+      onClearData();
+      emit("accept-modal");
+
+      ElMessage({
+        showClose: true,
+        message: "Correo enviado correctamente",
+        type: "success",
+      });
+    };
+
     const onClearData = () => {
       formRef.value.resetFields();
+      paymentReponse.value = null;
       collectionsToStudent.value = [];
       lockModal.value = false;
+      dialogVisible.value = false;
     };
 
     const onSubmit = async () => {
@@ -185,9 +240,9 @@ export default {
           formModel.value.paymentAmount = +formModel.value.paymentAmount;
 
           requestPostPayments(formModel.value)
-            .then(() => {
-              onClearData();
-              emit("accept-modal");
+            .then((data) => {
+              paymentReponse.value = data;
+              dialogVisible.value = true;
             })
             .catch(() => {
               lockModal.value = false;
@@ -242,6 +297,9 @@ export default {
       lockModal,
       studentsList,
       collectionsOwedByStudent,
+      dialogVisible,
+      onCloseDialog,
+      onSendMail,
     };
   },
 };

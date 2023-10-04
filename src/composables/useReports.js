@@ -9,6 +9,10 @@ const useReports = () => {
     () => store.getters["reports/getIsDownloadReportByStudent"]
   );
 
+  const isDownloadingReportByYear = computed(
+    () => store.getters["reports/getIsDownloadingReportByYear"]
+  );
+
   //methods
   const requestDownloadCollectionHistoryByStudent = (id, params) => {
     const resp = store.dispatch(
@@ -18,9 +22,19 @@ const useReports = () => {
     return resp;
   };
 
+  const requestDownloadCollectionHistoryByYear = (params) => {
+    const resp = store.dispatch(
+      "reports/requestDownloadCollectionHistoryByYear",
+      { params }
+    );
+    return resp;
+  };
+
   return {
     isDownlodReportByStudent,
     requestDownloadCollectionHistoryByStudent,
+    isDownloadingReportByYear,
+    requestDownloadCollectionHistoryByYear,
   };
 };
 

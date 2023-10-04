@@ -6,6 +6,7 @@ import useStudent from "./useStudent";
 import useQuarters from "./useQuarters";
 import useReports from "./useReports";
 import useAuth from "./useAuth";
+import useDashboard from "./useDashboard";
 
 export {
   useCollections,
@@ -16,4 +17,5 @@ export {
   useQuarters,
   useReports,
   useAuth,
+  useDashboard,
 };

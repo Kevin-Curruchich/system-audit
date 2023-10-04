@@ -14,6 +14,20 @@ export const signInUser = async ({ commit }, user) => {
   });
 };
 
+export const signUpUser = async ({ commit }, user) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .post("/sign-up", user)
+      .then((response) => {
+        commit("loginUser", response.data);
+        resolve({ ok: true });
+      })
+      .catch((error) => {
+        reject({ ok: false, error: error.response.data });
+      });
+  });
+};
+
 export const checkAuthentication = async ({ commit }) => {
   const accesToken = localStorage.getItem("sbg-admin-access-token");
 

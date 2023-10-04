@@ -7,6 +7,7 @@ import collections from "./modules/Collections";
 import payments from "./modules/Payments";
 import quarters from "./modules/Quarters";
 import reports from "./modules/Reports";
+import dashboard from "./modules/Dashboard";
 
 const store = createStore({
   state: {
@@ -97,6 +98,7 @@ const store = createStore({
     payments,
     quarters,
     reports,
+    dashboard,
   },
   plugins: [createPersistedState()],
 });

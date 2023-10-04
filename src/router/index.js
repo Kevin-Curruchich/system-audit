@@ -9,6 +9,7 @@ import Collections from "./modules/Collections";
 import ReportsRouter from "./modules/Reports";
 import SettingsRouter from "./modules/Settings";
 import Illustration from "../modules/auth/views/Illustration.vue";
+import Signup from "../modules/auth/views/Signup.vue";
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: Illustration,
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
   },
   {
     path: "/dashboard",

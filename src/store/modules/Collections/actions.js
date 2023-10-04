@@ -21,9 +21,11 @@ export const requestGetCollections = async ({ commit }) => {
 export const requestGetAssignedCollections = async ({ commit }, params) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingAssignedCollections", true);
+    commit("setAssignedCollection", { data: [], total: 0 });
     sbgApi
       .get(`/collections/students`, { params })
       .then((response) => {
+        console.log({ response: response.data });
         commit("setAssignedCollection", response.data);
         commit("setIsLoadingAssignedCollections", false);
         resolve(response.data);

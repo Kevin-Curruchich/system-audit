@@ -4,6 +4,7 @@ import sbgApi from "@/apis/sbgApi";
 export const requestGetPayments = async ({ commit }, params) => {
   return new Promise((resolve, reject) => {
     commit("setIsLoadingPayments", true);
+    commit("setPayments", { data: [], total: 0 });
     sbgApi
       .get("/payments", { params })
       .then((response) => {

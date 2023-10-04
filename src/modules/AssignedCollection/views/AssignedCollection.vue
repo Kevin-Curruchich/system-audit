@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label class="form-label"> Buscar </label>
               <div class="">
                 <el-input
@@ -61,11 +61,26 @@
                 </el-select>
               </div>
             </div>
-            <div class="col-md-2">
-              <div class="h-100 d-flex align-items-end justify-content-end">
+            <div class="col-md-3">
+              <div
+                class="h-100 d-flex align-items-end justify-content-between px-2"
+              >
                 <argon-button @click="filter"
                   >Filtrar
                   <i class="fas fa-filter"></i>
+                </argon-button>
+                <argon-button
+                  color="secondary"
+                  class="mb-0"
+                  :onclick="onDownloadReport"
+                  :loading="isDownloadingReportByYear"
+                  type="button"
+                  name="button"
+                  >Descargar
+                  <i
+                    v-show="!isDownloadingReportByYear"
+                    class="fas fa-download mx-2"
+                  ></i>
                 </argon-button>
               </div>
             </div>
@@ -75,44 +90,30 @@
           <el-table
             v-loading="isLoadingAssignedCollections"
             :data="assignedCollections.data"
-            row-key="studentId"
-            style="width: 100%; margin-bottom: 20px"
             border
             size="default"
+            row-key="studentId"
           >
-            <el-table-column label="Estudiate">
+            <el-table-column label="Estudiate" min-width="250">
               <template #default="{ row }">
                 {{ row.studentFullName }}
               </template>
             </el-table-column>
-            <el-table-column label="ID" min-width="50px">
-              <template #default="{ row }">
-                <a href="#" class="text-primary">
-                  {{ collectionId(row?.collectionStudentId) }}
-                </a>
-              </template>
-            </el-table-column>
-            <el-table-column label="Cobro">
+            <el-table-column label="Cobro" min-width="200">
               <template #default="{ row }">
                 {{ row?.collection?.collectionName }}
               </template>
             </el-table-column>
-            <el-table-column label="Fecha">
+            <el-table-column label="Trimestre" min-width="100">
               <template #default="{ row }">
-                {{
-                  `${
-                    row?.collectionStudentDate
-                      ? formatDateDMY(row?.collectionStudentDate)
-                      : ""
-                  }`
-                }}
+                {{ row?.Quartetly?.quartetlyName }}
               </template>
             </el-table-column>
-            <el-table-column label="Total">
+            <el-table-column label="Total" min-width="100">
               <template #default="{ row }">
                 {{
                   `${
-                    row?.collectionStudentAmountOwed &&
+                    row?.collectionStudentAmountOwed ||
                     row?.collectionStudentAmountPaid
                       ? `Q. ${(
                           row?.collectionStudentAmountOwed +
@@ -123,7 +124,7 @@
                 }}
               </template>
             </el-table-column>
-            <el-table-column label="Abonado">
+            <el-table-column label="Abonado" min-width="100">
               <template #default="{ row }">
                 <div class="text-success">
                   {{
@@ -138,7 +139,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="Saldo">
+            <el-table-column label="Saldo" min-width="100">
               <template #default="{ row }">
                 <div class="text-danger">
                   {{
@@ -153,7 +154,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="Acciones">
+            <el-table-column label="Acciones" min-width="100">
               <template #default="{ row }">
                 <el-button v-show="row?.collectionStudentId" size="small">
                   <i class="fas fa-edit"></i>
@@ -182,12 +183,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
   useCollections,
   useFormatDate,
   useStudents,
   useQuarters,
+  useReports,
 } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditAsignedCollection from "../components/AddEditAsignedCollection.vue";
@@ -206,9 +208,22 @@ export default {
       getStatusBadge,
       requestGetAssignedCollections,
     } = useCollections();
+
+    const {
+      isDownloadingReportByYear,
+      requestDownloadCollectionHistoryByYear,
+    } = useReports();
+
     const { studentYears } = useStudents();
     const { formatDateDMY, formatDateDMYH } = useFormatDate();
     const { quartersList } = useQuarters();
+
+    const yearSelected = computed(() => {
+      const year = studentYears.value.find(
+        (item) => item.year === studentCurrentYear.value
+      );
+      return year ? year.label : "SBG";
+    });
 
     //refs
     const showModal = ref(false);
@@ -236,12 +251,28 @@ export default {
       init();
     };
 
-    const init = () => {
-      requestGetAssignedCollections({
-        take: 10,
-        page: 1,
+    const onDownloadReport = () => {
+      requestDownloadCollectionHistoryByYear({
         searchQuery: search.value,
         currentYear: studentCurrentYear.value,
+        quartetlyId: quartetlyId.value,
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Reporte_${yearSelected.value}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
+    };
+
+    const init = () => {
+      requestGetAssignedCollections({
+        searchQuery: search.value,
+        currentYear: studentCurrentYear.value,
+        quartetlyId: quartetlyId.value,
+        page: 1,
+        take: 10,
       });
     };
 
@@ -263,6 +294,8 @@ export default {
       studentCurrentYear,
       studentYears,
       total,
+      onDownloadReport,
+      isDownloadingReportByYear,
     };
   },
 };

@@ -17,6 +17,11 @@ const useAuth = () => {
     return resp;
   };
 
+  const signUpUser = async (user) => {
+    const resp = await store.dispatch("auth/signUpUser", user);
+    return resp;
+  };
+
   const checkAuthentication = async () => {
     const resp = await store.dispatch("auth/checkAuthentication");
     return resp;
@@ -35,6 +40,7 @@ const useAuth = () => {
     username,
     userData,
     userIsAdmin,
+    signUpUser,
   };
 };
 

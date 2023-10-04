@@ -4,18 +4,18 @@
       <div class="col-12"></div>
     </div>
   </div>
-  <main class="mt-0 main-content">
+  <main class="main-content mt-0">
     <section>
       <div class="page-header min-vh-100">
         <div class="container">
           <div class="row">
             <div
-              class="mx-auto col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0"
+              class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto"
             >
               <div class="card card-plain">
-                <div class="pb-0 card-header text-start">
-                  <h4 class="font-weight-bolder">Iniciar sesión</h4>
-                  <p class="mb-0">Ingresa tu correo y contraseña</p>
+                <div class="card-header pb-0 text-left">
+                  <h4 class="font-weight-bolder">Registrarse</h4>
+                  <p class="mb-0">Ingresa tus credenciales</p>
                 </div>
                 <div class="card-body">
                   <el-form
@@ -25,6 +25,16 @@
                     :rules="rules"
                     label-position="top"
                   >
+                    <div class="mb-3">
+                      <el-form-item label="DPI/DNI" prop="userDNI">
+                        <el-input
+                          id="dni"
+                          v-model="userForm.userDNI"
+                          type="text"
+                          placeholder="DPI/DNI"
+                        />
+                      </el-form-item>
+                    </div>
                     <div class="mb-3">
                       <el-form-item label="Correo electronico" prop="userEmail">
                         <el-input
@@ -45,9 +55,6 @@
                         />
                       </el-form-item>
                     </div>
-                    <!-- <argon-switch id="rememberMe" name="rememberMe">
-                      Remember me
-                    </argon-switch> -->
                     <div class="text-center">
                       <argon-button
                         class="mt-4"
@@ -57,19 +64,20 @@
                         :loading="sendingRequest"
                         type="submit"
                         @click="onSubmit"
-                        >Iniciar</argon-button
+                        >Registrarse</argon-button
                       >
                     </div>
                   </el-form>
                 </div>
-                <div class="px-1 pt-0 text-center card-footer px-lg-2">
-                  <p class="mx-auto mb-4 text-sm">
-                    ¿No tienes una cuenta?
+                <div class="card-footer text-center pt-0 px-sm-4 px-1">
+                  <p class="mb-4 mx-auto text-sm">
+                    ¿Tienes una cuenta?
                     <router-link
-                      :to="{ name: 'Signup' }"
-                      class="text-success text-gradient font-weight-bold"
-                      >Registrate</router-link
+                      :to="{ name: 'login' }"
+                      class="text-success text-gradient font-weight-bolder"
                     >
+                      Iniciar Sesion
+                    </router-link>
                   </p>
                 </div>
               </div>
@@ -102,33 +110,41 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
-import { ElMessage } from "element-plus";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { useRouter } from "vue-router";
 const body = document.getElementsByTagName("body")[0];
-import useAuth from "@/composables/useAuth";
+import { mapMutations } from "vuex";
 import sbgImage from "../../../../public/sbg-image.jpg";
+import { useAuth } from "../../../composables";
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
 
 export default {
-  name: "SigninIllustration",
+  name: "Signup",
   components: {
     ArgonButton,
   },
   setup() {
     const router = useRouter();
-    const { loginUser, userData } = useAuth();
+    const { signUpUser, userData } = useAuth();
 
     const formRef = ref(null);
     const sendingRequest = ref(false);
 
     const userForm = ref({
+      userDNI: "",
       userEmail: "",
       password: "",
     });
 
     const rules = ref({
+      userDNI: [
+        {
+          required: true,
+          message: "Por favor ingrese su DPI/DNI",
+          trigger: "blur",
+        },
+      ],
       userEmail: [
         {
           required: true,
@@ -157,7 +173,7 @@ export default {
           sendingRequest.value = false;
           return;
         }
-        loginUser(userForm.value)
+        signUpUser(userForm.value)
           .then(({ ok }) => {
             if (ok) {
               if (userData.value.studentId) {
@@ -183,7 +199,14 @@ export default {
       });
     };
 
-    return { onSubmit, userForm, sbgImage, formRef, rules, sendingRequest };
+    return {
+      sbgImage,
+      rules,
+      onSubmit,
+      userForm,
+      formRef,
+      sendingRequest,
+    };
   },
   created() {
     this.$store.state.hideConfigButton = true;
@@ -194,15 +217,14 @@ export default {
   },
   beforeUnmount() {
     this.$store.state.hideConfigButton = false;
-    // this.toggleDefaultLayout();
     this.toggleDefaultLayoutTrue();
     body.classList.add("bg-gray-100");
   },
   methods: {
     ...mapMutations([
       "toggleDefaultLayout",
-      "toggleDefaultLayoutFalse",
       "toggleDefaultLayoutTrue",
+      "toggleDefaultLayoutFalse",
     ]),
   },
 };
