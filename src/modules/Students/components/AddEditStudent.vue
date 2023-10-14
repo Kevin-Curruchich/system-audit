@@ -56,6 +56,28 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
+            <el-form-item label="Fecha de nacimiento" prop="studentBirthDate">
+              <el-date-picker
+                v-model="formModel.studentBirthDate"
+                placeholder="Fecha de nacimiento"
+                format="DD/MM/YYYY"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </div>
+          <div class="col-md-12">
+            <el-form-item label="Lugar de nacimiento" prop="studentAddress">
+              <el-input
+                v-model="formModel.studentAddress"
+                type="text"
+                placeholder="Lugar de nacimiento"
+              />
+            </el-form-item>
+          </div>
+          <div class="col-12">
+            <el-divider />
+          </div>
+          <div class="col-md-6">
             <el-form-item label="Fecha ingreso" prop="studentStartDate">
               <el-date-picker
                 v-model="formModel.studentStartDate"
@@ -150,6 +172,8 @@ export default {
       studentStartDate: "",
       studentTypeId: "",
       studentCurrentYear: "",
+      studentBirthDate: "",
+      studentAddress: "",
     });
 
     const rules = ref({
@@ -166,6 +190,8 @@ export default {
         { required: true, message: requiredMesage, trigger: "change" },
       ],
       studentCurrentYear: [{ required: true, message: requiredMesage }],
+      studentBirthDate: [{ required: true, message: requiredMesage }],
+      studentAddress: [{ required: true, message: requiredMesage }],
     });
 
     //methods

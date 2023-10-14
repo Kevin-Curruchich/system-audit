@@ -89,7 +89,7 @@
             :data="students.data"
             style="width: 100%"
           >
-            <el-table-column label="Nombre">
+            <el-table-column label="Nombre" min-width="200px">
               <template #default="{ row }">
                 <a
                   href="#"
@@ -101,24 +101,24 @@
                 <span><b>DPI:</b> {{ row.studentDni }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="Contacto">
+            <el-table-column label="Contacto" min-width="200px">
               <template #default="{ row }">
                 <span><b>Telefono:</b> {{ row.studentPhone }}</span>
                 <br />
                 <span><b>Correo:</b> {{ row.studentEmail }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="Tipo de estudiante">
+            <el-table-column label="Tipo de estudiante" min-width="100px">
               <template #default="{ row }">
                 {{ row.StudentType?.studentTypeName }}
               </template>
             </el-table-column>
-            <el-table-column label="Año">
+            <el-table-column label="Año" width="80px">
               <template #default="{ row }">
                 {{ row?.studentCurrentYear }}
               </template>
             </el-table-column>
-            <el-table-column label="Estado" align="center">
+            <el-table-column label="Estado" align="center" width="100px">
               <template #default="{ row }">
                 <el-tag
                   :type="getStatusBadge(row.studentStatusId)"
@@ -186,6 +186,10 @@ export default {
       requestGetStudents({
         take: 10,
         page,
+        search: search.value,
+        studentTypeId: selectedStudentType.value,
+        studentStatusId: selectedStatus.value,
+        studentCurrentYear: studentCurrentYear.value,
       });
     };
 
