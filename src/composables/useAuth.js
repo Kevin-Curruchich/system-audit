@@ -11,6 +11,9 @@ const useAuth = () => {
   const username = computed(() => store.getters["auth/username"]);
   const userData = computed(() => store.getters["auth/userData"]);
   const userIsAdmin = computed(() => userData.value?.roleId === userRole.ADMIN);
+  const userIsAcademic = computed(
+    () => userData.value?.roleId === userRole.ACADEMIC
+  );
 
   const loginUser = async (user) => {
     const resp = await store.dispatch("auth/signInUser", user);
@@ -40,6 +43,7 @@ const useAuth = () => {
     username,
     userData,
     userIsAdmin,
+    userIsAcademic,
     signUpUser,
   };
 };

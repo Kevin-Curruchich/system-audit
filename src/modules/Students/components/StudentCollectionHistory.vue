@@ -61,60 +61,61 @@
               </div>
             </template>
 
+            <el-card shadow="never" class="mt-2 mb-4">
+              <table class="text-center">
+                <tr>
+                  <td>
+                    <span class="mx-4 fs-6">Cobro</span>
+                  </td>
+                  <td>
+                    <span class="mx-4 fs-6">Abonado</span>
+                  </td>
+                  <td>
+                    <span class="mx-4 fs-6">Saldo</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="me-2 fs-6">
+                      <b>
+                        {{
+                          `Q.${(
+                            collectionStudentAmountOwed +
+                            collectionStudentAmountPaid
+                          ).toLocaleString("es-GT")}`
+                        }}
+                      </b>
+                    </span>
+                  </td>
+
+                  <td>
+                    <el-tag type="success" class="me-2"
+                      >{{
+                        `Q.${collectionStudentAmountPaid.toLocaleString(
+                          "es-GT"
+                        )}`
+                      }}
+                    </el-tag>
+                  </td>
+                  <td>
+                    <el-tag type="danger" class="me-2"
+                      >{{
+                        `Q.${collectionStudentAmountOwed.toLocaleString(
+                          "es-GT"
+                        )}`
+                      }}
+                    </el-tag>
+                  </td>
+                </tr>
+              </table>
+              <span><b>Descripción:</b> {{ collection?.collectionDesc }}</span>
+            </el-card>
+
             <el-card v-if="Payment.length === 0" shadow="never">
               <span class="fs-6 text">No hay aportes registrados</span>
             </el-card>
 
             <div v-else>
-              <el-card shadow="never" class="mt-2 mb-4">
-                <table class="text-center">
-                  <tr>
-                    <td>
-                      <span class="mx-4 fs-6">Total</span>
-                    </td>
-                    <td>
-                      <span class="mx-4 fs-6">Abonado</span>
-                    </td>
-                    <td>
-                      <span class="mx-4 fs-6">Saldo</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span class="me-2 fs-6">
-                        <b>
-                          {{
-                            `Q.${(
-                              collectionStudentAmountOwed +
-                              collectionStudentAmountPaid
-                            ).toLocaleString("es-GT")}`
-                          }}
-                        </b>
-                      </span>
-                    </td>
-
-                    <td>
-                      <el-tag type="success" class="me-2"
-                        >{{
-                          `Q.${collectionStudentAmountPaid.toLocaleString(
-                            "es-GT"
-                          )}`
-                        }}
-                      </el-tag>
-                    </td>
-                    <td>
-                      <el-tag type="danger" class="me-2"
-                        >{{
-                          `Q.${collectionStudentAmountOwed.toLocaleString(
-                            "es-GT"
-                          )}`
-                        }}
-                      </el-tag>
-                    </td>
-                  </tr>
-                </table>
-              </el-card>
-
               <el-timeline>
                 <el-timeline-item
                   v-for="payment in Payment"

@@ -1,4 +1,5 @@
 import isAdminUser from "@/modules/auth/guards/auth-gard-admin.js";
+// import isAcademicUser from "@/modules/auth/guards/auth-gard-academic.js";
 
 export default {
   name: "students",

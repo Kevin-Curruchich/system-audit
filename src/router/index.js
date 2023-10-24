@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import isAdminUser from "../modules/auth/guards/auth-gard-admin.js";
+// import isAcademicUser from "../modules/auth/guards/auth-gard-academic.js";
 import isAuthenticatedGuard from "../modules/auth/guards/auth-gard.js";
 import Default from "../views/dashboards/Default.vue";
 import StudentsRouter from "./modules/Students";
@@ -35,7 +36,7 @@ const routes = [
   },
   {
     path: "/students",
-    // beforeEnter: [isAuthenticatedGuard],
+    beforeEnter: [isAuthenticatedGuard],
     ...StudentsRouter,
   },
   {

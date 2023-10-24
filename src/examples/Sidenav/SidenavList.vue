@@ -19,6 +19,7 @@
         </template>
       </sidenav-item>
       <sidenav-item
+        v-if="userIsAdmin"
         :to="{ name: 'Collections List' }"
         mini-icon="CA"
         text="Cobros Asignados"
@@ -28,6 +29,7 @@
         </template>
       </sidenav-item>
       <sidenav-item
+        v-if="userIsAdmin"
         :to="{ name: 'Payments List' }"
         mini-icon="A"
         text="Aportes"
@@ -37,12 +39,13 @@
         </template>
       </sidenav-item>
 
-      <li class="mt-3 nav-item">
+      <li v-if="userIsAdmin" class="mt-3 nav-item">
         <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6">
           Utilidades
         </h6>
       </li>
       <sidenav-collapse
+        v-if="userIsAdmin"
         collapse-ref="settingsPages"
         nav-text="Configuracion"
         :class="getRoute() === 'settings' ? 'active' : ''"
@@ -98,6 +101,7 @@
 <script>
 import SidenavItem from "./SidenavItem.vue";
 import SidenavCollapse from "./SidenavCollapse.vue";
+import { useAuth } from "../../composables";
 // import SidenavCollapseItem from "./SidenavCollapseItem.vue";
 
 export default {
@@ -106,6 +110,13 @@ export default {
     SidenavItem,
     SidenavCollapse,
     // SidenavCollapseItem,
+  },
+  setup() {
+    const { userIsAdmin } = useAuth();
+
+    return {
+      userIsAdmin,
+    };
   },
   methods: {
     getRoute() {

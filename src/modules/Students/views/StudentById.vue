@@ -5,7 +5,7 @@
         <div class="d-lg-flex">
           <div>
             <argon-button
-              v-if="userIsAdmin"
+              v-if="userIsAdmin || userIsAcademic"
               variant="outline"
               color="black"
               @click="back"
@@ -59,9 +59,7 @@ export default {
     //instances
     const router = useRouter();
     const { student, requestGetStudentById, isLoadingStudent } = useStudent();
-    const { userIsAdmin } = useAuth();
-
-    console.log({ userIsAdmin });
+    const { userIsAdmin, userIsAcademic } = useAuth();
 
     const back = () => {
       router.push({ name: "List of Students" });
@@ -72,7 +70,7 @@ export default {
       requestGetStudentById(props.id);
     });
 
-    return { back, student, isLoadingStudent, userIsAdmin };
+    return { back, student, isLoadingStudent, userIsAdmin, userIsAcademic };
   },
 };
 </script>

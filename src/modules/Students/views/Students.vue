@@ -57,7 +57,7 @@
                 </el-select>
               </div>
             </div>
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
               <label class="form-label"> Estado </label>
               <div>
                 <el-select v-model="selectedStatus">
@@ -72,8 +72,8 @@
                   </el-option>
                 </el-select>
               </div>
-            </div>
-            <div class="col-md-2">
+            </div> -->
+            <div class="col-md-4">
               <div class="h-100 d-flex align-items-end justify-content-end">
                 <argon-button @click="filter"
                   >Filtrar

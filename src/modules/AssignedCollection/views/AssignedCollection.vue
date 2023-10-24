@@ -109,7 +109,7 @@
                 {{ row?.Quartetly?.quartetlyName }}
               </template>
             </el-table-column>
-            <el-table-column label="Total" min-width="100">
+            <el-table-column label="Cobro" min-width="100">
               <template #default="{ row }">
                 {{
                   `${
@@ -154,13 +154,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="Acciones" min-width="100">
+            <!-- <el-table-column label="Acciones" min-width="100">
               <template #default="{ row }">
                 <el-button v-show="row?.collectionStudentId" size="small">
                   <i class="fas fa-edit"></i>
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">

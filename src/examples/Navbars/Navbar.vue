@@ -13,17 +13,17 @@
   >
     <div class="px-3 py-1 container-fluid">
       <breadcrumbs
-        v-if="userIsAdmin"
+        v-if="userIsAdmin || userIsAcademic"
         :current-page="currentRouteName"
         :current-directory="currentDirectory"
       />
       <div
-        v-if="userIsAdmin"
+        v-if="userIsAdmin || userIsAcademic"
         class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none"
         :class="isRTL ? 'me-3' : ''"
       >
         <a
-          v-if="userIsAdmin"
+          v-if="userIsAdmin || userIsAcademic"
           href="#"
           class="p-0 nav-link text-body"
           @click.prevent="navbarMinimize"
@@ -86,7 +86,7 @@
             </router-link> -->
           </li>
           <li
-            v-if="userIsAdmin"
+            v-if="userIsAdmin || userIsAcademic"
             class="nav-item d-xl-none ps-3 d-flex align-items-center"
           >
             <a
@@ -150,12 +150,13 @@ export default {
     Breadcrumbs,
   },
   setup() {
-    const { userData, userIsAdmin, logout } = useAuth();
+    const { userData, userIsAdmin, userIsAcademic, logout } = useAuth();
 
     return {
       userData,
       logout,
       userIsAdmin,
+      userIsAcademic,
     };
   },
   data() {

@@ -62,7 +62,6 @@
             v-loading="isLoadingPayments"
             :data="payments.data"
             row-key="studentId"
-            style="width: 100%; margin-bottom: 20px"
             border
             size="default"
           >
@@ -109,7 +108,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="payments.total"
+            :total="10"
             @current-change="onChangePage"
           />
         </div>
@@ -151,7 +150,7 @@ export default {
     const studentCurrentYear = ref("");
 
     //methods
-    const filter = () => {
+    const filter = async () => {
       const params = {
         page: 1,
         take: 10,
@@ -159,13 +158,15 @@ export default {
         currentYear: studentCurrentYear.value,
       };
 
-      requestGetPayments(params);
+      await requestGetPayments(params);
     };
 
-    const onChangePage = (page) => {
-      requestGetPayments({
-        take: 10,
+    const onChangePage = async (page) => {
+      await requestGetPayments({
         page,
+        take: 10,
+        searchQuery: search.value,
+        currentYear: studentCurrentYear.value,
       });
     };
 

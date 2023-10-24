@@ -25,7 +25,6 @@ export const requestGetPaymentById = async ({ commit }, id) => {
     sbgApi
       .get(`/payments/${id}`)
       .then((response) => {
-        console.log({ response });
         commit("setPaymentById", response.data);
         commit("setIsLoadingPaymentById", false);
         resolve(response.data);

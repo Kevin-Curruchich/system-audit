@@ -110,6 +110,7 @@ import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 import useAuth from "@/composables/useAuth";
 import sbgImage from "../../../../public/sbg-image.jpg";
+import userRole from "../../../constants/userRole";
 
 export default {
   name: "SigninIllustration",
@@ -160,7 +161,9 @@ export default {
         loginUser(userForm.value)
           .then(({ ok }) => {
             if (ok) {
-              if (userData.value.studentId) {
+              if (userData.value?.roleId === userRole.ACADEMIC) {
+                router.push({ name: "List of Students" });
+              } else if (userData.value.studentId) {
                 router.push({
                   name: "Student",
                   params: { id: userData.value.studentId },

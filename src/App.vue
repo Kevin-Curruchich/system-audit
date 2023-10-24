@@ -52,7 +52,11 @@ export default {
 
     return {
       userData,
-      accesSideNav: computed(() => userData.value?.roleId === userRole.ADMIN),
+      accesSideNav: computed(
+        () =>
+          userData.value?.roleId === userRole.ADMIN ||
+          userData.value?.roleId === userRole.ACADEMIC
+      ),
     };
   },
   computed: {

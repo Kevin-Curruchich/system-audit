@@ -1,6 +1,6 @@
 <template>
   <modal scrollable :show="showModal" size="lg" :on-hide-modal="onHideModal">
-    <template #header> Registrar Pago </template>
+    <template #header> Registrar Aporte </template>
     <template #body>
       <el-form
         ref="formRef"
