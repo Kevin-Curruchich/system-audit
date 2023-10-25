@@ -1,6 +1,6 @@
 <template>
   <modal scrollable :show="showModal" size="lg" :on-hide-modal="onHideModal">
-    <template #header> Asignar cobro </template>
+    <template #header> Editar cobro </template>
     <template #body>
       <el-form
         ref="formRef"
@@ -16,6 +16,7 @@
                 v-model="formModel.studentId"
                 placeholder="Estudiante"
                 filterable
+                disabled
               >
                 <el-option
                   v-for="student in studentsList.data"
@@ -27,41 +28,54 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Cobro" prop="collectionId">
-              <el-select
-                v-model="formModel.collectionId"
-                placeholder="Cobro"
-                filterable
-              >
-                <el-option
-                  v-for="collection in collectionsToStudent"
-                  :key="collection.collectionId"
-                  :value="collection.collectionId"
-                  :label="collection.collectionName"
-                />
-              </el-select>
-            </el-form-item>
-          </div>
-          <div class="col-md-6">
-            <el-form-item label="Monto" prop="collectionStudentAmountOwed">
+            <el-form-item label="Cobro" prop="collectionName">
               <el-input
-                v-model="formModel.collectionStudentAmountOwed"
-                type="number"
-                placeholder="Monto "
+                v-model="formModel.collectionName"
+                type="text"
+                disabled
               />
             </el-form-item>
           </div>
 
           <div class="col-md-6">
-            <el-form-item label="Trimestre" prop="quartetlyQuartetlyId">
-              <el-select v-model="formModel.quartetlyQuartetlyId">
-                <el-option
-                  v-for="quarter in quartersList"
-                  :key="quarter.quartetlyId"
-                  :value="quarter.quartetlyId"
-                  :label="quarter.quartetlyName"
-                />
-              </el-select>
+            <el-form-item label="Trimestre" prop="quartetlyName">
+              <el-input
+                v-model="formModel.quartetlyName"
+                type="text"
+                disabled
+              />
+            </el-form-item>
+          </div>
+
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <el-form-item label="Monto inicial" prop="collectionInitAmount">
+              <el-input
+                v-model="formModel.collectionInitAmount"
+                type="number"
+                placeholder="Monto Inicial"
+                disabled
+              />
+            </el-form-item>
+          </div>
+          <div class="col-md-6">
+            <el-form-item label="Abonado" prop="collectionStudentAmountPaid">
+              <el-input
+                v-model="formModel.collectionStudentAmountPaid"
+                type="number"
+                placeholder="Abonado"
+                disabled
+              />
+            </el-form-item>
+          </div>
+
+          <div class="col-md-6">
+            <el-form-item label="Nuevo monto" prop="collectionNewAmount">
+              <el-input
+                v-model="formModel.collectionNewAmount"
+                type="number"
+                placeholder="Nuevo monto"
+              />
             </el-form-item>
           </div>
 
@@ -102,13 +116,7 @@
 
 <script>
 import { onMounted, ref, watch } from "vue";
-import {
-  useStudents,
-  useCollections,
-  useFormatDate,
-  useQuarters,
-  useAuth,
-} from "@/composables";
+import { useStudents, useCollections, useAuth } from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 import collectionsAcademic from "@/constants/collectionsAcademic";
@@ -123,18 +131,19 @@ export default {
       type: Boolean,
       default: false,
     },
+    rowSelected: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["hidde-modal", "accept-modal"],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const requiredMesage = errorMessages.required;
     //instances
     const { userIsAcademic } = useAuth();
     const { requestGetStudentsList, studentsList } = useStudents();
-    const { collections, requestGetCollections, requestPostCollectionStudent } =
+    const { collections, requestGetCollections, putCollectionStudent } =
       useCollections();
-    const { requestGetQuartresList, quartersList } = useQuarters();
-
-    const { formatDateYMD } = useFormatDate();
 
     //refs
     const lockModal = ref(false);
@@ -142,21 +151,32 @@ export default {
     const formRef = ref(null);
     const formModel = ref({
       studentId: "",
-      collectionId: "",
-      quartetlyQuartetlyId: "",
+      collectionName: "",
+      quartetlyName: "",
       collectionStudentDate: "",
-      collectionStudentAmountOwed: "",
+      collectionInitAmount: "",
+      collectionNewAmount: "",
+      collectionStudentAmountPaid: "",
       collectionDescription: "",
     });
 
     const rules = ref({
       studentId: [{ required: true, message: requiredMesage }],
-      collectionId: [{ required: true, message: requiredMesage }],
-      collectionStudentAmountOwed: [
+      collectionNewAmount: [
         { required: true, message: requiredMesage },
+        {
+          validator: (rule, value, callback) => {
+            if (value < formModel.value.collectionStudentAmountPaid) {
+              callback(
+                new Error("El nuevo monto no puede ser menor al aportado")
+              );
+            } else {
+              callback();
+            }
+          },
+        },
       ],
       collectionStudentDate: [{ required: true, message: requiredMesage }],
-      quartetlyQuartetlyId: [{ required: true, message: requiredMesage }],
     });
 
     //methods
@@ -175,13 +195,13 @@ export default {
       await formRef.value.validate((isValid) => {
         if (isValid) {
           lockModal.value = true;
-          formModel.value.collectionStudentDate = formatDateYMD(
-            formModel.value.collectionStudentDate
-          );
-          formModel.value.collectionStudentAmountOwed =
-            +formModel.value.collectionStudentAmountOwed;
+          const data = {
+            amountOwed: formModel.value.collectionNewAmount,
+          };
 
-          requestPostCollectionStudent(formModel.value)
+          const id = props.rowSelected.collectionStudentId;
+
+          putCollectionStudent({ data, id })
             .then(() => {
               onClearData();
               emit("accept-modal");
@@ -194,17 +214,16 @@ export default {
     };
 
     //watchers
+
     watch(
       () => formModel.value.studentId,
       (studentId) => {
         if (studentId) {
           lockModal.value = true;
-          formModel.value.collectionId = "";
+
           const studentData = studentsList.value.data.find(
             (student) => student.studentId === studentId
           );
-
-          formModel.value.collectionStudentAmountOwed = "";
 
           collectionsToStudent.value = collections.value.filter((collection) =>
             collection.collectionStudentApply.find(
@@ -219,15 +238,19 @@ export default {
     );
 
     watch(
-      () => formModel.value.collectionId,
-      (collecitonId) => {
-        if (collecitonId) {
-          const collectionData = collectionsToStudent.value.find(
-            (collection) => collection.collectionId === collecitonId
-          );
-
-          formModel.value.collectionStudentAmountOwed =
-            collectionData.collectionBaseAmount;
+      () => props.rowSelected,
+      (row) => {
+        if (row) {
+          lockModal.value = true;
+          console.log(row);
+          formModel.value.studentId = row.childrenStudentId;
+          formModel.value.collectionName = row.collection.collectionName;
+          formModel.value.quartetlyName = row.Quartetly?.quartetlyName;
+          formModel.value.collectionStudentAmountPaid =
+            row.collectionStudentAmountPaid;
+          formModel.value.collectionInitAmount =
+            row.collectionStudentAmountOwed + row.collectionStudentAmountPaid;
+          lockModal.value = false;
         }
       }
     );
@@ -236,7 +259,6 @@ export default {
     onMounted(() => {
       requestGetStudentsList();
       requestGetCollections();
-      requestGetQuartresList();
     });
 
     return {
@@ -248,7 +270,6 @@ export default {
       lockModal,
       studentsList,
       collectionsToStudent,
-      quartersList,
       userIsAcademic,
       collectionsAcademic,
     };

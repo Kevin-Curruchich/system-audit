@@ -13,6 +13,10 @@ const useReports = () => {
     () => store.getters["reports/getIsDownloadingReportByYear"]
   );
 
+  const isDownloadingStudentsPersonalData = computed(
+    () => store.getters["reports/getIsDownloadingStudentsPersonalData"]
+  );
+
   //methods
   const requestDownloadCollectionHistoryByStudent = (id, params) => {
     const resp = store.dispatch(
@@ -30,11 +34,18 @@ const useReports = () => {
     return resp;
   };
 
+  const requestDownloadStudentsPersonalData = () => {
+    const resp = store.dispatch("reports/requestDownloadStudentsPersonalData");
+    return resp;
+  };
+
   return {
     isDownlodReportByStudent,
     requestDownloadCollectionHistoryByStudent,
     isDownloadingReportByYear,
     requestDownloadCollectionHistoryByYear,
+    isDownloadingStudentsPersonalData,
+    requestDownloadStudentsPersonalData,
   };
 };
 

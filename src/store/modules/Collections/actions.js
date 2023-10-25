@@ -121,3 +121,17 @@ export const requestPostCollection = async (_, data) => {
       });
   });
 };
+
+export const putCollectionStudent = async (_, { id, data }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .put(`/collections/students/${id}`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

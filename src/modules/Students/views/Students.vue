@@ -75,9 +75,25 @@
             </div> -->
             <div class="col-md-4">
               <div class="h-100 d-flex align-items-end justify-content-end">
-                <argon-button @click="filter"
+                <argon-button
+                  class="mx-2"
+                  :disabled="isDownloadingStudentsPersonalData"
+                  @click="filter"
                   >Filtrar
                   <i class="fas fa-filter"></i>
+                </argon-button>
+                <argon-button
+                  color="secondary"
+                  class="mb-0"
+                  :onclick="onDownloadReport"
+                  :loading="isDownloadingStudentsPersonalData"
+                  type="button"
+                  name="button"
+                  >Descargar
+                  <i
+                    v-show="!isDownloadingStudentsPersonalData"
+                    class="fas fa-download mx-2"
+                  ></i>
                 </argon-button>
               </div>
             </div>
@@ -152,7 +168,7 @@
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStudents } from "@/composables";
+import { useStudents, useReports } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditStudent from "../components/AddEditStudent.vue";
 
@@ -174,6 +190,11 @@ export default {
       studentYears,
     } = useStudents();
 
+    const {
+      isDownloadingStudentsPersonalData,
+      requestDownloadStudentsPersonalData,
+    } = useReports();
+
     //ref
     const showModal = ref(false);
     const selectedStatus = ref("");
@@ -190,6 +211,17 @@ export default {
         studentTypeId: selectedStudentType.value,
         studentStatusId: selectedStatus.value,
         studentCurrentYear: studentCurrentYear.value,
+      });
+    };
+
+    const onDownloadReport = () => {
+      requestDownloadStudentsPersonalData().then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Reporte_General_Estudiantes.xlsx`);
+        document.body.appendChild(link);
+        link.click();
       });
     };
 
@@ -239,6 +271,8 @@ export default {
       studentTypes,
       studentYears,
       studentCurrentYear,
+      isDownloadingStudentsPersonalData,
+      onDownloadReport,
     };
   },
 };

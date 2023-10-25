@@ -9,8 +9,7 @@ const isAdminUser = async (to, from, next) => {
 
   if (ok) {
     next();
-  }
-  if (ok2) {
+  } else if (ok2) {
     next();
   } else {
     next({ name: "login" });

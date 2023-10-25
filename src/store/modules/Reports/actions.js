@@ -40,3 +40,23 @@ export const requestDownloadCollectionHistoryByYear = async (
       });
   });
 };
+
+export const requestDownloadStudentsPersonalData = async ({ commit }) => {
+  return new Promise((resolve, reject) => {
+    commit("setIsDownloadingStudentsPersonalData", true);
+    sbgApi
+      .get(`/reports/all-students`, {
+        // params,
+        responseType: "blob",
+      })
+      .then((response) => {
+        commit("setIsDownloadingStudentsPersonalData", false);
+        resolve(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        commit("setIsDownloadingStudentsPersonalData", false);
+        reject(error);
+      });
+  });
+};

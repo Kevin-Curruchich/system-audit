@@ -70,6 +70,7 @@
                   <i class="fas fa-filter"></i>
                 </argon-button>
                 <argon-button
+                  v-if="userIsAdmin"
                   color="secondary"
                   class="mb-0"
                   :onclick="onDownloadReport"
@@ -154,13 +155,17 @@
                 </div>
               </template>
             </el-table-column>
-            <!-- <el-table-column label="Acciones" min-width="100">
+            <el-table-column label="Acciones" min-width="100">
               <template #default="{ row }">
-                <el-button v-show="row?.collectionStudentId" size="small">
+                <el-button
+                  v-show="row?.collectionStudentId"
+                  size="small"
+                  @click="onEditCollection(row)"
+                >
                   <i class="fas fa-edit"></i>
                 </el-button>
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">
@@ -175,8 +180,14 @@
       </div>
     </div>
   </div>
-  <add-edit-asigned-collection
+  <AddEditAsignedCollection
     :show="showModal"
+    @hidde-modal="onCloseModal"
+    @accept-modal="onAcceptModal"
+  />
+  <EditAsignedCollection
+    :show="showModalEdit"
+    :row-selected="rowSelectd"
     @hidde-modal="onCloseModal"
     @accept-modal="onAcceptModal"
   />
@@ -190,15 +201,18 @@ import {
   useStudents,
   useQuarters,
   useReports,
+  useAuth,
 } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditAsignedCollection from "../components/AddEditAsignedCollection.vue";
+import EditAsignedCollection from "../components/EditAsignedCollection.vue";
 
 export default {
   name: "Collections",
-  components: { ArgonButton, AddEditAsignedCollection },
+  components: { ArgonButton, AddEditAsignedCollection, EditAsignedCollection },
   setup() {
     //instances
+    const { userIsAdmin } = useAuth();
     const {
       isLoadingAssignedCollections,
       onChangePage,
@@ -227,11 +241,18 @@ export default {
 
     //refs
     const showModal = ref(false);
+    const showModalEdit = ref(false);
     const search = ref("");
     const studentCurrentYear = ref("");
     const quartetlyId = ref("");
+    const rowSelectd = ref(null);
 
     //methods
+    const onEditCollection = (row) => {
+      rowSelectd.value = row;
+      showModalEdit.value = true;
+    };
+
     const filter = () => {
       requestGetAssignedCollections({
         take: 10,
@@ -244,10 +265,14 @@ export default {
 
     const onCloseModal = () => {
       showModal.value = false;
+      showModalEdit.value = false;
+      rowSelectd.value = null;
     };
 
     const onAcceptModal = () => {
       showModal.value = false;
+      showModalEdit.value = false;
+      rowSelectd.value = null;
       init();
     };
 
@@ -296,6 +321,10 @@ export default {
       total,
       onDownloadReport,
       isDownloadingReportByYear,
+      onEditCollection,
+      showModalEdit,
+      rowSelectd,
+      userIsAdmin,
     };
   },
 };

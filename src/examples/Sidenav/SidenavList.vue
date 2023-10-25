@@ -19,7 +19,7 @@
         </template>
       </sidenav-item>
       <sidenav-item
-        v-if="userIsAdmin"
+        v-if="userIsAdmin || userIsAcademic"
         :to="{ name: 'Collections List' }"
         mini-icon="CA"
         text="Cobros Asignados"
@@ -112,10 +112,11 @@ export default {
     // SidenavCollapseItem,
   },
   setup() {
-    const { userIsAdmin } = useAuth();
+    const { userIsAdmin, userIsAcademic } = useAuth();
 
     return {
       userIsAdmin,
+      userIsAcademic,
     };
   },
   methods: {

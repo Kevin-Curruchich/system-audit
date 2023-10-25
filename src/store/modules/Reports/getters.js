@@ -5,3 +5,7 @@ export const getIsDownloadReportByStudent = (state) => {
 export const getIsDownloadingReportByYear = (state) => {
   return state.isDownloadingReportByYear;
 };
+
+export const getIsDownloadingStudentsPersonalData = (state) => {
+  return state.isDownloadingStudentsPersonalData;
+};
