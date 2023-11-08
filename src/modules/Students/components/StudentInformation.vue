@@ -14,7 +14,7 @@
     </template>
     <el-form
       ref="formRef"
-      v-loading="sendingRequest"
+      v-loading="sendingRequest || settingData"
       label-position="top"
       :model="formModel"
       :rules="rules"
@@ -70,6 +70,28 @@
             />
           </el-form-item>
         </div>
+        <div class="col-md-6">
+          <el-form-item label="Fecha de nacimiento" prop="studentBirthDate">
+            <el-date-picker
+              v-model="formModel.studentBirthDate"
+              placeholder="Fecha de nacimiento"
+              format="DD/MM/YYYY"
+              style="width: 100%"
+              :disabled="!editMode"
+            />
+          </el-form-item>
+        </div>
+        <div class="col-md-12">
+          <el-form-item label="Lugar de nacimiento" prop="studentAddress">
+            <el-input
+              v-model="formModel.studentAddress"
+              type="text"
+              placeholder="Lugar de nacimiento"
+              :disabled="!editMode"
+            />
+          </el-form-item>
+        </div>
+        <el-divider></el-divider>
         <div class="col-md-6">
           <el-form-item label="Fecha ingreso" prop="studentStartDate">
             <el-date-picker
@@ -135,31 +157,34 @@ import { onMounted, ref } from "vue";
 import { useStudents, useStudent } from "@/composables";
 import { ArgonButton } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
+import { ElMessage } from "element-plus";
 
 export default {
   components: {
     ArgonButton,
   },
   props: {
-    showModal: {
-      type: Boolean,
-      default: false,
+    studentId: {
+      type: String,
+      required: true,
     },
   },
-  setup() {
-    const requiredMesage = errorMessages.required;
-    const inValidEmailMessage = errorMessages.inValidEmail;
+  setup(props) {
     //instances
     const {
       requestGetSudentTypes,
       studentTypes,
       studentYears,
-      requestPostStudent,
+      requestPutStudent,
     } = useStudents();
 
-    const { student } = useStudent();
+    const { student, requestGetStudentById } = useStudent();
+
+    const requiredMesage = errorMessages.required;
+    const inValidEmailMessage = errorMessages.inValidEmail;
 
     //refs
+    const settingData = ref(false);
     const editMode = ref(false);
     const sendingRequest = ref(false);
     const formRef = ref(null);
@@ -169,6 +194,8 @@ export default {
       studentDni: "",
       studentPhone: "",
       studentEmail: "",
+      studentBirthDate: "",
+      studentAddress: "",
       studentStartDate: "",
       studentTypeId: "",
       studentCurrentYear: "",
@@ -205,26 +232,35 @@ export default {
     };
 
     const onSetInitialData = () => {
-      formModel.value.studentName = student.value.studentName;
-      formModel.value.studentLastName = student.value.studentLastName;
-      formModel.value.studentDni = student.value.studentDni;
-      formModel.value.studentPhone = student.value.studentPhone;
-      formModel.value.studentEmail = student.value.studentEmail;
-      formModel.value.studentStartDate = student.value.studentStartDate;
-      formModel.value.studentTypeId = student.value.StudentType.studentTypeId;
-      formModel.value.studentCurrentYear = student.value.studentCurrentYear;
+      settingData.value = true;
+      formModel.value = {
+        ...student.value,
+      };
+      settingData.value = false;
     };
 
     const onSubmit = async () => {
       await formRef.value.validate((isValid) => {
         if (isValid) {
           sendingRequest.value = true;
-          requestPostStudent(formModel.value)
-            .then(() => {
-              onClearData();
+          const studentId = student.value.studentId;
+
+          const data = { ...formModel.value };
+          delete data.studentId;
+          delete data.StudentStatus;
+          delete data.StudentType;
+
+          requestPutStudent({ studentId, data })
+            .then(async () => {
+              await requestGetStudentById(props.studentId);
+              sendingRequest.value = false;
+              editMode.value = false;
+              ElMessage.success("Estudiante actualizado correctamente");
             })
             .catch(() => {
               sendingRequest.value = false;
+              ElMessage.error("Error al actualizar estudiante");
+              onEditMode();
             });
         }
       });
@@ -246,6 +282,7 @@ export default {
       studentYears,
       editMode,
       onEditMode,
+      settingData,
     };
   },
 };

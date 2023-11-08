@@ -1,7 +1,7 @@
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
 import studentStatus from "@/constants/studentStatus";
 import studentType from "@/constants/studentType";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
 
 export default function useStudents() {
   //instances
@@ -76,6 +76,15 @@ export default function useStudents() {
     return resp;
   };
 
+  const requestPutStudent = async ({ data, studentId }) => {
+    const resp = await store.dispatch("students/requestPutStudent", {
+      data,
+      studentId,
+    });
+    return resp;
+  };
+
+  //helpers
   const getStatusBadge = (status) => {
     let statusId = status;
     let statusReturn = "";
@@ -112,6 +121,7 @@ export default function useStudents() {
     requestGetSudentTypes,
     requestPostStudent,
     requestPostStudentType,
+    requestPutStudent,
     students,
     studentsList,
     studentStatuses,

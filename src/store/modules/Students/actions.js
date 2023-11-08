@@ -109,3 +109,17 @@ export const requestPostStudentType = async (_, data) => {
       });
   });
 };
+
+export const requestPutStudent = async (_, { studentId, data }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .put(`/students/student/${studentId}`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

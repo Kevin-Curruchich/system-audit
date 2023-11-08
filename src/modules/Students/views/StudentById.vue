@@ -27,13 +27,13 @@
         <template #label>
           <i class="fas fa-money-bill-wave-alt m-2"></i> Historial de Aportes
         </template>
-        <student-collection-history />
+        <StudentCollectionHistory />
       </el-tab-pane>
       <el-tab-pane lazy>
         <template #label>
           <i class="fas fa-address-card m-2"></i> Información
         </template>
-        <student-information />
+        <StudentInformation :student-id="props.id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -70,7 +70,14 @@ export default {
       requestGetStudentById(props.id);
     });
 
-    return { back, student, isLoadingStudent, userIsAdmin, userIsAcademic };
+    return {
+      back,
+      student,
+      isLoadingStudent,
+      userIsAdmin,
+      userIsAcademic,
+      props,
+    };
   },
 };
 </script>
