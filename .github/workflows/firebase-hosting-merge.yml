@@ -16,10 +16,13 @@ jobs:
           - name: Production
             projectId: sbg-admin
             branch: main
-
+            apiUrl: ${{ secrets.VUE_APP_API_URL_PRODUCTION }}
+            firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN }}
           - name: Development
             projectId: sbg-admin-dev
             branch: develop
+            apiUrl: ${{ secrets.VUE_APP_API_URL_DEVELOPMENT }}
+            firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN_DEVELOP }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,8 +36,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN }}'
+          firebaseServiceAccount: '${{ matrix.environment.firebaseServiceAccount }}'
           channelId: live
           projectId: ${{ matrix.environment.projectId }}
-          env: '{"VUE_APP_API_URL": "${{ env.VUE_APP_API_URL }}"'
 
