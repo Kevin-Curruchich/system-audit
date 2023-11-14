@@ -16,27 +16,29 @@ jobs:
           - name: Production
             projectId: sbg-admin
             branch: main
-            apiUrl: ${{ secrets.VUE_APP_API_URL_PRODUCTION }}
-            firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN }}
           - name: Development
             projectId: sbg-admin-dev
             branch: develop
-            apiUrl: ${{ secrets.VUE_APP_API_URL_DEVELOPMENT }}
-            firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN_DEVELOP }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install and build
         run: npm ci && npm run build
       - name: Set environment variables
-        run: echo "VUE_APP_API_URL=${{ matrix.environment.apiUrl }}" >> $GITHUB_ENV
-
+        run: |
+          if [[ "${{ matrix.environment.branch }}" == "main" ]]; then
+            echo "VUE_APP_API_URL=${{ secrets.VUE_APP_API_URL_PRODUCTION }}" >> $GITHUB_ENV
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN }}" >> $GITHUB_ENV
+          else
+            echo "VUE_APP_API_URL=${{ secrets.VUE_APP_API_URL_DEVELOPMENT }}" >> $GITHUB_ENV
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN_DEVELOP }}" >> $GITHUB_ENV
+          fi
       - name: Deploy to Firebase Hosting
         if: github.ref == 'refs/heads/${{ matrix.environment.branch }}'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ matrix.environment.firebaseServiceAccount }}'
+          firebaseServiceAccount: '${{ env.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
           projectId: ${{ matrix.environment.projectId }}
 
