@@ -56,11 +56,11 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Monto a abonar" prop="paymentAmount">
+            <el-form-item label="Monto aporte" prop="paymentAmount">
               <el-input
                 v-model="formModel.paymentAmount"
                 type="number"
-                placeholder="Monto a abonar"
+                placeholder="Monto aporte"
               />
             </el-form-item>
           </div>
