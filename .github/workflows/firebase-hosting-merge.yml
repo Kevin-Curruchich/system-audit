@@ -34,7 +34,6 @@ jobs:
             echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT_SBG_ADMIN_DEVELOP }}" >> $GITHUB_ENV
           fi
       - name: Deploy to Firebase Hosting
-        if: github.ref == 'refs/heads/${{ matrix.environment.branch }}'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
