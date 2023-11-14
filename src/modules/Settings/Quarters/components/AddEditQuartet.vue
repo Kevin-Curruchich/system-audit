@@ -1,6 +1,8 @@
 <template>
   <modal scrollable :show="showModal" size="lg" :on-hide-modal="onHideModal">
-    <template #header> Crear Trimestre </template>
+    <template #header>
+      {{ `${props.rowSelected ? "Editar" : "Crear"} Trimestre` }}
+    </template>
     <template #body>
       <el-form
         ref="formRef"
@@ -39,6 +41,17 @@
               />
             </el-form-item>
           </div>
+          <div v-if="props.rowSelected" class="col-md-6">
+            <el-form-item label="Estado" prop="quartetlyIsActive">
+              <el-switch
+                v-model="formModel.quartetlyIsActive"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="Activo"
+                inactive-text="Inactivo"
+              />
+            </el-form-item>
+          </div>
         </div>
       </el-form>
     </template>
@@ -46,15 +59,15 @@
       <argon-button variant="outline" @click="onHideModal"
         >Cancelar</argon-button
       >
-      <argon-button :loading="lockModal" @click="onSubmit"
-        >Agregar</argon-button
-      >
+      <argon-button :loading="lockModal" @click="onSubmit">
+        {{ props.rowSelected ? "Editar" : "Agregar" }}
+      </argon-button>
     </template>
   </modal>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useQuarters, useFormatDate } from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
@@ -69,12 +82,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    rowSelected: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["hidde-modal", "accept-modal"],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const requiredMesage = errorMessages.required;
     //instances
-    const { requestPostQuarters } = useQuarters();
+    const { requestPostQuarters, requestPutQuarters } = useQuarters();
     const { formatDateYMD } = useFormatDate();
 
     //refs
@@ -84,6 +101,7 @@ export default {
       quartetlyName: "",
       quartetlyStart: "",
       quartetlyEnd: "",
+      quartetlyIsActive: true,
     });
 
     const rules = ref({
@@ -105,14 +123,31 @@ export default {
 
     const onSubmit = async () => {
       await formRef.value.validate((isValid) => {
-        if (isValid) {
-          lockModal.value = true;
-          formModel.value.quartetlyStart = formatDateYMD(
-            formModel.value.quartetlyStart
-          );
-          formModel.value.quartetlyEnd = formatDateYMD(
-            formModel.value.quartetlyEnd
-          );
+        if (!isValid) return;
+        lockModal.value = true;
+
+        formModel.value.quartetlyStart = formatDateYMD(
+          formModel.value.quartetlyStart
+        );
+        formModel.value.quartetlyEnd = formatDateYMD(
+          formModel.value.quartetlyEnd
+        );
+
+        const data = { ...formModel.value };
+
+        if (props.rowSelected) {
+          const id = props.rowSelected.quartetlyId;
+
+          requestPutQuarters({ id, data })
+            .then(() => {
+              onClearData();
+              emit("accept-modal");
+            })
+            .catch(() => {
+              lockModal.value = false;
+            });
+        } else {
+          delete data.quartetlyIsActive;
 
           requestPostQuarters(formModel.value)
             .then(() => {
@@ -126,6 +161,19 @@ export default {
       });
     };
 
+    //watchers
+    watch(
+      () => props.rowSelected,
+      (value) => {
+        if (value) {
+          formModel.value.quartetlyName = value.quartetlyName;
+          formModel.value.quartetlyStart = value.quartetlyStart;
+          formModel.value.quartetlyEnd = value.quartetlyEnd;
+          formModel.value.quartetlyIsActive = value.quartetlyIsActive;
+        }
+      }
+    );
+
     //lifecycle
     onMounted(() => {});
 
@@ -136,6 +184,7 @@ export default {
       onSubmit,
       rules,
       lockModal,
+      props,
     };
   },
 };

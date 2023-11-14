@@ -51,6 +51,13 @@
                 {{ `Q. ${row.collectionBaseAmount}` }}
               </template>
             </el-table-column>
+            <el-table-column label="Acciones">
+              <template #default="{ row }">
+                <el-button size="small" @click="onEditCollection(row)">
+                  <i class="fas fa-edit"></i>
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">
@@ -67,6 +74,7 @@
   </div>
   <AddEditCollection
     :show-modal="showModal"
+    :row-selected="rowSelected"
     @hidde-modal="onHiddeModal"
     @accept-modal="onAcceptModal"
   />
@@ -82,21 +90,28 @@ export default {
   name: "Collections",
   components: { ArgonButton, AddEditCollection },
   setup() {
-    //instances
+    ArgonButton; //instances
     const { isLoadingCollections, collections, requestGetCollections } =
       useCollections();
     const { getStudentTypeName } = useStudents();
 
     //refs
     const showModal = ref(false);
+    const rowSelected = ref(null);
 
     //methods
+    const onEditCollection = (row) => {
+      rowSelected.value = row;
+      showModal.value = true;
+    };
     const onHiddeModal = () => {
       showModal.value = false;
+      rowSelected.value = null;
     };
 
     const onAcceptModal = () => {
       showModal.value = false;
+      rowSelected.value = null;
       requestGetCollections();
     };
 
@@ -111,8 +126,10 @@ export default {
       getStudentTypeName,
       isLoadingCollections,
       onAcceptModal,
+      onEditCollection,
       onHiddeModal,
       showModal,
+      rowSelected,
     };
   },
 };

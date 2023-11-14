@@ -48,6 +48,7 @@
               collectionStudentAmountOwed,
               collectionStudentAmountPaid,
               collectionStudentDate,
+              collectionDescription,
             } in collectionsByStudent"
             :key="collectionStudentId"
           >
@@ -108,7 +109,7 @@
                   </td>
                 </tr>
               </table>
-              <span><b>Descripción:</b> {{ collection?.collectionDesc }}</span>
+              <span><b>Descripción:</b> {{ collectionDescription }}</span>
             </el-card>
 
             <el-card v-if="Payment.length === 0" shadow="never">

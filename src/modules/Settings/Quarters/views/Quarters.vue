@@ -39,12 +39,13 @@
                 {{ formatDateDMY(row.quartetlyEnd) }}
               </template>
             </el-table-column>
-
-            <!-- <el-table-column label="Monto base">
+            <el-table-column label="Acciones">
               <template #default="{ row }">
-                {{ row.quartetlyStatusId }}
+                <el-button size="small" @click="onEditQuarter(row)">
+                  <i class="fas fa-edit"></i>
+                </el-button>
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">
@@ -61,6 +62,7 @@
   </div>
   <add-edit-quartet
     :show-modal="showModal"
+    :row-selected="rowSelected"
     @hidde-modal="onCloseModal"
     @accept-modal="onAcceptModal"
   />
@@ -82,9 +84,11 @@ export default {
 
     //refs
     const showModal = ref(false);
+    const rowSelected = ref(null);
 
     const onCloseModal = () => {
       showModal.value = false;
+      rowSelected.value = null;
     };
 
     const onAcceptModal = () => {
@@ -92,17 +96,25 @@ export default {
       requestGetQuartres();
     };
 
+    const onEditQuarter = (row) => {
+      rowSelected.value = row;
+      showModal.value = true;
+    };
+
     //lifecycle
     onMounted(() => {
       requestGetQuartres();
     });
+
     return {
-      showModal,
       formatDateDMY,
       isLoadingQuarters,
-      quarters,
-      onCloseModal,
       onAcceptModal,
+      onCloseModal,
+      onEditQuarter,
+      quarters,
+      rowSelected,
+      showModal,
     };
   },
 };

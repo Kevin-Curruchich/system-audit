@@ -43,6 +43,14 @@ const useQuarters = () => {
     return resp;
   };
 
+  const requestPutQuarters = async ({ data, id }) => {
+    const resp = await store.dispatch("quarters/requestPutQuarters", {
+      data,
+      id,
+    });
+    return resp;
+  };
+
   return {
     isLoadingQuarters,
     quarters,
@@ -52,6 +60,7 @@ const useQuarters = () => {
     requestGetQuartresByStudent,
     requestGetQuartresList,
     requestPostQuarters,
+    requestPutQuarters,
   };
 };
 

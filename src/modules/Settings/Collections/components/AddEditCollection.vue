@@ -1,6 +1,8 @@
 <template>
   <modal scrollable :show="showModal" size="lg" :on-hide-modal="onHideModal">
-    <template #header> Crear Cobro </template>
+    <template #header>
+      {{ `${props.rowSelected ? "Editar" : "Crear"} Cobro` }}
+    </template>
     <template #body>
       <el-form
         ref="formRef"
@@ -72,18 +74,19 @@
       <argon-button variant="outline" @click="onHideModal"
         >Cancelar</argon-button
       >
-      <argon-button :loading="sendingRequest" @click="onSubmit"
-        >Agregar</argon-button
-      >
+      <argon-button :loading="sendingRequest" @click="onSubmit">
+        {{ props.rowSelected ? "Actualizar" : "Agregar" }}
+      </argon-button>
     </template>
   </modal>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { ArgonButton, Modal } from "@/components";
 import { useStudents, useCollections } from "@/composables";
 import errorMessages from "@/constants/formErrorMessages";
+import { ElMessage } from "element-plus";
 
 export default {
   components: {
@@ -95,9 +98,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    rowSelected: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ["hidde-modal", "accept-modal"],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const requiredMesage = errorMessages.required;
     //instances
     const { studentTypes, requestGetSudentTypes } = useStudents();
@@ -105,6 +112,7 @@ export default {
       collectionTypes,
       requestGetCollectionTypes,
       requestPostCollection,
+      putCollection,
     } = useCollections();
 
     //refs
@@ -138,17 +146,34 @@ export default {
 
     const onSubmit = async () => {
       await formRef.value.validate((isValid) => {
-        if (isValid) {
-          sendingRequest.value = true;
-          formModel.value.collectionBaseAmount = Number(
-            formModel.value.collectionBaseAmount
-          );
-          formModel.value.collectionStudentApply =
-            formModel.value.collectionStudentApply.map((item) => ({
-              studentTypeId: item,
-            }));
+        if (!isValid) return;
 
-          requestPostCollection(formModel.value)
+        sendingRequest.value = true;
+
+        formModel.value.collectionBaseAmount =
+          +formModel.value.collectionBaseAmount;
+
+        formModel.value.collectionStudentApply =
+          formModel.value.collectionStudentApply.map((item) => ({
+            studentTypeId: item,
+          }));
+
+        const data = { ...formModel.value };
+
+        if (props.rowSelected) {
+          const id = props.rowSelected.collectionId;
+
+          putCollection({ id, data })
+            .then(() => {
+              emit("accept-modal");
+              onClearData();
+            })
+            .catch(() => {
+              sendingRequest.value = false;
+              ElMessage.error("Error al actualizar el cobro");
+            });
+        } else {
+          requestPostCollection(data)
             .then(() => {
               emit("accept-modal");
               onClearData();
@@ -159,6 +184,25 @@ export default {
         }
       });
     };
+
+    //watchers
+    watch(
+      () => props.rowSelected,
+      (newValue) => {
+        if (newValue) {
+          formModel.value = {
+            collectionName: newValue.collectionName,
+            collectionTypeId: newValue.collectionTypeId,
+            collectionBaseAmount: newValue.collectionBaseAmount,
+            collectionStudentApply: newValue.collectionStudentApply.map(
+              (item) => item.studentTypeId
+            ),
+            collectionDesc: newValue.collectionDesc,
+          };
+        }
+      },
+      { immediate: true }
+    );
 
     //lifecycle
     onMounted(() => {
@@ -175,6 +219,7 @@ export default {
       rules,
       sendingRequest,
       studentTypes,
+      props,
     };
   },
 };

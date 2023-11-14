@@ -120,6 +120,7 @@ import { useStudents, useCollections, useAuth } from "@/composables";
 import { ArgonButton, Modal } from "@/components";
 import errorMessages from "@/constants/formErrorMessages";
 import collectionsAcademic from "@/constants/collectionsAcademic";
+import { ElMessage } from "element-plus";
 
 export default {
   components: {
@@ -196,7 +197,9 @@ export default {
         if (isValid) {
           lockModal.value = true;
           const data = {
-            amountOwed: formModel.value.collectionNewAmount,
+            collectionStudentAmountOwed: formModel.value.collectionNewAmount,
+            collectionStudentUpdateDate: formModel.value.collectionStudentDate,
+            collectionDescription: formModel.value.collectionDescription,
           };
 
           const id = props.rowSelected.collectionStudentId;
@@ -206,8 +209,12 @@ export default {
               onClearData();
               emit("accept-modal");
             })
-            .catch(() => {
+            .catch((error) => {
               lockModal.value = false;
+              ElMessage.error({
+                message: error.message,
+                showClose: true,
+              });
             });
         }
       });

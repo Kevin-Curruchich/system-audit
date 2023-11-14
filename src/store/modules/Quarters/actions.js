@@ -61,3 +61,18 @@ export const requestPostQuarters = async (_, data) => {
       });
   });
 };
+
+//put
+export const requestPutQuarters = async (_, { data, id }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .put(`/quartes/${id}`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};

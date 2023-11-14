@@ -122,6 +122,20 @@ export const requestPostCollection = async (_, data) => {
   });
 };
 
+export const putCollection = async (_, { id, data }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .put(`/collections/${id}`, data)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error.response.data);
+      });
+  });
+};
+
 export const putCollectionStudent = async (_, { id, data }) => {
   return new Promise((resolve, reject) => {
     sbgApi
@@ -131,7 +145,7 @@ export const putCollectionStudent = async (_, { id, data }) => {
       })
       .catch((error) => {
         console.log(error);
-        reject(error);
+        reject(error.response.data);
       });
   });
 };
