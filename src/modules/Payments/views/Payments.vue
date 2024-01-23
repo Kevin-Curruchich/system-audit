@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { usePayments, useFormatDate, useStudents } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
 import AddEditPayment from "../components/AddEditPayment.vue";
@@ -178,6 +178,16 @@ export default {
       showModal.value = false;
       requestGetPayments();
     };
+
+    onMounted(() => {
+      const params = {
+        page: 1,
+        take: 10,
+        searchQuery: search.value,
+        currentYear: studentCurrentYear.value,
+      };
+      requestGetPayments(params);
+    });
 
     return {
       filter,

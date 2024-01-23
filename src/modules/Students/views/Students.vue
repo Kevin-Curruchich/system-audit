@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStudents, useReports } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
@@ -252,6 +252,18 @@ export default {
       hiddeModal();
       requestGetStudents({});
     };
+
+    //lifecycle
+    onMounted(() => {
+      requestGetStudents({
+        page: 1,
+        take: 10,
+        search: search.value,
+        studentTypeId: selectedStudentType.value,
+        studentStatusId: selectedStatus.value,
+        studentCurrentYear: studentCurrentYear.value,
+      });
+    });
 
     return {
       acceptModal,

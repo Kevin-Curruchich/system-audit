@@ -1,6 +1,14 @@
 <template>
   <div class="container-fluid">
     <div class="row mb-3">
+      <el-card shadow="never" class="col-md-12">
+        <span class="me-2 fs-6">Saldo total: </span>
+        <b>
+          {{ `Q.${(totalAmountOwed + 0).toLocaleString("es-GT")}` }}
+        </b>
+      </el-card>
+    </div>
+    <div class="row mb-3">
       <div class="col-md-9 col-sm-12">
         <label class="form-label"> Trimestre </label>
         <div>
@@ -33,6 +41,7 @@
         </el-button>
       </div>
     </div>
+
     <div class="row">
       <div class="col-sm-12">
         <el-collapse
@@ -196,6 +205,14 @@ export default {
     const quarterSelected = ref("");
 
     //computed
+    const totalAmountOwed = computed(() => {
+      return collectionsByStudent.value.reduce(
+        (acc, { collectionStudentAmountOwed }) => {
+          return acc + collectionStudentAmountOwed;
+        },
+        0
+      );
+    });
 
     const params = computed(() => {
       return {
@@ -243,6 +260,7 @@ export default {
       quarterSelected,
       userIsAdmin,
       formatDateDM,
+      totalAmountOwed,
     };
   },
 };

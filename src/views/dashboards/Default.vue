@@ -109,6 +109,8 @@ export default {
   },
   setup() {
     const formatMoney = (value) => {
+      if (!value) return 0;
+
       return value.toLocaleString("en-US", {
         style: "currency",
         currency: "GTQ",

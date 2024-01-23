@@ -194,7 +194,7 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
   useCollections,
   useFormatDate,
@@ -300,6 +300,16 @@ export default {
         take: 10,
       });
     };
+
+    onMounted(() => {
+      requestGetAssignedCollections({
+        take: 10,
+        page: 1,
+        searchQuery: search.value,
+        currentYear: studentCurrentYear.value,
+        quartetlyId: quartetlyId.value,
+      });
+    });
 
     return {
       assignedCollections,
