@@ -35,9 +35,9 @@ import Sidenav from "./examples/Sidenav";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
 import { mapState } from "vuex";
-import useAuth from "@/composables/useAuth";
-import userRole from "@/constants/userRole";
+import userRole from "./constants/userRole";
 import { computed } from "vue";
+import useAuth from "./composables/useAuth";
 
 export default {
   name: "App",
@@ -51,7 +51,6 @@ export default {
     const { userData } = useAuth();
 
     return {
-      userData,
       accesSideNav: computed(
         () =>
           userData.value?.roleId === userRole.ADMIN ||

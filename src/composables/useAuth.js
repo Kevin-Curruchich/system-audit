@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import store from "@/store";
+import store from "../store";
 import userRole from "../constants/userRole";
 
 const useAuth = () => {

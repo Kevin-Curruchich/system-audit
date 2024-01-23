@@ -16,13 +16,9 @@ export default function useStudents() {
     () => store.getters["students/getIsLoadingStudents"]
   );
   const studentTypes = computed(() => store.getters["students/getSudentTypes"]);
-  const studentYears = computed(() => [
-    { year: 0, label: "Especiales" },
-    { year: 1, label: "Primer" },
-    { year: 2, label: "Segundo" },
-    { year: 3, label: "Tercer" },
-    { year: 4, label: "Cuarto" },
-  ]);
+  const studentYears = computed(
+    () => store.getters["students/getStudentYears"]
+  );
   const studentTypesTotal = ref(studentTypes.value.length);
   const isLoadingStudentTypes = computed(
     () => store.getters["students/getIsLoadingStudentTypes"]
@@ -31,23 +27,17 @@ export default function useStudents() {
     () => store.getters["students/getStudentStatuses"]
   );
 
+  const deprecatedStudentYears = [
+    { year: 0, label: "Especiales" },
+    { year: 1, label: "Primer" },
+    { year: 2, label: "Segundo" },
+    { year: 3, label: "Tercer" },
+    { year: 4, label: "Cuarto" },
+  ];
+
   //methods
-  const requestGetStudents = async ({
-    page = 1,
-    take = 10,
-    search = "",
-    studentTypeId = "",
-    studentStatusId = "",
-    studentCurrentYear = "",
-  }) => {
-    await store.dispatch("students/requestGetStudents", {
-      page,
-      take,
-      search,
-      studentTypeId,
-      studentStatusId,
-      studentCurrentYear,
-    });
+  const requestGetStudents = async (params = { page: 1, take: 10 }) => {
+    await store.dispatch("students/requestGetStudents", params);
   };
 
   const requestGetStudentsList = async () => {
@@ -60,6 +50,11 @@ export default function useStudents() {
 
   const requestGetSudentTypes = async () => {
     await store.dispatch("students/requestGetSudentTypes");
+  };
+
+  const requestGetStudentYears = async () => {
+    const resp = await store.dispatch("students/requestGetStudentYears");
+    return resp;
   };
 
   //post request
@@ -111,6 +106,7 @@ export default function useStudents() {
   };
 
   return {
+    deprecatedStudentYears,
     getStatusBadge,
     getStudentTypeName,
     isLoadingStudents,
@@ -118,6 +114,7 @@ export default function useStudents() {
     requestGetStudents,
     requestGetStudentsList,
     requestGetStudentStatuses,
+    requestGetStudentYears,
     requestGetSudentTypes,
     requestPostStudent,
     requestPostStudentType,

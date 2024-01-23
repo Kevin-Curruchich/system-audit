@@ -32,3 +32,7 @@ export const getSudentTypes = (state) => {
 export const getIsLoadingStudentTypes = (state) => {
   return state.isLoadingStudentTypes;
 };
+
+export const getStudentYears = (state) => {
+  return state.studentYears;
+};

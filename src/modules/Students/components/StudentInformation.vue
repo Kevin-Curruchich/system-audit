@@ -120,17 +120,17 @@
           </el-form-item>
         </div>
         <div class="col-md-6">
-          <el-form-item label="Año" prop="studentCurrentYear">
+          <el-form-item label="Año" prop="studentCurrentYearId">
             <el-select
-              v-model="formModel.studentCurrentYear"
+              v-model="formModel.studentCurrentYearId"
               placeholder="Año estudiante"
               :disabled="!editMode"
             >
               <el-option
                 v-for="item in studentYears"
-                :key="item.year"
-                :value="item.year"
-                :label="item.label"
+                :key="item.studentYearId"
+                :value="item.studentYearId"
+                :label="item.studentYearName"
               />
             </el-select>
           </el-form-item>
@@ -198,7 +198,7 @@ export default {
       studentAddress: "",
       studentStartDate: "",
       studentTypeId: "",
-      studentCurrentYear: "",
+      studentCurrentYearId: "",
     });
 
     const rules = ref({
@@ -214,7 +214,7 @@ export default {
       studentTypeId: [
         { required: true, message: requiredMesage, trigger: "change" },
       ],
-      studentCurrentYear: [{ required: true, message: requiredMesage }],
+      studentCurrentYearId: [{ required: true, message: requiredMesage }],
     });
 
     //methods
@@ -249,6 +249,7 @@ export default {
           delete data.studentId;
           delete data.StudentStatus;
           delete data.StudentType;
+          delete data.studentCurrentYear;
 
           requestPutStudent({ studentId, data })
             .then(async () => {

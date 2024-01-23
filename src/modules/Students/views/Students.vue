@@ -49,7 +49,7 @@
                 <el-select v-model="studentCurrentYear">
                   <el-option label="Todos" value=""></el-option>
                   <el-option
-                    v-for="item in studentYears"
+                    v-for="item in deprecatedStudentYears"
                     :key="item.year"
                     :value="item.year"
                     :label="item.label"
@@ -131,7 +131,11 @@
             </el-table-column>
             <el-table-column label="Año" width="80px">
               <template #default="{ row }">
-                {{ row?.studentCurrentYear }}
+                {{
+                  row?.studentCurrentYear === 0
+                    ? "Esp"
+                    : row?.studentCurrentYear
+                }}
               </template>
             </el-table-column>
             <el-table-column label="Estado" align="center" width="100px">
@@ -147,12 +151,15 @@
           </el-table>
         </div>
         <div class="mt-4 d-flex justify-content-end">
+          <!-- v-model="params.page" -->
           <el-pagination
             background
             layout="prev, pager, next"
             :total="students.total"
+            :per-page="params.take"
             @current-change="onChangePage"
           />
+          <!-- :current-page="params.page" -->
         </div>
         <!-- </div> -->
       </div>
@@ -166,7 +173,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStudents, useReports } from "@/composables";
 import ArgonButton from "@/components/ArgonButton.vue";
@@ -187,7 +194,7 @@ export default {
       isLoadingStudents,
       requestGetStudents,
       getStatusBadge,
-      studentYears,
+      deprecatedStudentYears,
     } = useStudents();
 
     const {
@@ -201,17 +208,25 @@ export default {
     const selectedStudentType = ref("");
     const search = ref("");
     const studentCurrentYear = ref("");
+    const params = ref({
+      page: 1,
+      take: 10,
+    });
+
+    //params get
+    const paramsGetStudents = computed(() => ({
+      page: params.value.page,
+      take: params.value.take,
+      search: search.value || null,
+      studentTypeId: selectedStudentType.value || null,
+      studentStatusId: selectedStatus.value || null,
+      studentCurrentYear: studentCurrentYear.value || null,
+    }));
 
     //methods
-    const onChangePage = (page) => {
-      requestGetStudents({
-        take: 10,
-        page,
-        search: search.value,
-        studentTypeId: selectedStudentType.value,
-        studentStatusId: selectedStatus.value,
-        studentCurrentYear: studentCurrentYear.value,
-      });
+    const onChangePage = async (page) => {
+      params.value.page = page;
+      await requestGetStudents(paramsGetStudents.value);
     };
 
     const onDownloadReport = () => {
@@ -230,14 +245,8 @@ export default {
     };
 
     const filter = () => {
-      requestGetStudents({
-        page: 1,
-        take: 10,
-        search: search.value,
-        studentTypeId: selectedStudentType.value,
-        studentStatusId: selectedStatus.value,
-        studentCurrentYear: studentCurrentYear.value,
-      });
+      params.value.page = 1;
+      requestGetStudents(paramsGetStudents.value);
     };
 
     const onOpenModal = () => {
@@ -250,19 +259,12 @@ export default {
 
     const acceptModal = () => {
       hiddeModal();
-      requestGetStudents({});
+      requestGetStudents();
     };
 
     //lifecycle
     onMounted(() => {
-      requestGetStudents({
-        page: 1,
-        take: 10,
-        search: search.value,
-        studentTypeId: selectedStudentType.value,
-        studentStatusId: selectedStatus.value,
-        studentCurrentYear: studentCurrentYear.value,
-      });
+      requestGetStudents();
     });
 
     return {
@@ -271,7 +273,6 @@ export default {
       getStatusBadge,
       hiddeModal,
       isLoadingStudents,
-      onChangePage,
       onNavStudent,
       onOpenModal,
       search,
@@ -281,10 +282,12 @@ export default {
       students,
       studentStatuses,
       studentTypes,
-      studentYears,
+      deprecatedStudentYears,
       studentCurrentYear,
       isDownloadingStudentsPersonalData,
       onDownloadReport,
+      params,
+      onChangePage,
     };
   },
 };

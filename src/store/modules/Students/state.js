@@ -16,4 +16,5 @@ export default () => ({
   student: {},
   isLoadingStudent: false,
   isLoadingStudentTypes: false,
+  studentYears: [],
 });

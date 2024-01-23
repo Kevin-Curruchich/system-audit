@@ -33,3 +33,7 @@ export const setSudentTypes = (state, val) => {
 export const setIsLoadingStudentTypes = (state, val) => {
   state.isLoadingStudentTypes = val;
 };
+
+export const setStudentYears = (state, val) => {
+  state.studentYears = val;
+};

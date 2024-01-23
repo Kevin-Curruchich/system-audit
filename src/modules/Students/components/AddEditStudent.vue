@@ -103,16 +103,16 @@
             </el-form-item>
           </div>
           <div class="col-md-6">
-            <el-form-item label="Año" prop="studentCurrentYear">
+            <el-form-item label="Año" prop="studentCurrentYearId">
               <el-select
-                v-model="formModel.studentCurrentYear"
+                v-model="formModel.studentCurrentYearId"
                 placeholder="Año estudiante"
               >
                 <el-option
                   v-for="item in studentYears"
-                  :key="item.year"
-                  :value="item.year"
-                  :label="item.label"
+                  :key="item.studentYearId"
+                  :value="item.studentYearId"
+                  :label="item.studentYearName"
                 />
               </el-select>
             </el-form-item>
@@ -158,6 +158,7 @@ export default {
       studentTypes,
       studentYears,
       requestPostStudent,
+      requestGetStudentYears,
     } = useStudents();
 
     //refs
@@ -171,7 +172,7 @@ export default {
       studentEmail: "",
       studentStartDate: "",
       studentTypeId: "",
-      studentCurrentYear: "",
+      studentCurrentYearId: "",
       studentBirthDate: "",
       studentAddress: "",
     });
@@ -189,7 +190,7 @@ export default {
       studentTypeId: [
         { required: true, message: requiredMesage, trigger: "change" },
       ],
-      studentCurrentYear: [{ required: true, message: requiredMesage }],
+      studentCurrentYearId: [{ required: true, message: requiredMesage }],
       studentBirthDate: [{ required: true, message: requiredMesage }],
       studentAddress: [{ required: true, message: requiredMesage }],
     });
@@ -224,6 +225,7 @@ export default {
     //lifecycle
     onMounted(() => {
       requestGetSudentTypes();
+      requestGetStudentYears();
     });
 
     return {

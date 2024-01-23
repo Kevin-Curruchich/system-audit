@@ -1,8 +1,7 @@
 import axios from "axios";
 import apiConstants from "./apiConstants";
-import store from "@/store";
+import store from "../store";
 import router from "../router";
-// import useAuth from "@/composables/useAuth";
 
 const sbgApi = axios.create({ baseURL: apiConstants.API });
 

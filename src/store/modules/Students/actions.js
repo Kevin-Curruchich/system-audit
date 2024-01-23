@@ -82,6 +82,21 @@ export const requestGetSudentTypes = async ({ commit }) => {
   });
 };
 
+export const requestGetStudentYears = async ({ commit }) => {
+  return new Promise((resolve, reject) => {
+    sbgApi
+      .get("/students/years")
+      .then((response) => {
+        commit("setStudentYears", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const requestPostStudent = async (_, data) => {
   return new Promise((resolve, reject) => {
     sbgApi
